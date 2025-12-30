@@ -13,11 +13,11 @@ const roleBasedDashboard=()=>{
 switch(role){
 case 'admin':{
   console.log(adminData);
-const patients=adminData.patients;
+const patients=adminData.totalPatients;
 const admissions=adminData.admissions;
-const emptyBeds=adminData.Ebeds;
-const occupiedBeds=adminData.Obeds;
-const activities=adminData.activities;
+const emptyBeds=adminData.totalEmptyBeds;
+const occupiedBeds=adminData.totalOccupiedBeds;
+const activities=adminData.recentActivities;
   return(
     <div>
  <div className='flex flex-row gap-4 overflow-auto overview flex-nowrap scroll-m-0 '>

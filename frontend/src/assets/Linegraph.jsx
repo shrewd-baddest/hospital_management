@@ -17,7 +17,7 @@ const Linegraph = () => {
     const [labels,setLabels]=useState([]);
     const [values,setValues]=useState([]);
     useEffect(() => {
-        fetch('http://localhost:3000/webpages/dashboard',{headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
+        fetch('http://localhost:3000/webpages/admissionrange',{headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
         .then(res=>res.json())
              .then(data => {
         const names = data.map(item => item.name);

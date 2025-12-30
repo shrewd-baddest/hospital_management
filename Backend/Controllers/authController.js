@@ -5,29 +5,30 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
   
  const Login = async (req,res) => {
-  const { passWord,Email ,googleEmail} = req.body;
+  const { passWord,email ,googleEmail} = req.body;
+  console.log(req.body);
    try {
     // Check if user exists
     let user;
-    if(Email){
-    const [rows] = await pool.query('SELECT * FROM users  WHERE email = $1', [Email]);
-    if (rows.length === 0) {
+    if(email){
+    const response= await pool.query('SELECT * FROM users  WHERE email = $1', [email]);
+    if (response.rows.length === 0) {
       return res.status(401).json({ message: 'Invalid email' });
     }
 
-  user = rows[0];
+  user =response.rows[0];
      // Compare password
     const isMatch = await bcrypt.compare(passWord, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid  password' });
     }}
     else if(googleEmail){
- const [rows] = await pool.query('SELECT * FROM users  WHERE email = $1', [googleEmail]);
-    if (rows.length === 0) {
+ const response = await pool.query('SELECT * FROM users  WHERE email = $1', [googleEmail]);
+    if (response.rows.length === 0) {
       return res.status(401).json({ message: 'Invalid email' });
     }
 
-  user = rows[0];
+  user =response.rows[0];
 
     }
   

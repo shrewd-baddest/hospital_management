@@ -12,19 +12,22 @@ export const systemOverview = async (req, res) => {
       ORDER BY created_at DESC
       LIMIT 7
     `;
-
+const sql6=`SELECT COUNT(*) AS today_Admissions FROM admissions WHERE 
+TO_CHAR(DATE_TRUNC('day',admission_date),'dd mon yyyy')=TO_CHAR(DATE_TRUNC('day',NOW()),'dd mon yyyy');`
     const [
       totalPatients,
       totalDoctors,
       totalEmptyBeds,
       totalOccupiedBeds,
-      activities
+      activities,
+      admissions
     ] = await Promise.all([
       pool.query(sql1),
       pool.query(sql2),
       pool.query(sql3, ["empty"]),
       pool.query(sql4, ["occupied"]),
-      pool.query(sql5)
+      pool.query(sql5),
+      pool.query(sql6)
     ]);
 
     const overview = {
@@ -32,6 +35,7 @@ export const systemOverview = async (req, res) => {
       totalDoctors: totalDoctors.rows[0].total_doctors,
       totalEmptyBeds: totalEmptyBeds.rows[0].empty_beds,
       totalOccupiedBeds: totalOccupiedBeds.rows[0].occupied_beds,
+      todayAdmissions:admissions.rows[0].today_Admissions,
       recentActivities: activities.rows
     };
 
@@ -45,14 +49,18 @@ export const systemOverview = async (req, res) => {
 export const admissionsOverTime = async (req, res) => {
   try {
   const sql=`SELECT
-    CHAR(admission_date,'mon) AS month,
-    COUNT(*) AS total_admissions
+    COUNT(*) AS total_admissions,
+   TO_CHAR(DATE_TRUNC('month', admission_date),'MON') AS months
 FROM
     admissions
+	WHERE 
+	TO_CHAR(DATE_TRUNC('year',admission_date),'yyyy')=TO_CHAR(DATE_TRUNC('year',NOW()),'yyyy')
 GROUP BY
-    DATE_TRUNC('month', admission_date)
+  TO_CHAR(DATE_TRUNC('month', admission_date),'MON')
 ORDER BY
-    month`;
+    TO_CHAR(DATE_TRUNC('month', admission_date),'MON') ASC
+	;
+`
     const result = await pool.query(sql);
     res.status(200).json({ data: result.rows });
   } catch (error) {

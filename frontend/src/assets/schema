@@ -33,11 +33,12 @@ created_at TIMESTAMP DEFAULT NOW()
 
 CREATE TABLE patients(
 id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-user_id UUID REFERENCES users(id),
-gender VARCHAR(20) DEFAULT 'male'
+ gender VARCHAR(20) DEFAULT 'male'
 CHECK (gender IN('male','female')),
 date_of_birth DATE NOT NULL,
 address TEXT NOT NULL,
+insurance_num(200),
+insurance_provider(100),
 created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -140,7 +141,7 @@ CREATE TABLE admissions (
  
 );
  
-
+-- TRIGGERS
 
  CREATE OR REPLACE FUNCTION update_appointment_func()
 RETURNS TRIGGER AS $$

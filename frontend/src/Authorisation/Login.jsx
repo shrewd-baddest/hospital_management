@@ -21,7 +21,11 @@ const googleSubmit = useGoogleLogin({
           return;
         }
         // Only send email to backend for Google login
-        axios.post('http//3000:/authorisation/login', { googleEmail: emails },{ withCredentials: true })
+        const blockedDomains = ["opayq.com", "tempmail.com", "mailinator.com"];
+        const emailDomain = emails.split('@')[1];
+        if (!blockedDomains.includes(emailDomain)) {
+
+        axios.post('http://localhost:3000/authorisation/login', { googleEmail: emails },{ withCredentials: true })
           .then(response => {
             if (response.data.status === 'success') {
               Navigate('/dashboard');
@@ -35,6 +39,9 @@ const googleSubmit = useGoogleLogin({
             console.error('Error during login:', error);
             alert('Login failed');
           });
+        } else {
+          alert('Login with temporary or disposable email addresses is not allowed.');
+        }
       } catch (error) {
         console.error('Error fetching user info:', error);
       }
@@ -46,7 +53,8 @@ const formData={
   email,passWord
 }
 try {
- const postData= await axios.post("http//3000:/authorisation/login",formData);
+ const postData= await axios.post("http://localhost:3000/authorisation/login",formData);
+ console.log(postData);
  const response=await postData.data;
  if(response.status=='success'){
  localStorage.setItem('token',response.token);
