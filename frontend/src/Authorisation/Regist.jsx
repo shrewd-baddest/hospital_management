@@ -1,178 +1,144 @@
-import { BriefcaseIcon, HeartIcon, ShieldCheckIcon, UserCircleIcon, UserIcon } from '@heroicons/react/24/outline'
+import {
+  BriefcaseIcon,
+  HeartIcon,
+  ShieldCheckIcon,
+  UserCircleIcon,
+  UserIcon
+} from '@heroicons/react/24/outline';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Regist = () => {
-  const [role,setRole]=useState('');
-  const [name,setName]=useState('');
-  const [gender,setGender]=useState('');
-  const [birth,setBirth]=useState('');
-  const [id,setId]=useState('');
-  const [contact,setContact]=useState('');
-  const [email,setEmail]=useState('');
-  const [provider,setProvider]=useState('');
-  const [num,setNum]=useState('');
-  const [password,setPassword]=useState('');
-  const [confirm,setConfirm]=useState('');
+  const navigate = useNavigate();
 
-  const navigate=useNavigate();
-useEffect(()=>{
-switch(role){
-  case('patients'):{
-    const formData=new FormData();
-    formData.append(name);
-    formData.append(gender);
-    formData.append(birth);
-    formData.append(id);
-    formData.append(contact);
-    formData.append(email);
-    formData.append(provider);
-    formData.append(num);
-    password==confirm? formData.append(password):alert('please enter a correct password')
- const details=async () => {
-  Object.value(formData).some(item=>item.trim()==''|| item==0 && alert('please fill all the inputs'));
-  const response=await axios.post('http://localhost:3000/authorisation/login',formData);
-  response.data.status=='success'&& alert('successfully registered');navigate('/dashboard')
-  
- }
-    return(
-      <>
-      <div className='text-center'>
-<h1 className='text-xl font-extrabold'>Patient Registration</h1>
-<p>please fill in your details to create a patient account</p>
-      </div>
-<h2 className='grid grid-cols-2 gap-[3%] font-bold text-lg text-black'>Personal Details</h2>
-      <div>
-<section className='grid grid-cols-1'>
-<label className='font-semibold text-md'>Full Name</label>
-<input type="text" placeholder='john Doe' onChange={(e)=>setName(e.value.target)}/>
+  const [role, setRole] = useState('');
+  const [confirm, setConfirm] = useState('');
 
-</section>
-<section className='grid grid-cols-1'>
-<label className='font-semibold text-md'>Date of Birth</label>
-<input type="date" onChange={(e)=>setBirth(e.target.value)} />
+  // 🔹 minimal patient-only state
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
+  const [birth, setBirth] = useState('');
+  const [contact, setContact] = useState('');
+  const [email, setEmail] = useState('');
+  const [provider, setProvider] = useState('');
+  const [num, setNum] = useState('');
+  const [password, setPassword] = useState('');
 
-</section>
-<section className='grid grid-cols-1'>
-<label className='font-semibold text-md' >Gender</label>
-<select name="gender" placeholder='select gender' onSelect={e=>setGender(e.value.target)}>
-  <option value="male">male</option>
-  <option value="female">female</option>
-</select>
+  const submitPatient = async () => {
+    if (!name || !email || !password) {
+      return alert('Please fill all required fields');
+    }
 
-</section>
-<section className='grid grid-cols-1'>
- <label className='font-semibold text-md'>National ID</label>
-<input type="date" placeholder='e.g;123-456-789' onClick={(e)=>setId(e.target.value)}/>
+    if (password !== confirm) {
+      return alert('Passwords do not match');
+    }
 
-</section>
+    try {
+      await axios.post('http://localhost:3000/authorisation/register', {
+        name,
+        gender,
+        birth,
+        contact,
+        email,
+        provider,
+        num,
+        role: 'patient',
+        password
+      });
 
-      </div>
-        <h2 className='text-lg font-bold text-black'>Contact Information</h2>
-      <div>
-<section className='grid grid-cols-1'>
-        <label className='font-semibold text-md'>Contact Number</label>
-        <input type="tel"  onChange={(e)=>setContact(e.target.value)}/>
-        </section>
+      alert('Patient registered successfully');
+      navigate('/dashboard');
 
-<section className='grid grid-cols-1'>
+    } catch (err) {
+      alert(err.response?.data?.message || 'Registration failed');
+    }
+  };
 
-        <label className='font-semibold text-md' >Email</label>
-        <input type='email' onChange={(e)=>setEmail(e.target.value)}/>
-        </section>
-      </div>
-      <h2 className='text-lg font-bold text-black'>Medical & Insurance</h2>
-      <div>
-<section className='grid grid-cols-1'>
-      <label className='font-semibold text-md'>Insurance Provider</label>
-      <input type="text" placeholder='e.g SHA' onChange={(e)=>setProvider(e.target.value)}/>
+  // 🔥 CLEAN SWITCH (render only)
+  switch (role) {
 
-      </section>
+    case 'patient':
+      return (
+        <div className="max-w-3xl p-6 mx-auto bg-white rounded shadow">
+          <h1 className="mb-4 text-xl font-bold">Patient Registration</h1>
 
-<section className='grid grid-cols-1'>
-        <label className='font-semibold text-md'>Insurance Number</label>
-        <input type="text" onChange={(e)=>setNum(e.target.value)} />
-      </section>
-      </div>
-            <h2 className='text-lg font-bold text-black'>Account Security</h2>
-            <div>
-              <section className='grid grid-cols-1'>
+          <Input label="Full Name" onChange={e => setName(e.target.value)} />
+          <Input label="Date of Birth" type="date" onChange={e => setBirth(e.target.value)} />
 
-              <label className='font-semibold text-md' >password</label>
-              <input type="password" name="password"  onChange={(e)=>{setPassword(e.target.value)}}/>
-            </section>
+          <label className="font-semibold">Gender</label>
+          <select onChange={e => setGender(e.target.value)} className="w-full p-2 mb-3 border">
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
 
-<section className='grid grid-cols-1'>
-                <label className='font-semibold text-md'>Confirm Password</label>
-                <input type="password" name="password" onChange={(e)=>setConfirm(e.target.value)} />
-              </section>
-            </div>
-<button className='text-black bg-blue-500 rounded-md cursor-pointer hover:bg-blue-700' onClick={()=>details()}>
-  Submit Registration
-</button>
-      </>
+          <Input label="Contact Number" onChange={e => setContact(e.target.value)} />
+          <Input label="Email" type="email" onChange={e => setEmail(e.target.value)} />
+          <Input label="Insurance Provider" onChange={e => setProvider(e.target.value)} />
+          <Input label="Insurance Number" onChange={e => setNum(e.target.value)} />
+          <Input label="Password" type="password" onChange={e => setPassword(e.target.value)} />
+          <Input label="Confirm Password" type="password" onChange={e => setConfirm(e.target.value)} />
 
-
-    )
-  }
-
-  default:{
-    return (
-      <div className='flex items-center justify-center max-w-[70%]  border shadow-md rounded-xl bg-white'>
-        <div>
-          <h1 className='text-2xl font-bold'>Welcome to Our Hospital Management System!</h1>
-          <p>Please select your role to proceed with the registration process</p>
+          <button
+            onClick={submitPatient}
+            className="px-4 py-2 mt-4 text-white bg-blue-600 rounded hover:bg-blue-700"
+          >
+            Register Patient
+          </button>
         </div>
-      <div className='grid grid-cols-3 gap-[4%] '>
-    <section className='grid p-[5%] shadow-md shadow-black hover:scale-95 transition duration-200 max-w-[20%]' onClick={()=>setRole('patient')}>
-    <UserIcon className='w-5 h-5'/>
-    <h2 className='text-xl font-semibold text-black'>Patient</h2>
-    <p>Register as a patient to access your medical</p>
-    </section>
-    
-    
-    <section className='grid p-[5%] shadow-md shadow-black hover:scale-95 transition duration-200 max-w-[20%]' onClick={()=>setRole('nurse')}>
-    <HeartIcon className='w-5 h-5'/>
-     <h2 className='text-xl font-semibold text-black'>Nurse</h2>
-    <p>Join Our nursing team and manage patient</p>
-    </section>
-    
-    
-    <section className='grid p-[5%] shadow-md shadow-black hover:scale-95 transition duration-200 max-w-[20%]' onClick={()=>setRole('doctor')}>
-    <UserCircleIcon className='w-5 h-5'/>
-    <h2 className='text-xl font-semibold text-black'>Doctor</h2>
-    <p>Register as a doctor to manage patient</p>
-    </section>
-    
-    <section className='grid p-[5%] shadow-md shadow-black hover:scale-95 transition duration-200 max-w-[20%]' onClick={()=>setRole('receptionist')}>
-    <BriefcaseIcon className='w-5 h-5'/>
-     <h2 className='text-xl font-semibold text-black'>Reptionist</h2>
-    <p>Manage patient check-ins</p>
-    </section>
-    
-    
-    <section className='grid p-[5%] shadow-md shadow-black hover:scale-95 transition duration-200 max-w-[20%]' onClick={()=>setRole('admin')}>
-    <ShieldCheckIcon className='w-5 h-5'/>
-    <h2 className='text-xl font-semibold text-black'>Admin</h2>
-    <p>Gain full administrative control over the</p>
-    </section>
-    
-        
-      </div>
-      </div>
-    )
+      );
 
+    case 'nurse':
+    case 'doctor':
+    case 'receptionist':
+    case 'admin':
+      return (
+        <div className="mt-10 text-center">
+          <h2 className="text-xl font-bold">{role} registration coming soon</h2>
+          <button
+            onClick={() => setRole('')}
+            className="mt-4 text-blue-600 underline"
+          >
+            Back
+          </button>
+        </div>
+      );
+
+    default:
+      return (
+        <div className="flex flex-col items-center max-w-4xl gap-6 mx-auto mt-10">
+          <h1 className="text-2xl font-bold">Hospital Management System</h1>
+          <p>Select your role to continue</p>
+
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
+            <RoleCard icon={UserIcon} title="Patient" onClick={() => setRole('patient')} />
+            <RoleCard icon={HeartIcon} title="Nurse" onClick={() => setRole('nurse')} />
+            <RoleCard icon={UserCircleIcon} title="Doctor" onClick={() => setRole('doctor')} />
+            <RoleCard icon={BriefcaseIcon} title="Receptionist" onClick={() => setRole('receptionist')} />
+            <RoleCard icon={ShieldCheckIcon} title="Admin" onClick={() => setRole('admin')} />
+          </div>
+        </div>
+      );
   }
-}
+};
 
-},[role])
-return(
-  <>
-  </>
-)
+// 🔹 small reusable components (clean)
+const Input = ({ label, ...props }) => (
+  <div className="mb-3">
+    <label className="block font-semibold">{label}</label>
+    <input {...props} className="w-full p-2 border rounded" />
+  </div>
+);
 
+const RoleCard = ({ icon: Icon, title, onClick }) => (
+  <div
+    onClick={onClick}
+    className="p-6 transition border shadow-md cursor-pointer rounded-xl hover:scale-95"
+  >
+    <Icon className="w-6 h-6 mb-2" />
+    <h2 className="font-semibold">{title}</h2>
+  </div>
+);
 
-}
-
-export default Regist
+export default Regist;
