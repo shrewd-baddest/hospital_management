@@ -11,5 +11,5 @@ webpages.get('/departments',getDepartments);
 webpages.post('/departmentSearch',searchDepartments);
 webpages.post('/addDepartment',addDepartment);
 webpages.post('/updateDepartment',updateDepartment);
-
+ 
 export default webpages

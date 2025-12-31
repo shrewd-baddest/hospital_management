@@ -55,9 +55,30 @@ const Regist = () => {
     }
 
     try {
+      const formData = new FormData();
+      // append simple fields
+      Object.entries(registDetails).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          formData.append(key, value);
+        }
+      });
+
+      // append files if present
+      if (photoFile) {
+        formData.append('photo', photoFile);
+      }
+      if (credentialsFile) {
+        formData.append('credentials', credentialsFile);
+      }
+
       const res = await axios.post(
         'http://localhost:3000/authorisation/register',
-        registDetails
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
       );
 
       if (res.data === 'successful') {
