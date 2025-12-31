@@ -12,18 +12,21 @@ import { useNavigate } from 'react-router-dom';
 const Regist = () => {
   const navigate = useNavigate();
 
-  const [role, setRole] = useState('');
-  const [confirm, setConfirm] = useState('');
+const [role,setRole]=useState('');
+ const [name,setName]=useState('');
+  const [gender,setGender]=useState(''); 
+  const [birth,setBirth]=useState(''); 
+  const [id,setId]=useState(''); 
+  const [contact,setContact]=useState(''); 
+  const [email,setEmail]=useState(''); 
+  const [provider,setProvider]=useState(''); 
+  const [num,setNum]=useState('');
+   const [password,setPassword]=useState('');
+    const [confirm,setConfirm]=useState('');
+   const [license,setLicense]=useState('');
+  const [years,setYears]=useState('');
 
-  // 🔹 minimal patient-only state
-  const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
-  const [birth, setBirth] = useState('');
-  const [contact, setContact] = useState('');
-  const [email, setEmail] = useState('');
-  const [provider, setProvider] = useState('');
-  const [num, setNum] = useState('');
-  const [password, setPassword] = useState('');
+const registDetails={ name,gender,birth,contact,email,provider,num,role, password,id,license,years };
 
   const submitPatient = async () => {
     if (!name || !email || !password) {
@@ -35,61 +38,133 @@ const Regist = () => {
     }
 
     try {
-      await axios.post('http://localhost:3000/authorisation/register', {
-        name,
-        gender,
-        birth,
-        contact,
-        email,
-        provider,
-        num,
-        role: 'patient',
-        password
-      });
+      const res=await axios.post('http://localhost:3000/authorisation/register',registDetails );
 
-      alert('Patient registered successfully');
-      navigate('/dashboard');
+      if(res.data=='successful'){
+        alert('Patient registered successfully');
+      navigate('/dashboard');}
 
     } catch (err) {
       alert(err.response?.data?.message || 'Registration failed');
     }
   };
 
-  // 🔥 CLEAN SWITCH (render only)
+  // switch
   switch (role) {
 
     case 'patient':
       return (
         <div className="max-w-3xl p-6 mx-auto bg-white rounded shadow">
-          <h1 className="mb-4 text-xl font-bold">Patient Registration</h1>
 
-          <Input label="Full Name" onChange={e => setName(e.target.value)} />
-          <Input label="Date of Birth" type="date" onChange={e => setBirth(e.target.value)} />
 
-          <label className="font-semibold">Gender</label>
+
+
+<div className='text-center'> 
+  <h1 className='text-xl font-extrabold'>Patient Registration</h1> 
+  <p>please fill in your details to create a patient account</p> 
+  </div>
+   <h2 className='grid grid-cols-2 gap-[3%] font-bold text-lg text-black'>Personal Details</h2> 
+   <div> 
+             <Input label="Full Name" onChange={e => setName(e.target.value)} />
+                <Input label="Date of Birth" type="date" onChange={e => setBirth(e.target.value)} />
+
+         <label className="font-semibold">Gender</label>
           <select onChange={e => setGender(e.target.value)} className="w-full p-2 mb-3 border">
             <option value="">Select gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
 
-          <Input label="Contact Number" onChange={e => setContact(e.target.value)} />
-          <Input label="Email" type="email" onChange={e => setEmail(e.target.value)} />
-          <Input label="Insurance Provider" onChange={e => setProvider(e.target.value)} />
-          <Input label="Insurance Number" onChange={e => setNum(e.target.value)} />
-          <Input label="Password" type="password" onChange={e => setPassword(e.target.value)} />
-          <Input label="Confirm Password" type="password" onChange={e => setConfirm(e.target.value)} />
+             
+         <Input label="National ID" placeholder='e.g;123-456-789' onClick={(e)=>setId(e.target.value)} />
 
-          <button
-            onClick={submitPatient}
-            className="px-4 py-2 mt-4 text-white bg-blue-600 rounded hover:bg-blue-700"
-          >
-            Register Patient
-          </button>
+      </div> 
+      <h2 className='text-lg font-bold text-black'>Contact Information</h2> 
+      <div>
+                  <Input label="Contact Number" onChange={e => setContact(e.target.value)} />
+
+                     <Input label="Email" type="email" onChange={e => setEmail(e.target.value)} />
+                </div>
+                 <h2 className='text-lg font-bold text-black'>Medical & Insurance</h2> 
+                 <div> 
+                               <Input label="Insurance Provider" placeholder='e.g SHA' onChange={e => setProvider(e.target.value)} />
+
+                            <Input label="Insurance Number" onChange={e => setNum(e.target.value)} />
+
+                         </div>
+     <h2 className='text-lg font-bold text-black'>Account Security</h2> 
+     <div> 
+             <Input label="Password" type="password" onChange={e => setPassword(e.target.value)} />
+
+                  <Input label="Confirm Password" type="password" onChange={e => setConfirm(e.target.value)} />
+ 
+          </div> 
+          <button className='text-black bg-blue-500 rounded-md cursor-pointer hover:bg-blue-700' onClick={submitPatient}> Submit Registration </button>
+
+       
         </div>
       );
 
     case 'nurse':
+      return(
+        <div>
+          <h1>Patient Registration</h1>
+          <p>please fill out the form below to register as a nurse in our system</p>
+          <div>
+          <Input label="Full Name" onChange={e => setName(e.target.value)} />
+          <Input label="Date of Birth" type="date" onChange={e => setBirth(e.target.value)} />
+              <label className="font-semibold">Gender</label>
+          <select onChange={e => setGender(e.target.value)} className="w-full p-2 mb-3 border" >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+          <Input label='National ID' onChange={(e)=>setId(e.target.value)} />
+
+          </div>
+<h1>Contact Details</h1>
+<div>
+
+<Input label='Contact Number' onChange={(e)=>setContact(e.target.value)} />
+          <Input label="Email" type="email" onChange={e => setEmail(e.target.value)} />
+</div>
+<h1>Professional Qualifications</h1>
+<div>
+<label>Department</label>
+    <select onChange={e => setGender(e.target.value)} className="w-full p-2 mb-3 border" >
+            <option value="" selected>Select Department</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+     <Input label='Nurse License Number' onChange={(e)=>{setLicense(e.target.value)}}/>
+     <Input label='Years of Experience' onChange={(e)=>setYears(e.target.value)}/>
+     <label>Shift Preference</label>
+     <select >
+<option >select Shift preference</option>
+<option value="day">Day</option>
+<option value="Night">Night</option>
+     </select>
+          </div>
+          <h1>Document Uploads</h1>
+          <div>
+            <label >Upload photo</label>
+            <input type="image" />
+            <label >Upload Credentials</label>
+            <input type="file" name="" id="" />
+          </div>
+
+          <h1>Account Security</h1>
+          <div>
+            <Input label='Password' onChange={(e)=>setPassword(e.target.value)}/>
+                      <Input label="Confirm Password" type="password" onChange={e => setConfirm(e.target.value)} />
+
+
+          </div>
+
+<input type="button" value="Register Nurse" className='bg-blue-600 cursor-pointer hover:bg-blue-800'/>
+        </div>
+        
+      )
     case 'doctor':
     case 'receptionist':
     case 'admin':
