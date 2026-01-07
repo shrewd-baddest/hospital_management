@@ -59,7 +59,7 @@ case 'patient':{
 
  
   return (
-    <div>
+    <div className='h-screen min-h-screen p-4 rounded-md shadow-md bg-slate-300 w-fit'>
 
  <section className="catalog">
           <ul className='hidden categories md:grid '>
@@ -71,15 +71,15 @@ case 'patient':{
                  <li className="card" key={index}>
             {  item.name=='Dashboard'?(
 
-              <Link to={site[site.length-1]=='dashboard'?'':`/dashboard/${item.name.toLowerCase()}`}>
+              <Link to={site[site.length-1]=='dashboard'?'':`/dashboard/${item.name.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
               <item.icon className='inline w-4 h-4'/>
-              {item.name} <span>&gt;</span>
+             <h4>{item.name}</h4> 
               </Link>
             )
              :(
-                 <Link to={`/dashboard/${item.name.toLowerCase()}`}>
+                 <Link to={`/dashboard/${item.name.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
               <item.icon className='inline w-4 h-4'/>
-              {item.name} <span>&gt;</span>
+             <h4>{item.name}</h4> 
               </Link> 
               )}
             </li>
@@ -93,18 +93,18 @@ case 'patient':{
                  <li className="card" key={index}>
             {  item.name=='Dashboard'?(
 
-              <Link to={site[site.length-1]=='dashboard'?'':`/dashboard/${item.path.toLowerCase()}`}>
+              <Link to={site[site.length-1]=='dashboard'?'':`/dashboard/${item.path.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
               <item.icon className="inline w-4 h-4 md:hidden" title={item.name} />
   <div className={`hidden ${open ? 'grid' : 'hidden'} grid-cols-1 gap-4 p-4`}>
-  {item.name} <span>&gt;</span>
+   <h4>{item.name}</h4>
   </div>
   </Link>
             )
              :(
-                 <Link to={`/dashboard/${item.path.toLowerCase()}`}>
+                 <Link to={`/dashboard/${item.path.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
                <item.icon className="inline w-4 h-4 md:hidden" title={item.name} />
   <div className={`hidden ${open ? 'grid' : 'hidden'} grid-cols-1 gap-4 p-4`}>
-  {item.name} <span>&gt;</span>
+  <h4>{item.name}</h4>
   </div></Link> 
               )}
             </li>

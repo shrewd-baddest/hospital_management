@@ -19,7 +19,7 @@ import { departments } from './Pages/Departments.jsx';
   const Billing = lazy(() => import('./Pages/Billing.jsx'));
   const WardBed = lazy(() => import('./Pages/WardBed.jsx'));
   const Settings = lazy(() => import('./Pages/Settings.jsx'));
-  const Users=lazy(()=>{import('./Pages/Users.jsx')});
+  const Users=lazy(()=>import('./Pages/Users.jsx'));
   const Departments=lazy(()=>import('./Pages/Departments.jsx'))
   const AddDepartments=lazy(()=>import('./Pages/AddDepartment.jsx'))
   const SuspendedElement=()=>(
@@ -35,7 +35,7 @@ const routes= createBrowserRouter(
 
     <Route path ="dashboard" element={<PagesLayout />}>
       
-      <Route index element={<Dashboard />} />
+      <Route index element={<Dashboard />} loader={dashboardLoader}/>
       <Route path="patients" element={<Patients />} loader={dashboardLoader} />
       <Route path="medicalrecords" element={<MedicalRecords />} />
       <Route path="appointments" element={<Appointments />} />

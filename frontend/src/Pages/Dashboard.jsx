@@ -6,40 +6,40 @@ import Linegraph from '../assets/Linegraph';
 const Dashboard = () => {
 
 // const role=localStorage.getItem('role');
- const adminData=useLoaderData();
+ const adminData=useLoaderData().overview;
  const role='admin';
-const roleBasedDashboard=()=>{
-
-switch(role){
-case 'admin':{
-  console.log(adminData);
+ console.log(adminData);
 const patients=adminData.totalPatients;
 const admissions=adminData.admissions;
 const emptyBeds=adminData.totalEmptyBeds;
 const occupiedBeds=adminData.totalOccupiedBeds;
 const activities=adminData.recentActivities;
+const roleBasedDashboard=()=>{
+
+switch(role){
+case 'admin':{
   return(
-    <div>
- <div className='flex flex-row gap-4 overflow-auto overview flex-nowrap scroll-m-0 '>
-<section className='grid grid-cols-1 p-5 transition scale-50 rounded-md shadow-md min-w-fit'>
-<p>Total Patients <UserGroupIcon/></p>
+    <div className='max-w-full m-0'>
+ <div className='flex flex-row w-full gap-4 flex-nowrap scroll-m-0'>
+<section className='grid w-1/4 grid-cols-1 p-5 text-lg rounded-md shadow-md min-fit'>
+<p className='text-xl'>Total Patients <UserGroupIcon className='inline w-12 h-12'/></p>
 <h2 className='font-bold text-black'>{patients}</h2>
-<p>currently adimitted or registered</p>
+<p className='text-xl'>currently adimitted or registered</p>
 </section>
-<section className='grid grid-cols-1 p-5 transition scale-50 rounded-md shadow-md min-w-fit'>
-<p>Today Admissions <FunnelIcon/></p>
+<section className='grid w-1/4 grid-cols-1 p-5 text-lg rounded-md shadow-md min-fit'>
+<p className='text-xl'>Today Admissions <FunnelIcon className='inline w-12 h-12'/></p>
 <h2 className='font-bold text-black'>{admissions}</h2>
-<p>since last 24hours</p>
+<p className='text-xl'>since last 24hours</p>
 </section >
-<section className='grid grid-cols-1 p-5 transition scale-50 rounded-md shadow-md min-w-fit'>
-<p>Available Beds <BuildingStorefrontIcon/></p>
+<section className='grid w-1/4 grid-cols-1 p-5 text-lg rounded-md shadow-md min-fit'>
+<p className='text-xl'>Available Beds <BuildingStorefrontIcon className='inline w-12 h-12'/></p>
 <h2 className='font-bold text-black'>{emptyBeds}</h2>
-<p>Across all departments</p>
+<p className='text-xl'>Across all departments</p>
 </section>
-<section className='grid grid-cols-1 p-5 transition scale-50 rounded-md shadow-md min-w-fit'>
-<p>Occupied Beds <ClipboardDocumentCheckIcon className='w-4 h-4'/></p>
+<section className='grid w-1/4 grid-cols-1 p-5 text-lg rounded-md shadow-md min-fit'>
+<p className='text-xl'>Occupied Beds <ClipboardDocumentCheckIcon className='inline w-12 h-12'/></p>
 <h2 className='font-bold text-black'>{occupiedBeds}</h2>
-<p>Total currently occupied</p>
+<p className='text-xl'>Total currently occupied</p>
 </section>
  </div>
 <div>
@@ -48,18 +48,18 @@ const activities=adminData.recentActivities;
 
 <Linegraph/>
 </div>
-<div>
+<div className='flex flex-row gap-[20%] '>
   <section className='grid grid-cols-1'>
     <h4 className='font-semibold'>Quick Actions</h4>
-    <button className='font-semibold text-white '>
+    <button className='flex flex-row gap-2 p-2 m-2 font-semibold text-white bg-blue-600 rounded-md w-fit'>
       <UserPlusIcon className='inline w-5 h-4'/>
       <h5>Add New Patient</h5>
     </button>
-    <button>
+    <button className='flex flex-row gap-2 p-2 m-2 font-semibold text-white bg-blue-600 rounded-md w-fit'>
       <ClipboardIcon className='inline w-5 h-4'/>
       <h5>Schedule Appointment</h5>
     </button>
-    <button>
+    <button className='flex flex-row gap-2 p-2 m-2 font-semibold text-white bg-blue-600 rounded-md w-fit'>
       <ChartBarIcon className='inline w-5 h-4'/>
       <h5>View All Report</h5>
     </button>
@@ -105,7 +105,7 @@ try {
   const response=await fetch('http://localhost:3000/webpages/dashboard',
    {headers:{ Authorization:`Bearer ${localStorage.getItem('token')}`}
   });
-return response.json().data
+ return await response.json();
 
 } catch (error) {
   console.error(error.message);

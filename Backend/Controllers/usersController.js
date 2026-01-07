@@ -1,7 +1,7 @@
 import pool from "../Servers/database.js";
 
 export const getAllUsers = async (req, res) => {
-  const sql = `SELECT first_name, email, role, is_active FROM users`;
+  const sql = `SELECT full_name, email, role, is_active FROM users`;
 
   try {
     const users = await pool.query(sql);
@@ -18,7 +18,7 @@ export const getUserSearch = async (req, res) => {
   const { search } = req.body;
 
   try {
-    const sql = `SELECT first_name, email, role, is_active FROM users WHERE first_name ILIKE $1 OR email ILIKE $1`;
+    const sql = `SELECT full_name, email, role, is_active FROM users WHERE full_name ILIKE $1 OR email ILIKE $1`;
     const users = await pool.query(sql, [`%${search}%`]);
 
     res.status(200).json({

@@ -1,5 +1,5 @@
-import pool from '../database/db.js';
-import bcrypt from 'bcryptjs';
+import pool from '../Servers/database.js';
+import bcrypt from 'bcrypt';
  
 export const registerUser = async (req, res) => {
     switch(req.body.role){

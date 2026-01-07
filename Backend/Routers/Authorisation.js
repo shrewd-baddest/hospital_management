@@ -4,7 +4,7 @@ import { registerUser } from "../Controllers/registerController.js";
 const authRoutes=Router();
 authRoutes.post('/login',Login);
 authRoutes.post('/register',registerUser);
-auth
+
 
 
 

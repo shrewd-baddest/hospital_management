@@ -11,9 +11,8 @@ const Users = () => {
   const [search, setSearch] = useState("");
 
   const token = localStorage.getItem("token");
-
-  // Search users by name or email
-  const userSearch = async (value) => {
+console.log(loaderData);
+   const userSearch = async (value) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/webpages/userSearch",
@@ -28,13 +27,13 @@ const Users = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="w-full p-4">
       <h1 className="mb-2 text-2xl font-bold">Users</h1>
       <p className="mb-4">
         Manage all system users: search, view details, and perform administrative actions.
       </p>
 
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex flex-row items-center justify-between w-full mb-4 gap-1/4">
         <button
           className="px-3 py-1 text-white bg-blue-500 rounded"
           onClick={() => navigate("/adduser")}
@@ -42,20 +41,21 @@ const Users = () => {
           Add New User
         </button>
 
-        <div className="flex items-center px-2 border rounded">
-          <MagnifyingGlassIcon className="w-4 h-4 mr-2 text-gray-500" />
-          <input
-            type="text"
-            placeholder="Search users by name or email"
-            value={search}
-            onChange={(e) => {
-              const value = e.target.value;
-              setSearch(value);
-              userSearch(value); // Call search whenever input changes
-            }}
-            className="p-1 outline-none"
-          />
-        </div>
+ <div  >
+  {/* <MagnifyingGlassIcon className="inline w-8 h-8 mr-2 text-gray-500" /> */}
+  <input
+    type="text"
+    placeholder="🔍Search users by name or email"
+    value={search}
+    onChange={(e) => {
+      const value = e.target.value;
+      setSearch(value);
+      userSearch(value);
+    }}
+    className="w-64 h-10 px-3 border border-gray-300 rounded-lg"
+  />
+</div>
+
       </div>
 
       <table className="w-full border-collapse">
@@ -74,7 +74,7 @@ const Users = () => {
           {Array.isArray(usersData) && usersData.length > 0 ? (
             usersData.map((user) => (
               <tr key={user.email} className="transition hover:bg-gray-50">
-                <td className="px-4 py-2">{user.first_name}</td>
+                <td className="px-4 py-2">{user.full_name}</td>
                 <td className="px-4 py-2">{user.role}</td>
                 <td className="px-4 py-2">{user.email}</td>
                 <td className="px-4 py-2">
@@ -107,7 +107,7 @@ export const userLoader = async () => {
     });
 
     const data = await response.json();
-    return data.users; // matches getAllUsers response
+     return data.users; 
   } catch (error) {
     console.error(error.message);
     return [];
