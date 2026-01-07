@@ -45,7 +45,7 @@ const routes= createBrowserRouter(
       <Route path="wardbed" element={<WardBed />} />
       <Route path="users" element={<Users/>}  loader={userLoader}/>
       <Route path="settings" element={<Settings />} />
-      <Route path='addDepartments' element={<AddDepartments/>}/>
+      <Route path='addDepartments/:id?' element={<AddDepartments/>}/>
       <Route path="departments" element={<Departments />} loader={departments} />
     </Route>
     </>
