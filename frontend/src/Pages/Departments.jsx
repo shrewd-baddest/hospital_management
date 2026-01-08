@@ -25,7 +25,8 @@ axios.post('http://localhost:3000/webpages/departmentSearch',{search},{
     <div className='flex flex-row justify-between w-full gap-4 mt-4'>
         <input type="search" placeholder={`🔍 Search departments...`} 
         onChange={(e)=>{setSearch(e.target.value);handleSearch()} }/>
-    <input type="button" value='+ Add New Department' className='px-4 text-lg font-semibold text-white bg-blue-600 w-fit' onclick={navigate('dashboard/addDepartments')}/>
+    <input type="button" value='+ Add New Department' className='px-4 text-lg font-semibold text-white bg-blue-600 cursor-pointer w-fit'
+     onClick={navigate('dashboard/addDepartment')}/>
     </div>
     
 </section>

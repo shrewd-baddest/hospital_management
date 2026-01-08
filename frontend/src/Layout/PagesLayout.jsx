@@ -5,10 +5,10 @@ import SideBars from '../Navigations/SideBars'
 import Footers from '../Navigations/Footers'
 const PagesLayout = () => {
   return (
-    <div>
+    <div className='mb-0'>
       <Headers />
-      <div className='flex flex-row gap-4 p-4'>
-      <SideBars />
+      <div className='flex flex-row gap-4 '>
+      <SideBars className='mb-0' />
       <Outlet />
       </div>
         <Footers />

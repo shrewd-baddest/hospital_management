@@ -26,7 +26,7 @@ switch(roles){
 const catalog=[{name:"Dashboard",path:"dashboard",icon:HomeIcon},{name:"Users",path:"users",icon:UserGroupIcon},{name:"Departments",path:"departments",icon:BuildingOfficeIcon},
   {name:"Doctors",path:"doctors",icon:UserCircleIcon},{name:"Appointments",path:"appointments",icon:CalendarDaysIcon},
   {name:"Billing",path:"billing",icon:DocumentTextIcon},{name:"Reports",path:"reports",icon:ChartBarIcon},
-  {name:"Roles & Permissions",path:"roles-permissions",icon:ShieldCheckIcon},{name:"Settings",path:"settings",icon:Cog6ToothIcon}];
+  {name:"Roles & Permissions",path:"roles_permissions",icon:ShieldCheckIcon},{name:"Settings",path:"settings",icon:Cog6ToothIcon}];
 
 return  setRoleBasedSidebars(catalog);
 
@@ -55,7 +55,7 @@ case 'patient':{
     return catalog;
   }
 }
-},[roles,roleBasedSidebars])
+},[roles,roleBasedSidebars,location])
 
  
   return (
@@ -71,15 +71,15 @@ case 'patient':{
                  <li className="card" key={index}>
             {  item.name=='Dashboard'?(
 
-              <Link to={site[site.length-1]=='dashboard'?'':`/dashboard/${item.name.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
+              <Link to={site[site.length-1]=='dashboard'?'':`/dashboard`} className='flex flex-row items-center gap-2 font-bold'>
               <item.icon className='inline w-4 h-4'/>
-             <h4>{item.name}</h4> 
+             <h4 className='my-4 text-xl'>{item.name}</h4> 
               </Link>
             )
              :(
-                 <Link to={`/dashboard/${item.name.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
+                 <Link to={`/dashboard/${item.path.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
               <item.icon className='inline w-4 h-4'/>
-             <h4>{item.name}</h4> 
+             <h4 className='my-4 text-xl'>{item.name}</h4> 
               </Link> 
               )}
             </li>
@@ -93,10 +93,10 @@ case 'patient':{
                  <li className="card" key={index}>
             {  item.name=='Dashboard'?(
 
-              <Link to={site[site.length-1]=='dashboard'?'':`/dashboard/${item.path.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
+              <Link to={site[site.length-1]=='dashboard'?'':`/dashboard`} className='flex flex-row items-center gap-2 font-bold'>
               <item.icon className="inline w-4 h-4 md:hidden" title={item.name} />
   <div className={`hidden ${open ? 'grid' : 'hidden'} grid-cols-1 gap-4 p-4`}>
-   <h4>{item.name}</h4>
+   <h4 className='my-4 text-xl'>{item.name}</h4>
   </div>
   </Link>
             )
@@ -104,7 +104,7 @@ case 'patient':{
                  <Link to={`/dashboard/${item.path.toLowerCase()}`} className='flex flex-row items-center gap-2 font-bold'>
                <item.icon className="inline w-4 h-4 md:hidden" title={item.name} />
   <div className={`hidden ${open ? 'grid' : 'hidden'} grid-cols-1 gap-4 p-4`}>
-  <h4>{item.name}</h4>
+  <h4 className='my-4 text-xl'>{item.name}</h4>
   </div></Link> 
               )}
             </li>
