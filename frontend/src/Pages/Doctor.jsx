@@ -1,0 +1,114 @@
+import { MagnifyingGlassCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import React, { useState } from 'react'
+import { useLoaderData, useNavigate } from 'react-router-dom'
+
+const Doctor = () => {
+    const doctors=useLoaderData();
+const [activeDoctorId, setActiveDoctorId] = useState(null);
+    const navigate=useNavigate();
+    const role=localStorage.getItem('role');
+    const [schedule,setSchedule]=useState(null);
+
+const getSchedule = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3000/webpages/doctor/schedule/${id}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+    const data = await res.json();
+    setSchedule(data.data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+  return (
+<div className={activeDoctorId ? 'relative blur' : 'static'}>
+
+<h1>Doctors Directory</h1>
+<p>Manage and view all medical practitioners within admin.Filter by speciality and availability to find the right doctor quickly</p>
+<div>
+<div className="flex items-center px-2 border rounded">
+  <MagnifyingGlassCircleIcon className="w-6 h-6 mr-2 text-gray-500" />
+  <input
+    type="text"
+    placeholder="Search doctors by name or ID"
+    className="flex-1 outline-none"
+  />
+</div>
+<select >
+    <option value="" selected>Filter by Availability</option>
+    <option value="away">Away</option>
+    <option value="online">Online</option>
+    <option value="offline">offline</option>
+</select>
+
+</div>
+<div>
+    {
+        doctors&&
+        doctors.map((item,idx)=>(
+            <div key={idx} className='grid grid-cols-1'>
+                <img src={item.image} alt="" />
+                <h2 className='text-lg font-bold'>{item.name}</h2>
+                <h4>{item.department_name}</h4>
+<button onClick={() => { setActiveDoctorId(item.id); getSchedule(item.id); }} className='text-blue-500'>
+  View Schedule
+</button>
+<div className={`${activeDoctorId === item.id ? 'grid fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 z-50 shadow-lg' : 'hidden'}`}>
+  <button onClick={() => setActiveDoctorId(null)}>
+    <XMarkIcon className='w-6 h-6'/>
+  </button>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Day</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {schedule&&
+                                schedule.map((sch,idx)=>(
+                                    <tr key={idx}>
+<td>{new Date(sch.schedule_date).toLocaleDateString()}</td>
+                                        <td>{sch.start_time}</td>
+                                        <td>{sch.end_time}</td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                 </div>
+                <button onClick={()=>navigate(`/dashboard/${item.id}`,{state:'profile'})} className='px-6 font-semibold text-black bg-slate-500 outline-0'>
+                    view profile
+                </button>
+<button
+  onClick={() => navigate(`/dashboard/${item.id}`, { state: 'assign' })}
+  disabled={role !== 'admin'}
+  className={`px-4 py-2 ${role === 'admin' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
+>
+  Assign Shifts
+</button>
+
+            </div>
+        ))
+    }
+</div>
+    </div>
+  )
+}
+
+export default Doctor
+
+export const doctorData=async()=>{
+    try {
+const response=await fetch('http://localhost:3000/webpages/doctors',
+            {headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}})
+            const res=await response.json();
+            return res.data;        
+    } catch (error) {
+        return console.error(error.message)
+        
+    }
+}
