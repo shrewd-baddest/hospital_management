@@ -47,6 +47,7 @@ const routes= createBrowserRouter(
       <Route path="settings" element={<Settings />} />
       <Route path='addDepartments/:id?' element={<AddDepartments/>}/>
       <Route path="departments" element={<Departments />} loader={departments} />
+      <Route path="docdetails/:id" element={<DocDetails/>} />
     </Route>
     </>
   )
