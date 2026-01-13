@@ -22,6 +22,8 @@ import { departments } from './Pages/Departments.jsx';
   const Users=lazy(()=>import('./Pages/Users.jsx'));
   const Departments=lazy(()=>import('./Pages/Departments.jsx'))
   const AddDepartments=lazy(()=>import('./Pages/AddDepartment.jsx'))
+  const DocDetails=lazy(()=>import('./Pages/DocDetails.jsx'));
+  const Doctors=lazy(()=>import('./Pages/Doctor.jsx'))
   const SuspendedElement=()=>(
     <div>🍷Loading...</div>
   )
@@ -48,6 +50,7 @@ const routes= createBrowserRouter(
       <Route path='addDepartments/:id?' element={<AddDepartments/>}/>
       <Route path="departments" element={<Departments />} loader={departments} />
       <Route path="docdetails/:id" element={<DocDetails/>} />
+      <Route path="doctors" element={<Doctors/>} />
     </Route>
     </>
   )

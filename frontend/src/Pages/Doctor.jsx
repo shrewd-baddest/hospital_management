@@ -1,4 +1,4 @@
-import { MagnifyingGlassCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React, { useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
@@ -23,20 +23,20 @@ const getSchedule = async (id) => {
 
 
   return (
-<div className={activeDoctorId ? 'relative blur' : 'static'}>
+<div className={`${activeDoctorId ? 'relative blur' : 'static'} w-full`}>
 
-<h1>Doctors Directory</h1>
+<h1 className='mb-3 text-2xl font-bold'>Doctors Directory</h1>
 <p>Manage and view all medical practitioners within admin.Filter by speciality and availability to find the right doctor quickly</p>
-<div>
-<div className="flex items-center px-2 border rounded">
-  <MagnifyingGlassCircleIcon className="w-6 h-6 mr-2 text-gray-500" />
+<div className='flex flex-row justify-between w-full gap-4 mt-4'>
+{/* <div className="flex flex-row items-center px-2 border rounded"> */}
+  {/* <MagnifyingGlassIcon className="absolute z-10 w-6 h-6 mr-2 text-gray-500 left-3" /> */}
   <input
     type="text"
-    placeholder="Search doctors by name or ID"
-    className="flex-1 outline-none"
+    placeholder="🔍 Search doctors by name or ID"
+    className="w-2/3 px-3 py-2 font-semibold bg-transparent rounded-lg outline-emerald-950 "
   />
-</div>
-<select >
+{/* </div> */}
+<select className='px-3 py-2 mr-10 font-semibold rounded-lg outline-none h-fit'>
     <option value="" selected>Filter by Availability</option>
     <option value="away">Away</option>
     <option value="online">Online</option>
