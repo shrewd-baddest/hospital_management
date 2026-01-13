@@ -1,5 +1,6 @@
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import React, { useState } from 'react'
+import axios from 'axios';
+import React, { useRef, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 
 const Doctor = () => {
@@ -8,7 +9,7 @@ const [activeDoctorId, setActiveDoctorId] = useState(null);
     const navigate=useNavigate();
     const role=localStorage.getItem('role');
     const [schedule,setSchedule]=useState(null);
-
+    const [shiftDoctorId,setShiftDoctorId]=useState(null);
 const getSchedule = async (id) => {
   try {
     const res = await fetch(`http://localhost:3000/webpages/doctor/schedule/${id}`, {
@@ -23,7 +24,7 @@ const getSchedule = async (id) => {
 
 
   return (
-<div className={`${activeDoctorId ? 'relative blur' : 'static'} w-full`}>
+<div className={`${activeDoctorId || shiftDoctorId ? 'relative blur-lg' : 'static'} w-full`}>
 
 <h1 className='mb-3 text-2xl font-bold'>Doctors Directory</h1>
 <p>Manage and view all medical practitioners within admin.Filter by speciality and availability to find the right doctor quickly</p>
@@ -47,8 +48,8 @@ const getSchedule = async (id) => {
 <div>
     {
         doctors&&
-        doctors.map((item,idx)=>(
-            <div key={idx} className='grid grid-cols-1'>
+        doctors.map((item)=>(
+            <div key={item.id} className='grid grid-cols-1'>
                 <img src={item.image} alt="" />
                 <h2 className='text-lg font-bold'>{item.name}</h2>
                 <h4>{item.department_name}</h4>
@@ -57,7 +58,7 @@ const getSchedule = async (id) => {
 </button>
 <div className={`${activeDoctorId === item.id ? 'grid fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 z-50 shadow-lg' : 'hidden'}`}>
   <button onClick={() => setActiveDoctorId(null)}>
-    <XMarkIcon className='w-6 h-6'/>
+    <XMarkIcon className='w-6 h-6' />
   </button>
                     <table>
                         <thead>
@@ -84,7 +85,7 @@ const getSchedule = async (id) => {
                     view profile
                 </button>
 <button
-  onClick={() => navigate(`/dashboard/docdetails/${item.id}`, { state: 'assign' })}
+  onClick={() => { setShiftDoctorId(item.id); }}
   disabled={role !== 'admin'}
   className={`px-4 py-2 ${role === 'admin' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-600 cursor-not-allowed'}`}
 >
@@ -95,6 +96,58 @@ const getSchedule = async (id) => {
         ))
     }
 </div>
+<div  className={`${shiftDoctorId?'grid':'hidden'} absolute  w-full h-full bg-gray-800 bg-opacity-50 top-4 right-4`}>
+  <div>
+    <XMarkIcon className='w-6 h-6 mt-2 mr-2' onClick={()=>setShiftDoctorId(null)}/>
+        <h1>Assign Shifts Page - ID: {shiftDoctorId}</h1>
+        <p>Assign shifts to the doctor here.</p>
+        <div>
+          {/* Form or interface for assigning shifts */}
+          <form onSubmit={(e)=>{
+            e.preventDefault();
+            const formData=new FormData(e.target);
+          const payload = {
+  ...Object.fromEntries(formData.entries())
+};
+axios.post(`http://localhost:3000/webpages/doctor/shifts/${shiftDoctorId}`, payload, {
+  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+}).then(response => {
+  console.log('Shifts assigned successfully:', response.data);
+}).catch(error => {
+  console.error('Error assigning shifts:', error);
+});          
+          }
+          }>
+
+             
+         <label>
+          Department Name:
+          <input type="text" name="department_name" required />
+        </label>
+
+            <label>
+             Schedule Date:
+              <input type="date" name="date" required />
+            </label>
+            <label>
+              Start Time:
+              <input type="time" name="start_time" required />
+            </label>
+            <label>
+              End Time:
+              <input type="time" name="end_time" required />
+            </label>
+            <button type="submit">Assign Shift</button>
+          </form>
+
+          <div>
+        </div>
+    
+</div>
+
+</div>
+    </div>
+
     </div>
   )
 }

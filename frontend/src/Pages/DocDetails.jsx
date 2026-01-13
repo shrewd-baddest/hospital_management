@@ -1,41 +1,31 @@
 import React, { useEffect } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 const DocDetails = () => {
 const {id}=useParams();
-const {state}=useLocation();
-const url=state==='profile'?`http://localhost:3000/webpages/doctor/profile/${id}`:`http://localhost:3000/webpages/shift/${id}`;
+ const url= 'http://localhost:3000/webpages/doctor/profile/${id}';
 const [profileData,setProfileData]=React.useState(null);
 const schedule=profileData?.schedule || [];
-var shiftData={};
-useEffect(()=>{
+ useEffect(()=>{
 const fetchData=async()=>{
   try{
-    const res=state==='profile'?await fetch(url,{
+    const res=await fetch(url,{
       method:'GET',
       headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}
-    }):
-    await fetch(url,shiftData,{
-      method:'POST',
-      headers:{Authorization:`Bearer ${localStorage.getItem('token')}`,
-      'Content-Type':'application/json'}
-    });
+    }) ;
     const data=await res.json();
-    state==='profile'?setProfileData(data):console.log(data);
+   setProfileData(data);
   } catch(err){
     console.error(err);
   }
 };
 fetchData();
-},[url,id,state]);
-switch(state){
-  case 'assign':
-    //code to assign shifts
-    break;
-  case 'profile':
-   {
-    return(
-        <div>
+},[url,id]);
+ 
+
+  return (
+    <div>
+  <div>
             <h1>Doctor Profile Page - ID: {id}</h1>
             <p>Display detailed information about the doctor here.</p>
             <div>
@@ -66,7 +56,7 @@ switch(state){
                             {schedule&&
                                 schedule.map((sch,idx)=>(
                                     <tr key={idx}>
-<td>{new Date(sch.schedule_date).toLocaleDateString()}</td>
+<td>{sch.schedule_date}</td>
                                         <td>{sch.start_time}</td>
                                         <td>{sch.end_time}</td>
                                     </tr>
@@ -76,15 +66,7 @@ switch(state){
                     </table>
 
             </div>
-        </div> )
-   }
-  default:
-    break;
-}
-
-  return (
-    <div>
-
+        </div>
     </div>
   )
 }
