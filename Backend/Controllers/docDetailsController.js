@@ -29,3 +29,22 @@ res.status(500).json({message:error.message})
 
 export const getShifts=async(req,res)=>{
     const {doctorId}=req.params;
+    const {department_name,date,start_time,end_time}=req.body;
+    const {id,role}=req.user;
+try {
+    sql1=`SELECT id FROM departments WHERE name=$1`
+    const results=await pool.query(sql1,[department_name])
+    const department_id=results.rows[0];
+    if(department_id && role=='admin'){
+        const sql2=`INSERT INTO doctor_schedule(doctor_id,department_id,schedule_date,start_time,end_time,created_by)
+        VALUES($1,$2,$3,$4,$5,$6);`
+        const query_results=pool.query(sql2,[doctorId,department_id,date,start_time,end_time,id]);
+        res.status(202).json({message:"success"})
+    }
+    
+} catch (error) {
+    res.status(500).json({message:error.message})
+}
+
+
+}
