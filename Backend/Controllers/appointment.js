@@ -1,4 +1,4 @@
-import pool from "../Servers/database";
+import pool from "../Servers/database.js";
 export const getAppointmentsEvents=async(req,res)=>{
     try {
  const sql=`SELECT 

@@ -1,6 +1,8 @@
 import React, { useEffect,useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+ 
+
 const Calendar = () => {
 
     const [events, setEvents] = useState([]);
@@ -24,13 +26,29 @@ const Calendar = () => {
         alert(arg.dateStr);
       }
   return (
-    <FullCalendar 
-    plugins={[dayGridPlugin]}
-    initialView='dayGridMonth'
-    dateClick={handleDateClick}
-    events={events}
+    <div className='w-3/4 shadow-lg h-3/4'>
 
-     />
+      <FullCalendar 
+      plugins={[dayGridPlugin]}
+      initialView='dayGridMonth'
+      dateClick={handleDateClick}
+      events={events}
+      eventClassNames={()=>['text-base','font-bold']}
+      headerToolbar={{
+        left:'prev,next,today',
+        center:'title',
+        right:'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      }}
+      buttonText={{
+        today:'Today',
+        month:'Month',
+        week:'Week',
+        day:'Day',
+        list:'List'
+      }}
+  
+       />
+    </div>
   )
 }
 
