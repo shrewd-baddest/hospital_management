@@ -5,6 +5,7 @@ import { addDepartment, getDepartmentById, getDepartments, searchDepartments, up
 import { getAllDoctors ,getDoctorSchedule} from "../Controllers/doctorController.js";
 import { getProfile } from "../Controllers/docDetailsController.js";
 import { getAppointmentsEvents } from "../Controllers/appointment.js";
+import { getBillingOverview } from "../Controllers/billingController.js";
  const webpages=Router();
 webpages.get('/dashboard',systemOverview)
 webpages.get('/users',getAllUsers);
@@ -19,6 +20,7 @@ webpages.get('/doctors',getAllDoctors);
 webpages.get('/doctor/schedule/:doctorId',getDoctorSchedule);
 webpages.get('/doctor/profile/:doctorId',getProfile);
 webpages.get('/appointments/events',getAppointmentsEvents)
+webpages.get('/billing',getBillingOverview);
 
  
 export default webpages
