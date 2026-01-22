@@ -2,8 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base{
-html{@apply bg-slate-200 }
-input{@apply  pl-2 font-semibold bg-slate-100 outline-none rounded-lg border-2 ml-2 mb-6}
-p{@apply m-0 text-sm text-teal-950}
+@layer base {
+  html {
+    @apply bg-slate-200;
+  }
+  input {
+    @apply pl-2 font-semibold bg-slate-100 outline-none rounded-lg border-2 ml-2 mb-6;
+  }
+  p {
+    @apply m-0 text-sm text-teal-950;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

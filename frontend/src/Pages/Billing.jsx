@@ -14,7 +14,7 @@ const Billing = () => {
   const overview = billingData ? billingData.billingOverview : null;
   const [newInvoice, setNewInvoice] = useState(null);
   return (
-    <div className="w-full p-4 space-y-6">
+    <div className="w-[85%] space-y-6 ">
       <h1 className="text-4xl font-extrabold text-black">Billing Overview</h1>
       <div className="flex flex-row items-center justify-start gap-6">
         <span className="grid grid-cols-1 gap-3 p-8 bg-white rounded-lg shadow-lg">
@@ -134,11 +134,16 @@ const Billing = () => {
               className="px-3 py-1 text-lg rounded-lg outline-1 w-fit"
             />
           </section>
-          <section>
+          <section className="grid grid-cols-1 gap-4 ">
             <label htmlFor="issueDate" className="text-xl font-semibold">
               Issue Date:
             </label>
-            <input type="date" id="issueDate" name="issueDate" />
+            <input
+              type="date"
+              id="issueDate"
+              name="issueDate"
+              className="px-3 py-1 text-lg rounded-lg outline-1 w-fit"
+            />
           </section>
 
           <section className="grid grid-cols-1 gap-4 ">
@@ -153,7 +158,7 @@ const Billing = () => {
             />
           </section>
 
-          <section>
+          <section className="grid grid-cols-1 gap-4 ">
             <label htmlFor="services" className="text-lg font-semibold">
               Services Rendered:
             </label>
