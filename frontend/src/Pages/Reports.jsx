@@ -7,6 +7,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Linegraph from "../assets/Graphs/Linegraph";
 import pdf from "jspdf";
+import axios from "axios";
 const Reports = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [dateRange, setDateRange] = useState({});
@@ -14,127 +15,190 @@ const Reports = () => {
   const [bgColor, setBgColor] = useState("30");
   const [exportData, setExportData] = useState([]);
 
-useEffect(() => {
-
-const fetchData = async () => {
-try {
-  const response=await axios.post('http://localhost:3000/webpages/getdataExport',{ reportType: selectedReport, dateRange: dateRange, days: days 
-},{
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-  setExportData(response.data);
-
-} catch (error) {
-  console.error("Error fetching export data:", error);
-}
-}
-fetchData();
-},
- [selectedReport, dateRange, days]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/webpages/getdataExport",
+          { reportType: selectedReport, dateRange: dateRange, days: days },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+        setExportData(response.data);
+      } catch (error) {
+        console.error("Error fetching export data:", error);
+      }
+    };
+    fetchData();
+  }, [selectedReport, dateRange, days]);
 
   const generatePDF = () => {
     const doc = new pdf();
     doc.text("Hospital Report", 10, 10);
-    doc.save("hospital-report.pdf");
+    var y = 20;
+    switch (selectedReport) {
+      case "admissions":
+        exportData.forEach((item) => {
+          doc.text(
+            `Name: ${item.name}, Ward: ${item.wardName}, Admission Date: ${item.admissionDate}, Discharge Date: ${item.dischargeDate}`,
+            10,
+            y,
+          );
+          if (y > 280) {
+            doc.addPage();
+            y = 20;
+          } else {
+            y += 10;
+          }
+        });
+        break;
+      case "billing":
+        exportData.forEach((item) => {
+          doc.text(
+            `Patient Name: ${item.name}, Billing Date: ${item.billingDate}, Amount: ${item.amount}, Status: ${item.status}`,
+            10,
+            y,
+          );
+          if (y > 280) {
+            doc.addPage();
+            y = 20;
+          } else {
+            y += 10;
+          }
+        });
+        break;
+      case "occupancy":
+        exportData.forEach((item) => {
+          doc.text(
+            `Ward Name: ${item.wardName}, Date: ${item.date}, Occupied Beds: ${item.occupiedBeds}, Total Beds: ${item.totalBeds}`,
+            10,
+            y,
+          );
+          if (y > 280) {
+            doc.addPage();
+            y = 20;
+          } else {
+            y += 10;
+          }
+        });
+        break;
+      case "staff":
+        exportData.forEach((item) => {
+          doc.text(
+            `Staff Name: ${item.staffName}, Date: ${item.date}, Hours Worked: ${item.hoursWorked}`,
+            10,
+            y,
+          );
+          if (y > 280) {
+            doc.addPage();
+            y = 20;
+          } else {
+            y += 10;
+          }
+        });
+        break;
+      default:
+        break;
+    }
   };
 
-const detailedData=async(reportType, dateRange, days)=>{
-
-switch(reportType){
-  case "admissions":
-    return(
-<table>
-  <thead>
-    <tr>
-       <th>Name</th>
-       <th>ward Name</th>
-      <th>Admission Date</th>
-      <th>Discharge Date</th>
-
-    </tr>
-  </thead>
-  <tbody>
-    {exportData.map((item) => (
-      <tr key={item.patientId}>
-         <td>{item.name}</td>
-        <td>{item.wardName}</td>
-        <td>{item.admissionDate}</td>
-        <td>{item.dischargeDate}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-    )
-  case "billing":
-    return(
-<table>
-  <thead>
-    <tr>
-        <th>Patient Name</th>
-      <th>Billing Date</th>
-      <th>Amount</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    {exportData.map((item) => (
-      <tr key={item.patientId}>
-        <td>{item.name}</td>
-        <td>{item.billingDate}</td>
-        <td>{item.amount}</td>
-        <td>{item.status}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-    )
-  case "occupancy":
-    return(
-<table>
-  <thead>
-    <tr>
-        <th>Ward Name</th>
-      <th>Date</th>
-      <th>Occupied Beds</th>
-      <th>Total Beds</th>
-    </tr>
-  </thead>
-  <tbody>
-    {exportData.map((item) => (
-      <tr key={item.wardId}>
-        <td>{item.wardName}</td>
-        <td>{item.date}</td>
-        <td>{item.occupiedBeds}</td>
-        <td>{item.totalBeds}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-    )
-  case "staff":
-    return(
-<table>
-  <thead>
-    <tr>
-        <th>Staff Name</th>
-      <th>Date</th>
-      <th>Hours Worked</th>
-    </tr>
-  </thead>
-  <tbody>
-    {exportData.map((item) => (
-      <tr key={item.staffId}>
-        <td>{item.staffName}</td>
-        <td>{item.date}</td>
-        <td>{item.hoursWorked}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-    )
-  }}
+  const detailedData = async (reportType) => {
+    switch (reportType) {
+      case "admissions":
+        return (
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>ward Name</th>
+                <th>Admission Date</th>
+                <th>Discharge Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {exportData.map((item) => (
+                <tr key={item.patientId}>
+                  <td>{item.name}</td>
+                  <td>{item.wardName}</td>
+                  <td>{item.admissionDate}</td>
+                  <td>{item.dischargeDate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      case "billing":
+        return (
+          <table>
+            <thead>
+              <tr>
+                <th>Patient Name</th>
+                <th>Billing Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {exportData.map((item) => (
+                <tr key={item.patientId}>
+                  <td>{item.name}</td>
+                  <td>{item.billingDate}</td>
+                  <td>{item.amount}</td>
+                  <td>{item.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      case "occupancy":
+        return (
+          <table>
+            <thead>
+              <tr>
+                <th>Ward Name</th>
+                <th>Date</th>
+                <th>Occupied Beds</th>
+                <th>Total Beds</th>
+              </tr>
+            </thead>
+            <tbody>
+              {exportData.map((item) => (
+                <tr key={item.wardId}>
+                  <td>{item.wardName}</td>
+                  <td>{item.date}</td>
+                  <td>{item.occupiedBeds}</td>
+                  <td>{item.totalBeds}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+      case "staff":
+        return (
+          <table>
+            <thead>
+              <tr>
+                <th>Staff Name</th>
+                <th>Date</th>
+                <th>Hours Worked</th>
+              </tr>
+            </thead>
+            <tbody>
+              {exportData.map((item) => (
+                <tr key={item.staffId}>
+                  <td>{item.staffName}</td>
+                  <td>{item.date}</td>
+                  <td>{item.hoursWorked}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        );
+    }
+  };
 
   return (
     <>
@@ -252,17 +316,28 @@ switch(reportType){
           </div>
         </div>
         <div>
-          <Linegraph
-            reportType={selectedReport}
-            dateRange={dateRange}
-            days={days}
-          />
+          <div>
+            <h2>Monthly Admissions Trend</h2>
+            <p>
+              Overview of patient admissions and discharges over the selected
+              period
+            </p>
+
+            <Linegraph
+              reportType={selectedReport}
+              dateRange={dateRange}
+              days={days}
+            />
+          </div>
+          <div className="p-4 mt-4 bg-white rounded shadow outline-2">
+            <h2>Detailed Report Data</h2>
+            <p>Raw data for the selected report within the chosen date range</p>
+            {detailedData(selectedReport)}
+          </div>
         </div>
       </div>
     </>
   );
 };
-
-
 
 export default Reports;
