@@ -23,6 +23,7 @@ CREATE TABLE departments(
     name VARCHAR(100),
     head VARCHAR(50),
     beds INT,
+    user_id UUID REFERENCES users(id),
     created_at TIMESTAMP DEFAULT NOW()
 );
 CREATE TABLE doctors(

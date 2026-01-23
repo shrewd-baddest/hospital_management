@@ -73,7 +73,7 @@ const Reports = () => {
       case "occupancy":
         exportData.forEach((item) => {
           doc.text(
-            `Ward Name: ${item.wardName}, Date: ${item.date}, Occupied Beds: ${item.occupiedBeds}, Total Beds: ${item.totalBeds}`,
+            `Ward Name: ${item.wardName}, Date: ${item.date}, Bed Number: ${item.bedNumber}, Total Beds: ${item.totalBeds}`,
             10,
             y,
           );
@@ -88,7 +88,7 @@ const Reports = () => {
       case "staff":
         exportData.forEach((item) => {
           doc.text(
-            `Staff Name: ${item.staffName}, Date: ${item.date}, Hours Worked: ${item.hoursWorked}`,
+            `Staff Name: ${item.staffName}, Date: ${item.date}, Department: ${item.department}`,
             10,
             y,
           );
@@ -159,18 +159,18 @@ const Reports = () => {
             <thead>
               <tr className="bg-gray-100">
                 <th className="px-4 py-2 text-left">Ward Name</th>
+                <th className="px-4 py-2 text-left">Status</th>
+                <th className="px-4 py-2 text-left">Bed Number</th>
                 <th className="px-4 py-2 text-left">Date</th>
-                <th className="px-4 py-2 text-left">Occupied Beds</th>
-                <th className="px-4 py-2 text-left">Total Beds</th>
               </tr>
             </thead>
             <tbody>
               {exportData.map((item) => (
                 <tr key={item.wardId} className="transition hover:bg-gray-50">
                   <td className="px-4 py-2">{item.wardName}</td>
+                  <td className="px-4 py-2">{item.status}</td>
+                  <td className="px-4 py-2">{item.bedNumber}</td>
                   <td className="px-4 py-2">{item.date}</td>
-                  <td className="px-4 py-2">{item.occupiedBeds}</td>
-                  <td className="px-4 py-2">{item.totalBeds}</td>
                 </tr>
               ))}
             </tbody>
@@ -183,7 +183,7 @@ const Reports = () => {
               <tr className="bg-gray-100">
                 <th className="px-4 py-2 text-left">Staff Name</th>
                 <th className="px-4 py-2 text-left">Date</th>
-                <th className="px-4 py-2 text-left">Hours Worked</th>
+                <th className="px-4 py-2 text-left">departments</th>
               </tr>
             </thead>
             <tbody>
@@ -191,7 +191,7 @@ const Reports = () => {
                 <tr key={item.staffId} className="transition hover:bg-gray-50">
                   <td className="px-4 py-2">{item.staffName}</td>
                   <td className="px-4 py-2">{item.date}</td>
-                  <td className="px-4 py-2">{item.hoursWorked}</td>
+                  <td className="px-4 py-2">{item.department}</td>
                 </tr>
               ))}
             </tbody>
