@@ -11,7 +11,7 @@ import axios from "axios";
 const Reports = () => {
   const [selectedReport, setSelectedReport] = useState(null);
   const [dateRange, setDateRange] = useState({});
-  const [days, setDays] = useState(null);
+  const [days, setDays] = useState(30);
   const [bgColor, setBgColor] = useState("30");
   const [exportData, setExportData] = useState([]);
 
@@ -109,22 +109,22 @@ const Reports = () => {
     switch (reportType) {
       case "admissions":
         return (
-          <table>
+          <table className="w-full border-collapse">
             <thead>
-              <tr>
-                <th>Name</th>
-                <th>ward Name</th>
-                <th>Admission Date</th>
-                <th>Discharge Date</th>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 text-left">Name</th>
+                <th className="px-4 py-2 text-left">ward Name</th>
+                <th className="px-4 py-2 text-left">Admission Date</th>
+                <th className="px-4 py-2 text-left">Discharge Date</th>
               </tr>
             </thead>
             <tbody>
               {exportData.map((item) => (
                 <tr key={item.patientId}>
-                  <td>{item.name}</td>
-                  <td>{item.wardName}</td>
-                  <td>{item.admissionDate}</td>
-                  <td>{item.dischargeDate}</td>
+                  <td className="px-4 py-2">{item.name}</td>
+                  <td className="px-4 py-2">{item.wardName}</td>
+                  <td className="px-4 py-2">{item.admissionDate}</td>
+                  <td className="px-4 py-2">{item.dischargeDate}</td>
                 </tr>
               ))}
             </tbody>
@@ -132,22 +132,22 @@ const Reports = () => {
         );
       case "billing":
         return (
-          <table>
+          <table className="w-full border-collapse">
             <thead>
-              <tr>
-                <th>Patient Name</th>
-                <th>Billing Date</th>
-                <th>Amount</th>
-                <th>Status</th>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 text-left">Patient Name</th>
+                <th className="px-4 py-2 text-left">Billing Date</th>
+                <th className="px-4 py-2 text-left">Amount</th>
+                <th className="px-4 py-2 text-left">Status</th>
               </tr>
             </thead>
             <tbody>
               {exportData.map((item) => (
                 <tr key={item.patientId}>
-                  <td>{item.name}</td>
-                  <td>{item.billingDate}</td>
-                  <td>{item.amount}</td>
-                  <td>{item.status}</td>
+                  <td className="px-4 py-2">{item.name}</td>
+                  <td className="px-4 py-2">{item.billingDate}</td>
+                  <td className="px-4 py-2">{item.amount}</td>
+                  <td className="px-4 py-2">{item.status}</td>
                 </tr>
               ))}
             </tbody>
@@ -155,22 +155,22 @@ const Reports = () => {
         );
       case "occupancy":
         return (
-          <table>
+          <table className="w-full border-collapse">
             <thead>
-              <tr>
-                <th>Ward Name</th>
-                <th>Date</th>
-                <th>Occupied Beds</th>
-                <th>Total Beds</th>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 text-left">Ward Name</th>
+                <th className="px-4 py-2 text-left">Date</th>
+                <th className="px-4 py-2 text-left">Occupied Beds</th>
+                <th className="px-4 py-2 text-left">Total Beds</th>
               </tr>
             </thead>
             <tbody>
               {exportData.map((item) => (
-                <tr key={item.wardId}>
-                  <td>{item.wardName}</td>
-                  <td>{item.date}</td>
-                  <td>{item.occupiedBeds}</td>
-                  <td>{item.totalBeds}</td>
+                <tr key={item.wardId} className="transition hover:bg-gray-50">
+                  <td className="px-4 py-2">{item.wardName}</td>
+                  <td className="px-4 py-2">{item.date}</td>
+                  <td className="px-4 py-2">{item.occupiedBeds}</td>
+                  <td className="px-4 py-2">{item.totalBeds}</td>
                 </tr>
               ))}
             </tbody>
@@ -178,20 +178,20 @@ const Reports = () => {
         );
       case "staff":
         return (
-          <table>
+          <table className="w-full border-collapse">
             <thead>
-              <tr>
-                <th>Staff Name</th>
-                <th>Date</th>
-                <th>Hours Worked</th>
+              <tr className="bg-gray-100">
+                <th className="px-4 py-2 text-left">Staff Name</th>
+                <th className="px-4 py-2 text-left">Date</th>
+                <th className="px-4 py-2 text-left">Hours Worked</th>
               </tr>
             </thead>
             <tbody>
               {exportData.map((item) => (
-                <tr key={item.staffId}>
-                  <td>{item.staffName}</td>
-                  <td>{item.date}</td>
-                  <td>{item.hoursWorked}</td>
+                <tr key={item.staffId} className="transition hover:bg-gray-50">
+                  <td className="px-4 py-2">{item.staffName}</td>
+                  <td className="px-4 py-2">{item.date}</td>
+                  <td className="px-4 py-2">{item.hoursWorked}</td>
                 </tr>
               ))}
             </tbody>
@@ -294,10 +294,10 @@ const Reports = () => {
                   setDateRange(range);
                 }}
               >
-                <label htmlFor="start-date">Start Date:</label>
-                <input type="date" id="start-date" name="start-date" />
-                <label htmlFor="end-date">End Date:</label>
-                <input type="date" id="end-date" name="end-date" />
+                <label htmlFor="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" />
+                <label htmlFor="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" />
                 <input type="submit" value="Apply Custom Range" />
               </form>
             </div>
