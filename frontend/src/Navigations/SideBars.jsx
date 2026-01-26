@@ -151,7 +151,7 @@ const SideBars = () => {
                     }
                     className="flex flex-row items-center gap-2 font-bold"
                   >
-                    <item.icon className="inline w-4 h-4" />
+                    <item.icon className="inline w-5 h-5" />
                     <h4 className="my-4 text-xl">{item.name}</h4>
                   </Link>
                 ) : (
@@ -159,7 +159,7 @@ const SideBars = () => {
                     to={`/dashboard/${item.path.toLowerCase()}`}
                     className="flex flex-row items-center gap-2 font-bold"
                   >
-                    <item.icon className="inline w-4 h-4" />
+                    <item.icon className="inline w-5 h-5" />
                     <h4 className="my-4 text-xl">{item.name}</h4>
                   </Link>
                 )}
@@ -178,7 +178,7 @@ const SideBars = () => {
                     className="flex flex-row items-center gap-2 font-bold"
                   >
                     <item.icon
-                      className="inline w-4 h-4 md:hidden"
+                      className="inline mb-5 w-7 h-7 md:hidden"
                       title={item.name}
                     />
                     <div
@@ -193,7 +193,7 @@ const SideBars = () => {
                     className="flex flex-row items-center gap-2 font-bold"
                   >
                     <item.icon
-                      className="inline w-4 h-4 md:hidden"
+                      className="inline mb-5 w-7 h-7 md:hidden"
                       title={item.name}
                     />
                     <div

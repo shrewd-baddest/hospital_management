@@ -7,6 +7,7 @@ import { getProfile } from "../Controllers/docDetailsController.js";
 import { getAppointmentsEvents } from "../Controllers/appointment.js";
 import { getBillingOverview } from "../Controllers/billingController.js";
 import { getexportData, getgraphdata } from "../Controllers/reportController.js";
+import { getPermissions } from "../Controllers/permissionController.js";
  const webpages=Router();
 webpages.get('/dashboard',systemOverview)
 webpages.get('/users',getAllUsers);
@@ -24,6 +25,7 @@ webpages.get('/appointments/events',getAppointmentsEvents)
 webpages.get('/billing',getBillingOverview);
 webpages.post('/getdataExport',getexportData);
 webpages.post('/getreportdata',getgraphdata);
+webpages.get('/permissions',getPermissions);
 
  
 export default webpages

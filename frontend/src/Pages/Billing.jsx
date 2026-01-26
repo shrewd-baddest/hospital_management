@@ -12,12 +12,12 @@ const Billing = () => {
   const billingData = useLoaderData();
   const invoices = billingData ? billingData.outstandingInvoices : [];
   const overview = billingData ? billingData.billingOverview : null;
-  const [newInvoice, setNewInvoice] = useState(null);
+  // const [newInvoice, setNewInvoice] = useState(null);
   return (
-    <div className="w-[85%] space-y-6 ">
+    <div className="w-full space-y-6 p-[5%]">
       <h1 className="text-4xl font-extrabold text-black">Billing Overview</h1>
-      <div className="flex flex-row items-center justify-start gap-6">
-        <span className="grid grid-cols-1 gap-3 p-8 bg-white rounded-lg shadow-lg">
+      <div className="flex flex-wrap items-center justify-start gap-6 lg:flex-row">
+        <span className="grid grid-cols-1 gap-3 p-8 bg-white rounded-lg shadow-lg min-w-[20%]">
           <p className="flex flex-row text-lg font-medium gap-9">
             Total Outstanding:
             <CurrencyDollarIcon className="inline w-6 h-6" />
@@ -64,8 +64,8 @@ const Billing = () => {
           Outstanding Invoices
         </h1>
         <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-100">
+          <thead className="rounded-lg">
+            <tr className="rounded-lg bg-gray-50">
               <th className="px-4 py-2 text-left">Invoice ID</th>
               <th className="px-4 py-2 text-left">Patient Name</th>
               <th className="px-4 py-2 text-left">Amount</th>
@@ -94,11 +94,11 @@ const Billing = () => {
       </div>
 
       <div>
-        <h1 className="text-2xl font-semibold text-black">
+        <h1 className="mb-8 text-2xl font-bold text-slate-900">
           Billing Operations
         </h1>
-        <h3 className="text-xl font-semibold">Generate New Invoice</h3>
-        <p className="text-gray-700">
+        <h3 className="mb-5 text-xl font-semibold">Generate New Invoice</h3>
+        <p className="mb-4 text-gray-700">
           Fill in the details to create a new patient invoice.
         </p>
         <form
@@ -121,6 +121,7 @@ const Billing = () => {
                 console.error("Error assigning shifts:", error);
               });
           }}
+          className="grid md:grid-cols-2 "
         >
           <section className="grid grid-cols-1 gap-4 ">
             <label htmlFor="patientName" className="text-lg font-semibold">
@@ -131,7 +132,7 @@ const Billing = () => {
               id="patientName"
               name="patientName"
               placeholder="patient's full name"
-              className="px-3 py-1 text-lg rounded-lg outline-1 w-fit"
+              className="px-3 py-1 text-lg rounded-lg outline-1  max-w-[65%]"
             />
           </section>
           <section className="grid grid-cols-1 gap-4 ">
@@ -142,7 +143,7 @@ const Billing = () => {
               type="date"
               id="issueDate"
               name="issueDate"
-              className="px-3 py-1 text-lg rounded-lg outline-1 w-fit"
+              className="px-3 py-1 text-lg rounded-lg outline-1  max-w-[65%]"
             />
           </section>
 
@@ -154,7 +155,7 @@ const Billing = () => {
               type="date"
               id="dueDate"
               name="dueDate"
-              className="px-3 text-lg rounded-lg outline-2 w-fit"
+              className="px-3 text-lg rounded-lg outline-2  max-w-[65%]"
             />
           </section>
 
@@ -166,7 +167,8 @@ const Billing = () => {
               id="services"
               name="services"
               placeholder="Describe the services provided"
-              cols={14}
+              cols={30}
+              rows={1}
               className="h-32 px-3 text-lg rounded-lg outline-1 w-fit"
             ></textarea>
           </section>
@@ -180,6 +182,7 @@ const Billing = () => {
               id="amount"
               name="amount"
               placeholder="e.g 100.00"
+              className="px-3 text-lg rounded-lg outline-2  max-w-[65%]"
             />
           </section>
         </form>

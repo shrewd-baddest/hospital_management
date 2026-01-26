@@ -35,8 +35,6 @@ const Doctor = () => {
         speciality and availability to find the right doctor quickly
       </p>
       <div className="flex flex-row justify-between w-full gap-4 mt-4">
-        {/* <div className="flex flex-row items-center px-2 border rounded"> */}
-        {/* <MagnifyingGlassIcon className="absolute z-10 w-6 h-6 mr-2 text-gray-500 left-3" /> */}
         <input
           type="text"
           placeholder="🔍 Search doctors by name or ID"

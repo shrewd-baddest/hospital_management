@@ -177,3 +177,42 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER admission_trig
 AFTER
 INSERT ON admissions FOR EACH ROW EXECUTE FUNCTION admission_func();
+CREATE OR REPLACE FUNCTION user_register_func() RETURNS TRIGGER AS $$ BEGIN
+INSERT INTO activity (table_name, action, record_id)
+VALUES (
+        'users',
+        'New user registered with email: ' || NEW.email,
+        NEW.id
+    );
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER user_register_trig
+AFTER
+INSERT ON users FOR EACH ROW EXECUTE FUNCTION user_register_func();
+CREATE OR REPLACE FUNCTION user_update_func() RETURNS TRIGGER AS $$ BEGIN
+INSERT INTO activity (table_name, action, record_id)
+VALUES (
+        'users',
+        'User with email: ' || NEW.email || ' has updated their profile.',
+        NEW.id
+    );
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER user_update_trig
+AFTER
+UPDATE ON users FOR EACH ROW EXECUTE FUNCTION user_update_func();
+CREATE OR REPLACE FUNCTION admissionStatus_func() RETURNS TRIGGER AS $$ BEGIN
+INSERT INTO activity (table_name, action, record_id)
+SELECT 'admissions',
+    NEW.admitted_by || ' has ' || NEW.status || ' patient ' || p.first_name,
+    NEW.id
+FROM patients p
+WHERE p.id = NEW.patient_id;
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER discharge_trig
+AFTER
+UPDATE ON admissions FOR EACH ROW EXECUTE FUNCTION admissionStatus_func();
