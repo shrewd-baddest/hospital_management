@@ -7,12 +7,16 @@ export const getPermissions=async (req,res) => {
         const sql2=`SELECT role, COUNT(*) AS total_users
 FROM users
 GROUP BY role;`
+        const sql3=`SELECT * FROM activity`
 
-        const roles= await pool.query(sql1);
-        const users = await pool.query(sql2);
+        const [roles, users, activity] = await Promise.all([
+            pool.query(sql1),
+            pool.query(sql2),
+            pool.query(sql3)
+        ]);
+        
 
- 
-        res.json({ roles:roles.rows, users:users.rows });
+        res.json({ roles:roles.rows, users:users.rows, activity:activity.rows });
 
     } catch (error) {
         res.status(500).json({message:error.message})

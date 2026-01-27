@@ -61,7 +61,7 @@ const App = () => {
           />
           <Route path="docdetails/:id" element={<DocDetails />} />
           <Route path="doctors" element={<Doctors />} />
-          <Route path="permission" element={<Permissions />} />
+          <Route path="roles_permissions" element={<Permissions />} />
         </Route>
       </>,
     ),
