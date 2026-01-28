@@ -74,7 +74,7 @@ const Permissions = () => {
         Manage user roles,assign specific permissions and review audit logs for
         access control changes.
       </h4>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-[1fr_2.5fr] gap-2">
         <div className="flex flex-col mr-1 w-fit">
           <h1 className="text-xl font-semibold text-black">
             Roles Overview - Total Users:
