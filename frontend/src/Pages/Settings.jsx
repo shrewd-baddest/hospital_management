@@ -31,15 +31,15 @@ const Settings = () => {
           <div>
             <h4>General Information</h4>
             <p>Manage your hospital system configurations and settings here.</p>
-            <form 
-              className="grid grid-cols-1 gap-5 mt-5"
+            <form
+              className="grid grid-cols-1 mt-5 gap-[5%] lg:max-w-[70%] mb-9"
               onSubmit={(e) => {
                 e.preventDefault();
-const formData = new FormData(e.target);
-                const updatedData   = {
-              ...Object.fromEntries(formData.entries()),
-            };
-               
+                const formData = new FormData(e.target);
+                const updatedData = {
+                  ...Object.fromEntries(formData.entries()),
+                };
+
                 fetch("http://localhost:3000/webpages/hospital-info", {
                   method: "PUT",
                   headers: {
@@ -54,7 +54,7 @@ const formData = new FormData(e.target);
                     setEditMode(false);
                   });
               }}
-            > 
+            >
               <section className="grid grid-cols-1">
                 <label htmlFor="Hospital Name">Hospital Name</label>
                 <input
@@ -62,7 +62,7 @@ const formData = new FormData(e.target);
                   id="Hospital Name"
                   value={settingsData?.Name || ""}
                   name="Name"
-                  className="md:max-w-[60%]"
+                  className="lg:max-w-[60%]"
                   readOnly={!EditMode}
                 />
               </section>
@@ -74,7 +74,7 @@ const formData = new FormData(e.target);
                   id="Address"
                   value={settingsData?.Address || ""}
                   name="Address"
-                  className="md:max-w-[60%]"
+                  className="lg:max-w-[60%]"
                   readOnly={!EditMode}
                 />
               </section>
@@ -86,7 +86,7 @@ const formData = new FormData(e.target);
                   id="Contact Number"
                   value={settingsData?.ContactNumber || ""}
                   name="ContactNumber"
-                  className="md:max-w-[60%]"
+                  className="lg:max-w-[60%]"
                   readOnly={!EditMode}
                 />
               </section>
@@ -98,7 +98,18 @@ const formData = new FormData(e.target);
                   id="Email"
                   name="Email"
                   value={settingsData?.Email || ""}
-                  className="md:max-w-[60%]"
+                  className="lg:max-w-[60%]"
+                  readOnly={!EditMode}
+                />
+              </section>
+              <section className="grid grid-cols-1">
+                <label htmlFor="Email">Email</label>
+                <input
+                  type="email"
+                  id="Email"
+                  name="Email"
+                  value={settingsData?.Email || ""}
+                  className="lg:max-w-[60%]"
                   readOnly={!EditMode}
                 />
               </section>
@@ -111,13 +122,24 @@ const formData = new FormData(e.target);
                   id="Hospital logo"
                   value="New Logo"
                   name="logo"
-                  className="md:max-w-[60%]"
+                  className="lg:max-w-[60%]"
                   readOnly={!EditMode}
                 />
               </section>
-
-              <button type="submit">Save Changes</button>
-              <button onClick={() => setEditMode(!EditMode)}>Edit</button>
+              <section className="flex flex-row gap-[6%] mt-5 pb-9">
+                <button
+                  onClick={() => setEditMode(!EditMode)}
+                  className="px-4 text-lg font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
+                >
+                  Edit Information
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 text-lg font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
+                >
+                  Save Changes
+                </button>
+              </section>
             </form>
           </div>
         );
@@ -135,7 +157,7 @@ const formData = new FormData(e.target);
     <div>
       <h1>Settings</h1>
       <h5>Manage your hospital system configurations</h5>
-      <ul className="flex flex-row min-w-fit gap-[5%] mt-5 font-medium list-inside text-slate-700 bg-slate-200 px-[6%] md:max-w-[80%] rounded-lg py-2">
+      <ul className="flex flex-row min-w-fit gap-[5%] mt-5 font-medium list-inside text-slate-700 bg-slate-200 px-[6%] lg:max-w-[80%] rounded-lg py-2">
         <li
           className="cursor-pointer hover:bg-slate-300"
           onClick={() => setActiveTab("hospital-info")}
