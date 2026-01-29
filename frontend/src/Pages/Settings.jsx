@@ -1,9 +1,11 @@
+import axios from "axios";
 import React, { useEffect } from "react";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = React.useState("hospital-info");
   const [settingsData, setSettingsData] = React.useState(null);
   const [EditMode, setEditMode] = React.useState(false);
+  // const [logoFile, setLogoFile] = React.useState(null);
   const urls = {
     "hospital-info": "http://localhost:3000/webpages/hospital-info",
     notifications: "http://localhost:3000/webpages/notifications",
@@ -21,6 +23,7 @@ const Settings = () => {
       .then((data) => data.json())
       .then((response) => {
         setSettingsData(response);
+        console.log(response);
       });
   }, [activeTab]);
 
@@ -36,100 +39,146 @@ const Settings = () => {
               onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.target);
-                const updatedData = {
-                  ...Object.fromEntries(formData.entries()),
-                };
+                // if (!logoFile) {
+                //   formData.append("logo", settingsData.logo);
+                // }
 
-                fetch("http://localhost:3000/webpages/hospital-info", {
-                  method: "PUT",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                  },
-                  body: JSON.stringify(updatedData),
-                })
-                  .then((res) => res.json())
+                axios
+                  .post(
+                    "http://localhost:3000/webpages/hospital-info",
+                    formData,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                      },
+                    },
+                  )
                   .then((data) => {
+                    alert("Settings updated successfully!");
                     setSettingsData(data);
                     setEditMode(false);
                   });
               }}
             >
               <section className="grid grid-cols-1">
-                <label htmlFor="Hospital Name">Hospital Name</label>
+                <label
+                  htmlFor="Hospital Name"
+                  className="text-lg font-semibold"
+                >
+                  Hospital Name
+                </label>
                 <input
                   type="text"
                   id="Hospital Name"
-                  value={settingsData?.Name || ""}
+                  value={settingsData?.name || ""}
+                  onChange={(e) => {
+                    setSettingsData({
+                      ...settingsData,
+                      name: e.target.value,
+                    });
+                  }}
                   name="Name"
-                  className="lg:max-w-[60%]"
+                  className="lg:max-w-[60%] text-black font-semibold"
                   readOnly={!EditMode}
                 />
               </section>
 
               <section className="grid grid-cols-1">
-                <label htmlFor="Address">Address</label>
+                <label htmlFor="Address" className="text-lg font-semibold">
+                  Address
+                </label>
                 <input
                   type="text"
                   id="Address"
-                  value={settingsData?.Address || ""}
+                  value={settingsData?.address || ""}
                   name="Address"
-                  className="lg:max-w-[60%]"
+                  onChange={(e) => {
+                    setSettingsData({
+                      ...settingsData,
+                      address: e.target.value,
+                    });
+                  }}
+                  className="lg:max-w-[60%] text-black font-semibold"
                   readOnly={!EditMode}
                 />
               </section>
 
               <section className="grid grid-cols-1">
-                <label htmlFor="Contact Number">Contact Number</label>
+                <label
+                  htmlFor="Contact Number"
+                  className="text-lg font-semibold "
+                >
+                  Contact Number
+                </label>
                 <input
                   type="text"
                   id="Contact Number"
-                  value={settingsData?.ContactNumber || ""}
-                  name="ContactNumber"
-                  className="lg:max-w-[60%]"
+                  value={settingsData?.phone_number || ""}
+                  name="phone_number"
+                  onChange={(e) => {
+                    setSettingsData({
+                      ...settingsData,
+                      phone_number: e.target.value,
+                    });
+                  }}
+                  className="lg:max-w-[60%] text-black font-semibold"
                   readOnly={!EditMode}
                 />
               </section>
 
               <section className="grid grid-cols-1">
-                <label htmlFor="Email">Email</label>
+                <label htmlFor="Email" className="text-lg font-semibold">
+                  Email
+                </label>
                 <input
                   type="email"
                   id="Email"
-                  name="Email"
-                  value={settingsData?.Email || ""}
-                  className="lg:max-w-[60%]"
-                  readOnly={!EditMode}
-                />
-              </section>
-              <section className="grid grid-cols-1">
-                <label htmlFor="Email">Email</label>
-                <input
-                  type="email"
-                  id="Email"
-                  name="Email"
-                  value={settingsData?.Email || ""}
-                  className="lg:max-w-[60%]"
+                  name="email"
+                  value={settingsData?.email || ""}
+                  onChange={(e) => {
+                    setSettingsData({
+                      ...settingsData,
+                      email: e.target.value,
+                    });
+                  }}
+                  className="lg:max-w-[60%] text-black font-semibold"
                   readOnly={!EditMode}
                 />
               </section>
 
               <section className="grid grid-cols-1">
-                <label htmlFor="Hospital logo">Hospital logo</label>
-                <img src={settingsData?.logo} alt="Hospital Logo" />
+                <label
+                  htmlFor="Hospital logo"
+                  className="text-lg font-semibold"
+                >
+                  Hospital logo
+                </label>
+                <img
+                  src={settingsData?.logo}
+                  alt="Hospital Logo"
+                  className="w-[20%] h-[60%] rounded-full"
+                />
                 <input
-                  type="image"
+                  type="file"
                   id="Hospital logo"
-                  value="New Logo"
+                  // value="New Logo"
                   name="logo"
+                  onChange={(e) => {
+                    setSettingsData({
+                      ...settingsData,
+                      logo: e.target.files[0],
+                    });
+                    // setLogoFile(e.target.files[0]);
+                  }}
                   className="lg:max-w-[60%]"
-                  readOnly={!EditMode}
+                  disabled={!EditMode}
                 />
               </section>
               <section className="flex flex-row gap-[6%] mt-5 pb-9">
                 <button
                   onClick={() => setEditMode(!EditMode)}
                   className="px-4 text-lg font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-700"
+                  type="button"
                 >
                   Edit Information
                 </button>
@@ -155,29 +204,31 @@ const Settings = () => {
   };
   return (
     <div>
-      <h1>Settings</h1>
-      <h5>Manage your hospital system configurations</h5>
+      <h1 className="py-5 text-2xl font-bold">Settings</h1>
+      <h5 className="mt-2 text-lg font-semibold text-slate-800">
+        Manage your hospital system configurations
+      </h5>
       <ul className="flex flex-row min-w-fit gap-[5%] mt-5 font-medium list-inside text-slate-700 bg-slate-200 px-[6%] lg:max-w-[80%] rounded-lg py-2">
         <li
-          className="cursor-pointer hover:bg-slate-300"
+          className="transition duration-100 cursor-pointer hover:underline"
           onClick={() => setActiveTab("hospital-info")}
         >
           Hospital info
         </li>
         <li
-          className="cursor-pointer hover:bg-slate-300"
+          className="transition duration-100 cursor-pointer hover:underline"
           onClick={() => setActiveTab("notifications")}
         >
           Notifications
         </li>
         <li
-          className="cursor-pointer hover:bg-slate-300"
+          className="transition duration-100 cursor-pointer hover:underline"
           onClick={() => setActiveTab("account")}
         >
           Account
         </li>
         <li
-          className="cursor-pointer hover:bg-slate-300"
+          className="transition duration-100 cursor-pointer hover:underline"
           onClick={() => setActiveTab("user-preferences")}
         >
           User Preferences
