@@ -32,3 +32,25 @@ export const updateSettings = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const getNotifications = async (req, res) => {
+  try {
+      const result = await pool.query('SELECT * FROM notifications ORDER BY created_at DESC');
+      res.status(200).json(result.rows);
+  } catch (error) {
+      console.error('Error fetching notifications:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+export const updateNotificationById = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const result = await pool.query('UPDATE notifications SET is_read = true WHERE id = $1 RETURNING *', [id]);
+      res.status(200).json({message: 'Notification marked as read'});
+  } catch (error) {
+      console.error('Error updating notification:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};

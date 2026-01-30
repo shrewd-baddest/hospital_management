@@ -5,6 +5,7 @@ const Settings = () => {
   const [activeTab, setActiveTab] = React.useState("hospital-info");
   const [settingsData, setSettingsData] = React.useState(null);
   const [EditMode, setEditMode] = React.useState(false);
+  const [notificationDetails, setNotificationDetails] = React.useState(null);
   // const [logoFile, setLogoFile] = React.useState(null);
   const urls = {
     "hospital-info": "http://localhost:3000/webpages/hospital-info",
@@ -27,12 +28,22 @@ const Settings = () => {
       });
   }, [activeTab]);
 
+  const showDetails = (notificationmsg, eventTime, source) => {
+    return (
+      <div>
+        <h3>{notificationmsg}</h3>
+        <p>Source: {source}</p>
+        <p>Received: {new Date(eventTime).toLocaleString()}</p>
+      </div>
+    );
+  };
+
   const settingsRender = () => {
     switch (activeTab) {
       case "hospital-info":
         return (
           <div>
-            <h4>General Information</h4>
+            <h4 className="text-2xl font-semibold">General Information</h4>
             <p>Manage your hospital system configurations and settings here.</p>
             <form
               className="grid grid-cols-1 mt-5 gap-[5%] lg:max-w-[70%] mb-9"
@@ -193,7 +204,110 @@ const Settings = () => {
           </div>
         );
       case "notifications":
-        return <div>Notifications Settings</div>;
+        return (
+          <div>
+            <h1>Notifications Settings</h1>
+
+            <section>
+              <ul>
+                <li>All</li>
+                <li>Unread</li>
+                <li>Read</li>
+                <li>Critical</li>
+                <li>Normal</li>
+              </ul>
+              <input
+                type="text"
+                name="🔍 notification-filter"
+                id="notification-filter"
+              />
+            </section>
+
+            <div className="grid grid-cols-[3fr_1fr] gap-[5%] lg:max-w-[90%] mt-5">
+              <section>
+                {settingsData && settingsData.length > 0 ? (
+                  <ul>
+                    {settingsData.map((notification) => (
+                      <li
+                        key={notification.id}
+                        className="p-4 border-b visited:bg-slate-50 bg-slate-200 max-w-70% rounded-lg mb-3"
+                      >
+                        <p
+                          className={
+                            notification.status === "critical"
+                              ? "text-red-600 font-bold"
+                              : "text-green-600 font-bold"
+                          }
+                        >
+                          Status: {notification.status}
+                        </p>
+                        <h3 className="font-semibold">{notification.type}:</h3>
+                        <p>{notification.message}</p>
+                        <p>
+                          Received:{" "}
+                          {new Date(notification.created_at).toLocaleString()}
+                        </p>
+                        <button
+                          className="px-3 py-1 text-sm text-black bg-white rounded cursor-pointer hover:bg-gray-100 max-w-fit"
+                          onClick={() => {
+                            setNotificationDetails(notification);
+                          }}
+                        >
+                          View Details
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>No notifications available.</p>
+                )}
+              </section>
+              <section>
+                <h2>Notification Details</h2>
+                <p>Select a notification to view more details here.</p>
+                {notificationDetails &&
+                  showDetails(
+                    notificationDetails.message,
+                    notificationDetails.created_at,
+                    notificationDetails.type,
+                  )}
+
+                <div>
+                  <button
+                    className="px-3 py-1 text-sm text-white bg-blue-500 rounded cursor-pointer hover:bg-blue-700 max-w-fit"
+                    onClick={async () => {
+                      if (!notificationDetails) {
+                        alert("No notification selected.");
+                        return;
+                      }
+
+                      try {
+                        var response = await axios.put(
+                          `http://localhost:3000/webpages/notificationsRead/${notificationDetails.id}`,
+                          { is_read: true },
+                          {
+                            headers: {
+                              Authorization: `Bearer ${localStorage.getItem("token")}`,
+                            },
+                          },
+                        );
+                        if (response.message == "Notification marked as read") {
+                          alert("Notification acknowledged.");
+                          setNotificationDetails(null);
+                        }
+                      } catch (error) {
+                        console.error(error);
+                        alert("Failed to acknowledge notification.");
+                      }
+                    }}
+                  >
+                    Acknowledge
+                  </button>
+                </div>
+              </section>
+            </div>
+          </div>
+        );
       case "account":
         return <div>Account Settings</div>;
       case "user-preferences":

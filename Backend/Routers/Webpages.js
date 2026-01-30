@@ -9,7 +9,7 @@ import { getBillingOverview } from "../Controllers/billingController.js";
 import { getexportData, getgraphdata } from "../Controllers/reportController.js";
 import { getPermissions } from "../Controllers/permissionController.js";
 import upload from "../Middlewares/multer.js";
-import { getSettings, updateSettings } from "../Controllers/systemController.js";
+import { getNotifications, getSettings, updateNotificationById, updateSettings } from "../Controllers/systemController.js";
  const webpages=Router();
 webpages.get('/dashboard',systemOverview)
 webpages.get('/users',getAllUsers);
@@ -30,6 +30,8 @@ webpages.post('/getreportdata',getgraphdata);
 webpages.get('/permissions',getPermissions);
 webpages.post('/hospital-info',upload.single('logo'),updateSettings);
 webpages.get('/hospital-info',getSettings);
+webpages.get('/notifications/:id',updateNotificationById); 
+webpages.get('/notifications',getNotifications);
 
 
  

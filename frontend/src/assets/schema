@@ -155,6 +155,14 @@ CREATE TABLE doctor_schedules (
     created_at TIMESTAMP DEFAULT NOW(),
     CONSTRAINT valid_time CHECK (start_time < end_time)
 );
+CREATE TABLE notifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    type VARCHAR(100),
+    message VARCHAR(255),
+    is_read BOOLEAN DEFAULT FALSE,
+    status VARCHAR(100) DEFAULT 'normal' CHECK (status IN ('normal', 'critical')),
+    created_at TIMESTAMP DEFAULT NOW()
+);
 -- TRIGGERS
 CREATE OR REPLACE FUNCTION update_appointment_func() RETURNS TRIGGER AS $$ BEGIN
 INSERT INTO activity (table_name, action, record_id)
