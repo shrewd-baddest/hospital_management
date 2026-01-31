@@ -54,3 +54,57 @@ export const updateNotificationById = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const getSpecificNotifications = async (req, res) => {
+  const { notTab, searchText = "" } = req.body;
+  const search = `%${searchText.trim()}%`;
+
+  try {
+    let sql = "";
+    let values = [];
+
+    switch (notTab) {
+      case "read":
+      case "unread":
+        sql = `
+          SELECT * FROM notifications
+          WHERE is_read = $1
+          AND (
+            message ILIKE $2
+            OR type ILIKE $2
+            OR status ILIKE $2
+          )
+        `;
+        values = [notTab === "read", search];
+        break;
+
+      case "critical":
+      case "normal":
+        sql = `
+          SELECT * FROM notifications
+          WHERE status = $1
+          AND (
+            message ILIKE $2
+            OR type ILIKE $2
+          )
+        `;
+        values = [notTab, search];
+        break;
+
+      default:
+        sql = `
+          SELECT * FROM notifications
+          WHERE
+            message ILIKE $1
+            OR type ILIKE $1
+            OR status ILIKE $1
+        `;
+        values = [search];
+    }
+
+    const results = await pool.query(sql, values);
+    res.status(200).json(results.rows);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
