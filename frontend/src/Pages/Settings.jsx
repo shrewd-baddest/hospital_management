@@ -1,6 +1,22 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import { useStyles } from "./StylingProvider";
+import Switch from "../assets/Switch";
+import {
+  GlobeAltIcon,
+  AdjustmentsHorizontalIcon,
+  MagnifyingGlassMinusIcon,
+  RocketLaunchIcon,
+  SpeakerWaveIcon,
+  SpeakerXMarkIcon,
+  MagnifyingGlassPlusIcon,
+  ClockIcon,
+  UsersIcon,
+  EnvelopeIcon,
+  LockClosedIcon,
+  ClipboardDocumentIcon,
+  ArrowRightOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 const Settings = () => {
   const [activeTab, setActiveTab] = React.useState("hospital-info");
   const [settingsData, setSettingsData] = React.useState(null);
@@ -9,6 +25,14 @@ const Settings = () => {
   const [notTab, setNotTab] = useState("all");
   const [logoFile, setLogoFile] = React.useState(null);
   const [searchText, setSearchText] = useState("");
+  const { themeSetter, fontSetter } = useStyles();
+  const [theme, setTheme] = useState("light");
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [fontSize, setFontSize] = useState("full");
+  const [isSoundOn, setIsSoundOn] = useState(true);
+  const [volume, setVolume] = useState(50);
+  const [isAutoUpdateOn, setIsAutoUpdateOn] = useState(true);
+  const options = ["Light", "Dark", "System"];
   const urls = {
     "hospital-info": "http://localhost:3000/webpages/hospital-info",
     notifications: "http://localhost:3000/webpages/notifications",
@@ -132,7 +156,7 @@ const Settings = () => {
                   readOnly={!EditMode}
                 />
               </section>
-              e
+
               <section className="grid grid-cols-1">
                 <label
                   htmlFor="Contact Number"
@@ -379,9 +403,274 @@ const Settings = () => {
           </div>
         );
       case "account":
-        return <div>Account Settings</div>;
-      case "user-preferences":
-        return <div>User Preferences Settings</div>;
+        return (
+          <div>
+            <h1>Profile Settings</h1>
+            <p>
+              Manage your personal information,contact details,and preferences
+            </p>
+            <hr />
+
+            <section>
+              <div>
+                <UsersIcon w-5 h-5 />
+                <h1>Personal Information</h1>
+              </div>
+
+              <div>
+                <img src={settingsData.image} alt="profile picture" />
+                <button>
+                  <input type="file" name="" id="" className="hidden" />
+                  Change Photo
+                </button>
+              </div>
+
+              <div>
+                <label htmlFor="name">Full Name</label>
+                <input
+                  type="text"
+                  name="full_name"
+                  value={settingsData?.fullName}
+                />
+                <label htmlFor="hospital">Hospital/Clinic</label>
+                <p>The institution you are affiliated with</p>
+                <input
+                  type="text"
+                  name="hospital"
+                  value={settingsData?.hospital}
+                />
+                <label htmlFor="role">Role</label>
+                <p>Your primary professional role</p>
+                <input type="text" name="role" value={settingsData?.role} />
+                <label htmlFor="department">Department</label>
+                <p>Your specific department or unit</p>
+                <input
+                  type="text"
+                  name="role"
+                  value={settingsData?.department}
+                />
+              </div>
+            </section>
+
+            <section>
+              <EnvelopeIcon className="inline-flex w-6 h-6" />
+              <h1>Contact Information</h1>
+
+              <div>
+                <label htmlFor="email">Email Address</label>
+                <p>Used for account login and primary communication.</p>
+                <input type="email" name="email" value={settingsData.email} />
+              </div>
+              <label htmlFor="Phone_Number">Phone Number</label>
+              <p>For critical alerts and two-factor authentication</p>
+              <input
+                type="tel"
+                name="telephone"
+                value={settingsData?.telephone}
+              />
+            </section>
+            <section>
+              <LockClosedIcon className="inline-flex w-6 h-6" />
+              <h1>Update your password and manage security settings.</h1>
+              <p>Minimum 8 characters,including a number and a symbol.</p>
+              <input
+                type="password"
+                name="password"
+                value={settingsData?.password}
+              />
+              <button>Change Password</button>
+              <h2>Two-Factor Authentication (2FA)</h2>
+              <P>Add an extra layer of security to your account</P>
+              <hr />
+              <h2>Recent Security Activity</h2>
+              <p>keep track of important account events</p>
+              <table>
+                <thead>
+                  <tr>
+                    <td>Date</td>
+                    <td>Action</td>
+                  </tr>
+                </thead>
+                {settingsData.securityActivity.map((activity, index) => (
+                  <tr key={index}>
+                    <td>{activity.date}</td>
+                    <td>{activity.action}</td>
+                  </tr>
+                ))}
+              </table>
+            </section>
+            <section>
+              <ClipboardDocumentIcon className="inline-flex w-6 h-6" />
+              <h1>Billing & Subscription</h1>
+              <p>View your current plan and manage payment methods</p>
+              <div>
+                <h4>Current Plan</h4>
+                <h3>Premium Monthly</h3>
+                <h5>`Billed at $ ${settingsData.payment}/month`</h5>
+                <h4>Payment Method</h4>
+                <h5>Visa ending in {}</h5>
+              </div>
+
+              <div>
+                <h2>Next Billing Date</h2>
+                <h1>{settingsData.nextPayment}</h1>
+                <p>`Remaining ${}`</p>
+              </div>
+            </section>
+            <section>
+              <ArrowRightOnRectangleIcon className="inline-flex w-6 h-6" />
+              <h1>Account Activity Log</h1>
+              <p>A detailed record of actions taken on your account</p>
+              <table>
+                <thead>
+                  <tr>
+                    <td>Date</td>
+                    <td>Action</td>
+                  </tr>
+                </thead>
+                {settingsData.Activity.map((activity, index) => (
+                  <tr key={index}>
+                    <td>{activity.date}</td>
+                    <td>{activity.action}</td>
+                  </tr>
+                ))}
+              </table>
+            </section>
+          </div>
+        );
+      case "user-preferences": {
+        return (
+          <>
+            <div className="genaralSettings">
+              <div className="inline-flex ml-5">
+                <GlobeAltIcon className="w-6 h-6 font-bold text-gray-800" />
+                <h2 className="font-semibold ">Language</h2>
+                {/* <GoogleTranslate /> */}
+              </div>
+              <div title="Language" icon="language"></div>
+
+              <section>
+                <h2 className="flex items-center mb-4 font-semibold">
+                  <AdjustmentsHorizontalIcon className="w-5 h-5 mr-2 text-gray-500" />
+                  Theme
+                </h2>
+
+                <div className="grid grid-cols-3 gap-4">
+                  {options.map((opt) => (
+                    <label
+                      key={opt}
+                      onClick={() => {
+                        setTheme(opt);
+                        themeSetter(opt.toLowerCase());
+                      }}
+                      className={`flex flex-col items-center justify-center p-4 rounded-lg border cursor-pointer transition-all duration-200 ${
+                        theme === opt
+                          ? " bg-primary/10 text-primary border-blue-600 shadow-md"
+                          : "border-gray-300 text-gray-500 hover:shadow-md"
+                      }`}
+                    >
+                      <span className="text-sm font-medium">{opt}</span>
+                    </label>
+                  ))}
+                </div>
+              </section>
+
+              <div className="inline-flex mt-5 ml-5">
+                <RocketLaunchIcon className="w-6 h-6 font-bold text-gray-800" />
+                <h2 className="font-bold ">Start behaviour</h2>
+              </div>
+              <div className="mt-8 launch">
+                <h3>Launch on system start up </h3>
+                <Switch
+                  onChange={() => setIsSwitchOn(!isSwitchOn)}
+                  checked={isSwitchOn}
+                  className="mr-5"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 gap-2 mt-10">
+                <div className="inline-flex">
+                  {fontSize === "full" ? (
+                    <MagnifyingGlassMinusIcon className="w-6 h-6 font-bold text-gray-800" />
+                  ) : (
+                    <MagnifyingGlassPlusIcon className="w-6 h-6 font-bold text-gray-800" />
+                  )}
+                  <h3 className="font-bold">Display scaling</h3>
+                </div>
+
+                <select
+                  className="w-3/4 h-full transition rounded-lg form-select border-border-light dark:border-border-dark dark:bg-background-dark text-text-light dark:text-text-dark focus:border-primary focus:ring-primary"
+                  value={fontSize}
+                  onChange={(e) => {
+                    fontSetter(e.target.value);
+                    setFontSize(e.target.value);
+                  }}
+                >
+                  <option value="16">200%</option>
+                  <option value="24">300%</option>
+                  <option value="20">250%</option>
+                  <option value="12">150%</option>
+                  <option value="8">100%</option>
+                  <option value="4">50%</option>
+                  <option value="2">20%</option>
+                </select>
+              </div>
+              <div className="inline-flex mt-5 ml-5">
+                {isSoundOn ? (
+                  <SpeakerWaveIcon className="w-6 h-6 font-bold text-gray-800" />
+                ) : (
+                  <SpeakerXMarkIcon className="w-6 h-6 font-bold text-gray-800" />
+                )}
+                <h3 className="font-bold">Sound Preference</h3>
+              </div>
+              <div className="grid grid-cols-1 bg-white p-[2%] text-black rounded-lg">
+                <div className="mt-8 launch">
+                  <h3 className="font-semibold">Enable Sound Effects</h3>
+                  <Switch
+                    onChange={() => setIsSoundOn(!isSoundOn)}
+                    checked={isSoundOn}
+                    className="mr-5"
+                  />
+                </div>
+                <div className="inline-flex w-full gap-12 mt-5 ml-5">
+                  <SpeakerXMarkIcon className="w-6 h-6 font-bold text-gray-800" />
+                  <input
+                    type="range"
+                    className="w-9/12"
+                    value={volume}
+                    onChange={(e) => setVolume(e.target.value)}
+                  />
+                  <SpeakerWaveIcon className="w-6 h-6 font-bold text-gray-800" />
+                </div>
+              </div>
+              <div className="inline-flex mt-10">
+                <ClockIcon className="w-6 h-6" />
+                <h3 className="font-bold">Auto Updates</h3>
+              </div>
+              <div className=" mt-5 ml-5 flex flex-row bg-white p-[2%] rounded-lg">
+                <h2 className="font-semibold">Enable AutoUpdates</h2>
+                <Switch
+                  onChange={() => setIsAutoUpdateOn(!isAutoUpdateOn)}
+                  checked={isAutoUpdateOn}
+                  className="mr-5"
+                />
+              </div>
+              <div className="flex flex-col items-center justify-center gap-3 mt-10 ">
+                <button className="mb-5 font-bold text-red-900">
+                  Reset to Default
+                </button>
+                <button
+                  className="font-bold text-white bg-gray-900 w-fit pl-[3%] pr-[3%] rounded-lg
+                  hover:bg-gray-700 transition duration-1000 scale-105"
+                  onClick={() => saveChanges()}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </>
+        );
+      }
       default:
         return <div>Hospital Info Settings</div>;
     }
