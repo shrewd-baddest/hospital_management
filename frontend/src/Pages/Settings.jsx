@@ -405,135 +405,206 @@ const Settings = () => {
       case "account":
         return (
           <div>
-            <h1>Profile Settings</h1>
+            <h1 className="mb-3 text-2xl font-bold">Profile Settings</h1>
             <p>
               Manage your personal information,contact details,and preferences
             </p>
             <hr />
 
             <section>
-              <div>
-                <UsersIcon w-5 h-5 />
-                <h1>Personal Information</h1>
+              <div className="flex gap-2 mt-5">
+                <UsersIcon className="inline w-5 h-5 font-bold" />
+                <h1 className="text-xl font-semibold"> Personal Information</h1>
               </div>
 
-              <div>
+              <div className="flex flex-row mt-5 gap-[5%]">
                 <img src={settingsData.image} alt="profile picture" />
-                <button>
+                <button className="px-4 py-1 transition border border-gray-200 rounded-lg shadow-sm hover:border-blue-500">
                   <input type="file" name="" id="" className="hidden" />
                   Change Photo
                 </button>
               </div>
 
-              <div>
-                <label htmlFor="name">Full Name</label>
-                <input
-                  type="text"
-                  name="full_name"
-                  value={settingsData?.fullName}
-                />
-                <label htmlFor="hospital">Hospital/Clinic</label>
-                <p>The institution you are affiliated with</p>
-                <input
-                  type="text"
-                  name="hospital"
-                  value={settingsData?.hospital}
-                />
-                <label htmlFor="role">Role</label>
-                <p>Your primary professional role</p>
-                <input type="text" name="role" value={settingsData?.role} />
-                <label htmlFor="department">Department</label>
-                <p>Your specific department or unit</p>
-                <input
-                  type="text"
-                  name="role"
-                  value={settingsData?.department}
-                />
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                <section className="grid grid-cols-1">
+                  <label htmlFor="name" className="text-lg font-semibold">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    name="full_name"
+                    value={settingsData?.fullName}
+                    className="lg:max-w-[60%] text-black font-semibold"
+                  />
+                </section>
+
+                <section className="grid grid-cols-1">
+                  <label htmlFor="hospital" className="text-lg font-semibold">
+                    Hospital/Clinic
+                  </label>
+                  <p>The institution you are affiliated with</p>
+                  <input
+                    type="text"
+                    name="hospital"
+                    value={settingsData?.hospital}
+                    className="lg:max-w-[60%] text-black font-semibold"
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="role" className="text-lg font-semibold">
+                    Role
+                  </label>
+                  <p>Your primary professional role</p>
+                  <input
+                    type="text"
+                    name="role"
+                    value={settingsData?.role}
+                    className="lg:max-w-[60%] text-black font-semibold w-full"
+                  />
+                </section>
+
+                <section className="grid grid-cols-1">
+                  <label htmlFor="department" className="text-lg font-semibold">
+                    Department
+                  </label>
+                  <p>Your specific department or unit</p>
+                  <input
+                    type="text"
+                    name="role"
+                    value={settingsData?.department}
+                    className="lg:max-w-[60%] text-black font-semibold"
+                  />
+                </section>
               </div>
             </section>
 
             <section>
-              <EnvelopeIcon className="inline-flex w-6 h-6" />
-              <h1>Contact Information</h1>
-
-              <div>
-                <label htmlFor="email">Email Address</label>
-                <p>Used for account login and primary communication.</p>
-                <input type="email" name="email" value={settingsData.email} />
+              <div className="flex gap-2 my-5">
+                <EnvelopeIcon className="inline-flex w-6 h-6" />
+                <h1 className="text-xl font-semibold">Contact Information</h1>
               </div>
-              <label htmlFor="Phone_Number">Phone Number</label>
-              <p>For critical alerts and two-factor authentication</p>
-              <input
-                type="tel"
-                name="telephone"
-                value={settingsData?.telephone}
-              />
+
+              <div className="grid grid-cols-1 lg:grid-cols-2">
+                <div className="grid grid-cols-1">
+                  <label htmlFor="email" className="text-lg font-semibold">
+                    Email Address
+                  </label>
+                  <p>Used for account login and primary communication.</p>
+                  <input
+                    type="email"
+                    name="email"
+                    value={settingsData.email}
+                    className="lg:max-w-[60%] text-black font-semibold"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1">
+                  <label
+                    htmlFor="Phone_Number"
+                    className="text-lg font-semibold"
+                  >
+                    Phone Number
+                  </label>
+                  <p>For critical alerts and two-factor authentication</p>
+                  <input
+                    type="tel"
+                    name="telephone"
+                    value={settingsData?.telephone}
+                    className="lg:max-w-[60%] text-black font-semibold"
+                  />
+                </div>
+              </div>
             </section>
             <section>
-              <LockClosedIcon className="inline-flex w-6 h-6" />
-              <h1>Update your password and manage security settings.</h1>
+              <div className="flex gap-2 mt-5">
+                <LockClosedIcon className="inline-flex w-6 h-6" />
+                <h1 className="text-xl font-semibold">
+                  Update your password and manage security settings.
+                </h1>
+              </div>
+
               <p>Minimum 8 characters,including a number and a symbol.</p>
-              <input
-                type="password"
-                name="password"
-                value={settingsData?.password}
-              />
-              <button>Change Password</button>
+              <div className="flex lg:flex-row gap-[5%] my-5 flex-col">
+                <input
+                  type="password"
+                  name="password"
+                  value={settingsData?.password}
+                  className="lg:min-w-[50%] text-black font-semibold py-1"
+                />
+                <button className="px-4 py-1 transition border border-gray-200 rounded-lg shadow-sm hover:border-blue-500 w-fit">
+                  Change Password
+                </button>
+              </div>
               <h2>Two-Factor Authentication (2FA)</h2>
-              <P>Add an extra layer of security to your account</P>
+              {/* <P>Add an extra layer of security to your account</P> */}
               <hr />
-              <h2>Recent Security Activity</h2>
+              <h2 className="text-xl font-semibold">
+                Recent Security Activity
+              </h2>
               <p>keep track of important account events</p>
-              <table>
+              <table className="w-full border-collapse">
                 <thead>
-                  <tr>
-                    <td>Date</td>
-                    <td>Action</td>
+                  <tr className="bg-gray-100">
+                    <td className="px-4 py-2 text-left">Date</td>
+                    <td className="px-4 py-2 text-left">Action</td>
                   </tr>
                 </thead>
-                {settingsData.securityActivity.map((activity, index) => (
-                  <tr key={index}>
-                    <td>{activity.date}</td>
-                    <td>{activity.action}</td>
-                  </tr>
-                ))}
+                {settingsData.securityActivity &&
+                  settingsData.securityActivity.map((activity, index) => (
+                    <tr key={index}>
+                      <td className="px-4 py-2">{activity.date}</td>
+                      <td className="px-4 py-2">{activity.action}</td>
+                    </tr>
+                  ))}
               </table>
             </section>
             <section>
-              <ClipboardDocumentIcon className="inline-flex w-6 h-6" />
-              <h1>Billing & Subscription</h1>
-              <p>View your current plan and manage payment methods</p>
-              <div>
-                <h4>Current Plan</h4>
-                <h3>Premium Monthly</h3>
-                <h5>`Billed at $ ${settingsData.payment}/month`</h5>
-                <h4>Payment Method</h4>
-                <h5>Visa ending in {}</h5>
+              <div className="flex gap-2 my-3">
+                <ClipboardDocumentIcon className="inline-flex w-6 h-6" />
+                <h1 className="text-xl font-semibold">
+                  Billing & Subscription
+                </h1>
               </div>
+              <p>View your current plan and manage payment methods</p>
+              <div className="flex flex-row gap-[10%]">
+                <div>
+                  <h4 className="my-3">Current Plan</h4>
+                  <h3 className="font-semibold">Premium Monthly</h3>
+                  <h5 className="text-slate-700">
+                    {`Billed at $ ${settingsData.payment}/month`}
+                  </h5>
+                  <h4 className="font-semibold">Payment Method</h4>
+                  <h5>Visa ending in {}</h5>
+                </div>
 
-              <div>
-                <h2>Next Billing Date</h2>
-                <h1>{settingsData.nextPayment}</h1>
-                <p>`Remaining ${}`</p>
+                <div>
+                  <h2>Next Billing Date</h2>
+                  <h1>{settingsData.nextPayment}</h1>
+                  <p>{`Remaining ${settingsData.date}`}</p>
+                </div>
               </div>
             </section>
             <section>
-              <ArrowRightOnRectangleIcon className="inline-flex w-6 h-6" />
-              <h1>Account Activity Log</h1>
+              <div className="flex gap-2 my-5">
+                <ArrowRightOnRectangleIcon className="inline-flex w-6 h-6" />
+                <h1 className="text-xl font-semibold">Account Activity Log</h1>
+              </div>
               <p>A detailed record of actions taken on your account</p>
-              <table>
+              <table className="w-full border-collapse">
                 <thead>
-                  <tr>
-                    <td>Date</td>
-                    <td>Action</td>
+                  <tr className="bg-gray-100">
+                    <td className="px-4 py-2 text-left">Date</td>
+                    <td className="px-4 py-2 text-left">Action</td>
                   </tr>
                 </thead>
-                {settingsData.Activity.map((activity, index) => (
-                  <tr key={index}>
-                    <td>{activity.date}</td>
-                    <td>{activity.action}</td>
-                  </tr>
-                ))}
+                {settingsData.Activity &&
+                  settingsData.Activity.map((activity, index) => (
+                    <tr key={index}>
+                      <td className="px-4 py-2">{activity.date}</td>
+                      <td className="px-4 py-2">{activity.action}</td>
+                    </tr>
+                  ))}
               </table>
             </section>
           </div>
