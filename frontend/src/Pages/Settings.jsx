@@ -54,6 +54,29 @@ const Settings = () => {
       });
   }, [activeTab]);
 
+  const userPreference = {
+    volume,
+    isAutoUpdateOn,
+    isSoundOn,
+    fontSize,
+    isSwitchOn,
+    theme,
+  };
+
+  const saveChanges = async () => {
+    const response = await axios.post(
+      "http://localhost:3000/webpages/user-preferences",
+      userPreference,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+    var res = response.data;
+    setSettingsData(res);
+  };
+
   const showDetails = (notificationmsg, eventTime, source) => {
     return (
       <div>

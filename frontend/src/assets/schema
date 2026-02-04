@@ -7,6 +7,15 @@ CREATE TABLE system_info(
     email VARCHAR(50) NOT NULL UNIQUE,
     logo VARCHAR(200) NOT NULL
 );
+CREATE TABLE preference (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid references users(id),
+    volume INT DEFAULT 50,
+    isSoundOn BOOLEAN DEFAULT TRUE,
+    fontSize INT DEFAULT 16,
+    isSwitchOn BOOLEAN DEFAULT FALSE,
+    theme VARCHAR(100) DEFAULT 'Light' CHECK (theme IN ('Light', 'System', 'Dark'))
+);
 CREATE TABLE users(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     full_name VARCHAR(50),
