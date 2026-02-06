@@ -14,6 +14,7 @@ CREATE TABLE preference (
     isSoundOn BOOLEAN DEFAULT TRUE,
     fontSize INT DEFAULT 16,
     isSwitchOn BOOLEAN DEFAULT FALSE,
+    isAutoUpdatesOn BOOLEAN DEFAULT TRUE,
     theme VARCHAR(100) DEFAULT 'Light' CHECK (theme IN ('Light', 'System', 'Dark'))
 );
 CREATE TABLE users(

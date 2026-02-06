@@ -37,7 +37,7 @@ const Settings = () => {
     "hospital-info": "http://localhost:3000/webpages/hospital-info",
     notifications: "http://localhost:3000/webpages/notifications",
     account: "http://localhost:3000/webpages/account",
-    "user-preferences": "http://localhost:3000/webpages/user-preferences",
+    "user-preferences": "http://localhost:3000/webpages/user_preferences",
   };
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const Settings = () => {
 
   const saveChanges = async () => {
     const response = await axios.post(
-      "http://localhost:3000/webpages/user-preferences",
+      "http://localhost:3000/webpages/user_preferences",
       userPreference,
       {
         headers: {
@@ -658,9 +658,11 @@ const Settings = () => {
                         themeSetter(opt.toLowerCase());
                       }}
                       className={`flex flex-col items-center justify-center p-4 rounded-lg border cursor-pointer transition-all duration-200 ${
-                        theme === opt
-                          ? " bg-primary/10 text-primary border-blue-600 shadow-md"
-                          : "border-gray-300 text-gray-500 hover:shadow-md"
+                        settingsData
+                          ? settingsData.theme
+                          : theme === opt
+                            ? " bg-primary/10 text-primary border-blue-600 shadow-md"
+                            : "border-gray-300 text-gray-500 hover:shadow-md"
                       }`}
                     >
                       <span className="text-sm font-medium">{opt}</span>
@@ -677,7 +679,7 @@ const Settings = () => {
                 <h3>Launch on system start up </h3>
                 <Switch
                   onChange={() => setIsSwitchOn(!isSwitchOn)}
-                  checked={isSwitchOn}
+                  checked={settingsData ? settingsData.isswitchon : isSwitchOn}
                   className="mr-5"
                 />
               </div>
@@ -694,7 +696,9 @@ const Settings = () => {
 
                 <select
                   className="w-3/4 h-full transition rounded-lg form-select border-border-light dark:border-border-dark dark:bg-background-dark text-text-light dark:text-text-dark focus:border-primary focus:ring-primary"
-                  value={fontSize}
+                  value={() =>
+                    settingsData ? settingsData.fontsize : fontSize
+                  }
                   onChange={(e) => {
                     fontSetter(e.target.value);
                     setFontSize(e.target.value);
@@ -710,7 +714,7 @@ const Settings = () => {
                 </select>
               </div>
               <div className="inline-flex mt-5 ml-5">
-                {isSoundOn ? (
+                {settingsData?.issoundon ? (
                   <SpeakerWaveIcon className="w-6 h-6 font-bold text-gray-800" />
                 ) : (
                   <SpeakerXMarkIcon className="w-6 h-6 font-bold text-gray-800" />
@@ -722,7 +726,9 @@ const Settings = () => {
                   <h3 className="font-semibold">Enable Sound Effects</h3>
                   <Switch
                     onChange={() => setIsSoundOn(!isSoundOn)}
-                    checked={isSoundOn}
+                    checked={() =>
+                      settingsData ? settingsData.issoundon : isSoundOn
+                    }
                     className="mr-5"
                   />
                 </div>
@@ -731,7 +737,7 @@ const Settings = () => {
                   <input
                     type="range"
                     className="w-9/12"
-                    value={volume}
+                    value={() => (settingsData ? settingsData.volume : volume)}
                     onChange={(e) => setVolume(e.target.value)}
                   />
                   <SpeakerWaveIcon className="w-6 h-6 font-bold text-gray-800" />
@@ -745,7 +751,9 @@ const Settings = () => {
                 <h2 className="font-semibold">Enable AutoUpdates</h2>
                 <Switch
                   onChange={() => setIsAutoUpdateOn(!isAutoUpdateOn)}
-                  checked={isAutoUpdateOn}
+                  checked={() =>
+                    settingsData ? settingsData.isautoupdateion : isAutoUpdateOn
+                  }
                   className="mr-5"
                 />
               </div>

@@ -1,11 +1,11 @@
 import pool from "../Servers/database.js";
 
-const getPreference=async(req,res)=>{
+export const getPreference=async(req,res)=>{
 
 try {
-    const sql=`SELECT * FROM getPreference`;
-    const results=pool.query(sql);
-    res.status(200).json(results.rows[0]);
+    const sql=`SELECT * FROM preference`;
+    const results=await pool.query(sql);
+     res.status(200).json(results.rows[0]);
 
 } catch (error) {
     console.error('Error fetching system settings:', error);
@@ -15,7 +15,7 @@ try {
 }
 
 
-const updatePreference=async (req,res) => {
+export const updatePreference=async (req,res) => {
 const {volume,isAutoUpdateOn,isSoundOn,fontSize,isSwitchOn,theme}=req.body
 const user_id=req.user;
     try {
@@ -23,14 +23,14 @@ const user_id=req.user;
     var result;
         if(checkUser.rows.includes(user_id)){
 
-       result=await pool.query(`UPDATE preference SET user_id=$1,volume=$2,isSoundOn=$3,fontSize=$4,isSwitchOn=$5,theme=$6 RETURNING *`,
-            [user_id,volume,isSoundOn,fontSize,isSwitchOn,theme]
+       result=await pool.query(`UPDATE preference SET user_id=$1,volume=$2,isSoundOn=$3,fontSize=$4,isSwitchOn=$5,theme=$6,isAutoUpdateOn=$7 RETURNING *`,
+            [user_id,volume,isSoundOn,fontSize,isSwitchOn,theme,isAutoUpdateOn]
         )
     }
     else{
-        const sql=`INSERT INTO preference (user_id,volume,isSoundOn,fontSize,isSwitchOn,theme)
-        values($1,$2,$3,$4,$5,$6) RETURNING *`
-        result=await pool.query(sql,[user_id,volume,isSoundOn,fontSize,isSwitchOn,theme]);
+        const sql=`INSERT INTO preference (user_id,volume,isSoundOn,fontSize,isSwitchOn,theme,isAutoUpdateOn)
+        values($1,$2,$3,$4,$5,$6,$7) RETURNING *`
+        result=await pool.query(sql,[user_id,volume,isSoundOn,fontSize,isSwitchOn,theme,isAutoUpdateOn]);
     }
        res.status(200).json(result.rows[0]);
         

@@ -10,6 +10,7 @@ import { getexportData, getgraphdata } from "../Controllers/reportController.js"
 import { getPermissions } from "../Controllers/permissionController.js";
 import upload from "../Middlewares/multer.js";
 import { getNotifications, getSettings, updateNotificationById, updateSettings } from "../Controllers/systemController.js";
+import { getPreference, updatePreference } from "../Controllers/preference.js";
  const webpages=Router();
 webpages.get('/dashboard',systemOverview)
 webpages.get('/users',getAllUsers);
@@ -23,7 +24,7 @@ webpages.post('/updateDepartment',updateDepartment);
 webpages.get('/doctors',getAllDoctors);
 webpages.get('/doctor/schedule/:doctorId',getDoctorSchedule);
 webpages.get('/doctor/profile/:doctorId',getProfile);
-webpages.get('/appointments/events',getAppointmentsEvents)
+webpages.get('/appointments/events',getAppointmentsEvents);
 webpages.get('/billing',getBillingOverview);
 webpages.post('/getdataExport',getexportData);
 webpages.post('/getreportdata',getgraphdata);
@@ -32,6 +33,8 @@ webpages.post('/hospital-info',upload.single('logo'),updateSettings);
 webpages.get('/hospital-info',getSettings);
 webpages.get('/notifications/:id',updateNotificationById); 
 webpages.get('/notifications',getNotifications);
+webpages.get('/user_preferences',getPreference);
+webpages.post('/user_preferences',updatePreference);
 
 
  
