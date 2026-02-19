@@ -1,41 +1,66 @@
 import { Router } from "express";
-import { getAllUsers, getUserSearch, } from "../Controllers/usersController.js";
-import { admissionsOverTime, systemOverview } from "../Controllers/dashboardController.js";
-import { addDepartment, getDepartmentById, getDepartments, searchDepartments, updateDepartment } from "../Controllers/departmentsController.js";
-import { getAllDoctors ,getDoctorSchedule} from "../Controllers/doctorController.js";
-import { getProfile } from "../Controllers/docDetailsController.js";
-import { getAppointmentsEvents } from "../Controllers/appointment.js";
-import { getBillingOverview } from "../Controllers/billingController.js";
-import { getexportData, getgraphdata } from "../Controllers/reportController.js";
-import { getPermissions } from "../Controllers/permissionController.js";
+import {
+  getAllUsers,
+  getUserSearch,
+} from "../Controllers/admin/usersController.js";
+import {
+  admissionsOverTime,
+  systemOverview,
+} from "../Controllers/admin/dashboardController.js";
+import {
+  addDepartment,
+  getDepartmentById,
+  getDepartments,
+  searchDepartments,
+  updateDepartment,
+} from "../Controllers/admin/departmentsController.js";
+import {
+  getAllDoctors,
+  getDoctorSchedule,
+} from "../Controllers/admin/doctorController.js";
+import { getProfile } from "../Controllers/admin/docDetailsController.js";
+import { getAppointmentsEvents } from "../Controllers/admin/appointment.js";
+import { getBillingOverview } from "../Controllers/admin/billingController.js";
+import {
+  getexportData,
+  getgraphdata,
+} from "../Controllers/admin/reportController.js";
+import { getPermissions } from "../Controllers/admin/permissionController.js";
 import upload from "../Middlewares/multer.js";
-import { getNotifications, getSettings, updateNotificationById, updateSettings } from "../Controllers/systemController.js";
-import { getPreference, updatePreference } from "../Controllers/preference.js";
- const webpages=Router();
-webpages.get('/dashboard',systemOverview)
-webpages.get('/users',getAllUsers);
-webpages.post('/userSearch',getUserSearch);
-webpages.get('/admissionrange',admissionsOverTime);
-webpages.get('/departments',getDepartments);
-webpages.post('/departmentSearch',searchDepartments);
-webpages.post('/addDepartment',addDepartment);
-webpages.get('/getDepartmentById/:id',getDepartmentById);
-webpages.post('/updateDepartment',updateDepartment);
-webpages.get('/doctors',getAllDoctors);
-webpages.get('/doctor/schedule/:doctorId',getDoctorSchedule);
-webpages.get('/doctor/profile/:doctorId',getProfile);
-webpages.get('/appointments/events',getAppointmentsEvents);
-webpages.get('/billing',getBillingOverview);
-webpages.post('/getdataExport',getexportData);
-webpages.post('/getreportdata',getgraphdata);
-webpages.get('/permissions',getPermissions);
-webpages.post('/hospital-info',upload.single('logo'),updateSettings);
-webpages.get('/hospital-info',getSettings);
-webpages.get('/notifications/:id',updateNotificationById); 
-webpages.get('/notifications',getNotifications);
-webpages.get('/user_preferences',getPreference);
-webpages.post('/user_preferences',updatePreference);
+import {
+  getNotifications,
+  getSettings,
+  updateNotificationById,
+  updateSettings,
+} from "../Controllers/admin/systemController.js";
+import {
+  getPreference,
+  updatePreference,
+} from "../Controllers/admin/preference.js";
+const webpages = Router();
+webpages.get("/dashboard", systemOverview);
+webpages.get("/users", getAllUsers);
+webpages.post("/userSearch", getUserSearch);
+webpages.get("/admissionrange", admissionsOverTime);
+webpages.get("/departments", getDepartments);
+webpages.post("/departmentSearch", searchDepartments);
+webpages.post("/addDepartment", addDepartment);
+webpages.get("/getDepartmentById/:id", getDepartmentById);
+webpages.post("/updateDepartment", updateDepartment);
+webpages.get("/doctors", getAllDoctors);
+webpages.get("/doctor/schedule/:doctorId", getDoctorSchedule);
+webpages.get("/doctor/profile/:doctorId", getProfile);
+webpages.get("/appointments/events", getAppointmentsEvents);
+webpages.get("/billing", getBillingOverview);
+webpages.post("/getdataExport", getexportData);
+webpages.post("/getreportdata", getgraphdata);
+webpages.get("/permissions", getPermissions);
+webpages.post("/hospital-info", upload.single("logo"), updateSettings);
+webpages.get("/hospital-info", getSettings);
+webpages.get("/notifications/:id", updateNotificationById);
+webpages.get("/notifications", getNotifications);
+webpages.get("/user_preferences", getPreference);
+webpages.post("/user_preferences", updatePreference);
+// webpages.get("/doctors/appointments");
 
-
- 
-export default webpages
+export default webpages;

@@ -4,7 +4,10 @@ import {
   ClipboardDocumentCheckIcon,
   ClipboardIcon,
   FunnelIcon,
+  MicrophoneIcon,
+  ReceiptPercentIcon,
   UserGroupIcon,
+  UserIcon,
   UserPlusIcon,
 } from "@heroicons/react/24/outline";
 import React from "react";
@@ -12,9 +15,11 @@ import { useLoaderData } from "react-router-dom";
 import Linegraph from "../assets/Linegraph";
 
 const Dashboard = () => {
-  // const role=localStorage.getItem('role');
-  const adminData = useLoaderData().overview;
-  const role = "admin";
+  const role = localStorage.getItem("role");
+  const dashboardData = useLoaderData();
+  const doctor = dashboardData;
+  // const role = "admin";
+  const adminData = dashboardData.overview;
   console.log(adminData);
   const patients = adminData.totalPatients;
   const admissions = adminData.admissions;
@@ -93,6 +98,97 @@ const Dashboard = () => {
                   </div>
                 ))}
               </section>
+            </div>
+          </div>
+        );
+      }
+
+      case "doctor": {
+        return (
+          <div>
+            <p>{date.now()}</p>
+            <h1>{`Hello ,Dr.${doctor.fullName}`}</h1>
+
+            <div>
+              <section>
+                <p>
+                  Today's appointments <ClipboardDocumentCheckIcon />
+                </p>
+                <h1>{doctor.appointmentNumber}</h1>
+              </section>
+              <section>
+                <p>
+                  Critical Lab Results <FunnelIcon />
+                </p>
+                <h1>{doctor.LabResults}</h1>
+              </section>
+              <section>
+                <p>pending referrals</p>
+                <h1>{doctor.referrals}</h1>
+                <p>patients awaiting for review</p>
+              </section>
+              <section></section>
+            </div>
+            <div>
+              <table className="w-full border-collapse">
+                <thead className="rounded-lg">
+                  <tr className="rounded-lg bg-gray-50">
+                    <th className="px-4 py-2 text-left">Time</th>
+                    <th className="px-4 py-2 text-left">Patient Name</th>
+                    <th className="px-4 py-2 text-left">Reason</th>
+                    <th className="px-4 py-2 text-left">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Array.isArray(doctor.appointments) &&
+                    doctor.appointments.map((invoice) => (
+                      <tr
+                        key={invoice.invoiceId}
+                        className="transition hover:bg-gray-50"
+                      >
+                        <td className="px-4 py-2">{invoice.time}</td>
+                        <td className="px-4 py-2">{invoice.patientName}</td>
+                        <td className="px-4 py-2">{invoice.reason}</td>
+                        <td className="px-4 py-2">{invoice.status}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+
+              <section>
+               <h1> Recent Alerts</h1>
+               <p>Important notifications requiring attention</p>
+               {
+               Array.isArray(doctor.notifications)&&
+               doctor.notifications.map((not,index)=>{
+                <div key={index}>
+<h4><ReceiptPercentIcon /> {not.message}</h4>
+<p>{not.time}</p>
+                </div>
+               }
+
+               )
+               }
+              </section>
+            </div>
+            <div>
+              <h3>Quick Action</h3>
+              <button>
+                <ClipboardDocumentCheckIcon />
+                Add New Prescription
+              </button>
+              <button>
+                <UserGroupIcon />
+                Manage Patient List
+              </button>
+              <button>
+                <MicrophoneIcon />
+                View Pending Results
+              </button>
+              <button>
+                <UserIcon />
+                Update Availability
+              </button>
             </div>
           </div>
         );

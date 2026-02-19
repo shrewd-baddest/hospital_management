@@ -9,8 +9,10 @@ import {
 import { dashboardLoader } from "./Pages/Dashboard.jsx";
 import { userLoader } from "./Pages/Users.jsx";
 import { departments } from "./Pages/Departments.jsx";
+import { appointments } from "./Pages/Appointments.jsx";
 
 const App = () => {
+  const role = localStorage.getItem("role");
   const PagesLayout = lazy(() => import("./Layout/PagesLayout.jsx"));
   const Accounts = lazy(() => import("./Layout/Accounts.jsx"));
   const Login = lazy(() => import("./Authorisation/Login.jsx"));
@@ -46,7 +48,11 @@ const App = () => {
             loader={dashboardLoader}
           />
           <Route path="medicalrecords" element={<MedicalRecords />} />
-          <Route path="appointments" element={<Appointments />} />
+          <Route
+            path="appointments"
+            element={<Appointments />}
+            loader={role !== "admin" ? appointments : ""}
+          />
           <Route path="labresults" element={<LabResults />} />
           <Route path="profile" element={<Profile />} />
           <Route path="billing" element={<Billing />} />

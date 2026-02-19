@@ -1,4 +1,4 @@
-import pool from "../Servers/database.js";
+import pool from "../../Servers/database.js";
 
 export const getAllUsers = async (req, res) => {
   const sql = `SELECT full_name, email, role, is_active FROM users`;
@@ -7,9 +7,8 @@ export const getAllUsers = async (req, res) => {
     const users = await pool.query(sql);
 
     res.status(200).json({
-      users: users.rows   // return all users, not just the first one
+      users: users.rows, // return all users, not just the first one
     });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -22,9 +21,8 @@ export const getUserSearch = async (req, res) => {
     const users = await pool.query(sql, [`%${search}%`]);
 
     res.status(200).json({
-      users: users.rows
+      users: users.rows,
     });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

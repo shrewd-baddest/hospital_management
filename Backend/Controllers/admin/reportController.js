@@ -1,4 +1,4 @@
-import pool from "../Servers/database.js";
+import pool from "../../Servers/database.js";
 
 export const getgraphdata = async (req, res) => {
   const { reportType, dateRange = {}, days = 7 } = req.body;

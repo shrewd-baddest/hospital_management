@@ -1,7 +1,7 @@
-import pool from "../Servers/database.js";
-export const getAppointmentsEvents=async(req,res)=>{
-    try {
- const sql=`SELECT 
+import pool from "../../Servers/database.js";
+export const getAppointmentsEvents = async (req, res) => {
+  try {
+    const sql = `SELECT 
     a.appointment_date AS start_time,
     a.appointment_date + INTERVAL '1 hour' AS end_time,
     COALESCE(
@@ -18,15 +18,15 @@ export const getAppointmentsEvents=async(req,res)=>{
 
     const result = await pool.query(sql);
 
-    const events = result.rows.map(row => ({
-        title: row.title,
-        start: row.start_time.toISOString(),
-        end: row.end_time.toISOString()
-      }));
+    const events = result.rows.map((row) => ({
+      title: row.title,
+      start: row.start_time.toISOString(),
+      end: row.end_time.toISOString(),
+    }));
 
     res.json(events);
   } catch (error) {
-    console.error('Error fetching events:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error fetching events:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-}
+};

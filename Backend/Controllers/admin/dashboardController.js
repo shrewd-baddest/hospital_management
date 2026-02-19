@@ -1,4 +1,4 @@
-import pool from '../Servers/database.js';
+import pool from "../../Servers/database.js";
 
 export const systemOverview = async (req, res) => {
   try {
@@ -12,22 +12,22 @@ export const systemOverview = async (req, res) => {
       ORDER BY created_at DESC
       LIMIT 7
     `;
-const sql6=`SELECT COUNT(*) AS today_Admissions FROM admissions WHERE 
-TO_CHAR(DATE_TRUNC('day',admission_date),'dd mon yyyy')=TO_CHAR(DATE_TRUNC('day',NOW()),'dd mon yyyy');`
+    const sql6 = `SELECT COUNT(*) AS today_Admissions FROM admissions WHERE 
+TO_CHAR(DATE_TRUNC('day',admission_date),'dd mon yyyy')=TO_CHAR(DATE_TRUNC('day',NOW()),'dd mon yyyy');`;
     const [
       totalPatients,
       totalDoctors,
       totalEmptyBeds,
       totalOccupiedBeds,
       activities,
-      admissions
+      admissions,
     ] = await Promise.all([
       pool.query(sql1),
       pool.query(sql2),
       pool.query(sql3, ["empty"]),
       pool.query(sql4, ["occupied"]),
       pool.query(sql5),
-      pool.query(sql6)
+      pool.query(sql6),
     ]);
 
     const overview = {
@@ -35,12 +35,11 @@ TO_CHAR(DATE_TRUNC('day',admission_date),'dd mon yyyy')=TO_CHAR(DATE_TRUNC('day'
       totalDoctors: totalDoctors.rows[0].total_doctors,
       totalEmptyBeds: totalEmptyBeds.rows[0].empty_beds,
       totalOccupiedBeds: totalOccupiedBeds.rows[0].occupied_beds,
-      todayAdmissions:admissions.rows[0].today_Admissions,
-      recentActivities: activities.rows
+      todayAdmissions: admissions.rows[0].today_Admissions,
+      recentActivities: activities.rows,
     };
 
     res.status(200).json({ overview });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -48,7 +47,7 @@ TO_CHAR(DATE_TRUNC('day',admission_date),'dd mon yyyy')=TO_CHAR(DATE_TRUNC('day'
 
 export const admissionsOverTime = async (req, res) => {
   try {
-  const sql=`SELECT
+    const sql = `SELECT
     COUNT(*) AS total_admissions,
    TO_CHAR(DATE_TRUNC('month', admission_date),'MON') AS months
 FROM
@@ -60,10 +59,10 @@ GROUP BY
 ORDER BY
     TO_CHAR(DATE_TRUNC('month', admission_date),'MON') ASC
 	;
-`
+`;
     const result = await pool.query(sql);
     res.status(200).json({ data: result.rows });
   } catch (error) {
     res.status(500).json({ message: error.message });
-  } 
+  }
 };
