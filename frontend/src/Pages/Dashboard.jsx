@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   BuildingStorefrontIcon,
   ChartBarIcon,
@@ -9,205 +10,255 @@ import {
   UserGroupIcon,
   UserIcon,
   UserPlusIcon,
+  CalendarDateRangeIcon,
+  BeakerIcon,
 } from "@heroicons/react/24/outline";
-import React from "react";
-import { useLoaderData } from "react-router-dom";
+
 import Linegraph from "../assets/Linegraph";
 
 const Dashboard = () => {
   const role = localStorage.getItem("role");
-  const dashboardData = useLoaderData();
-  const doctor = dashboardData;
-  // const role = "admin";
-  const adminData = dashboardData.overview;
-  console.log(adminData);
-  const patients = adminData.totalPatients;
-  const admissions = adminData.admissions;
-  const emptyBeds = adminData.totalEmptyBeds;
-  const occupiedBeds = adminData.totalOccupiedBeds;
-  const activities = adminData.recentActivities;
-  const roleBasedDashboard = () => {
+  const token = localStorage.getItem("token");
+
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const urls = {
+    admin: "http://localhost:3000/webpages/dashboard",
+    doctor: "http://localhost:3000/webpages/doctor/dashboard",
+  };
+
+  /* ================= FETCH ================= */
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const response = await fetch(urls[role], {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch");
+
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        console.error("Dashboard error:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (role && urls[role]) {
+      fetchDashboard();
+    }
+  }, [role, token]);
+
+  if (loading) return <p className="p-5">Loading...</p>;
+  if (!data) return <p className="p-5">No dashboard data</p>;
+
+  /* ================= SWITCH RENDER ================= */
+  const renderDashboard = () => {
     switch (role) {
       case "admin": {
-        return (
-          <div className="max-w-full m-0">
-            <div className="flex flex-row flex-wrap flex-shrink-0 w-full gap-4 scroll-m-0 md:flex-nowrap md:overflow-auto no-scrollbar">
-              <section className="grid w-1/4 grid-cols-1 p-5 text-lg rounded-md shadow-md min-w-fit">
-                <p className="text-xl">
-                  Total Patients <UserGroupIcon className="inline w-12 h-12" />
-                </p>
-                <h2 className="font-bold text-black">{patients}</h2>
-                <p className="text-xl">currently adimitted or registered</p>
-              </section>
-              <section className="grid w-1/4 grid-cols-1 p-5 text-lg rounded-md shadow-md min-w-fit">
-                <p className="text-xl">
-                  Today Admissions <FunnelIcon className="inline w-12 h-12" />
-                </p>
-                <h2 className="font-bold text-black">{admissions}</h2>
-                <p className="text-xl">since last 24hours</p>
-              </section>
-              <section className="grid w-1/4 grid-cols-1 p-5 text-lg rounded-md shadow-md min-w-fit">
-                <p className="text-xl">
-                  Available Beds{" "}
-                  <BuildingStorefrontIcon className="inline w-12 h-12" />
-                </p>
-                <h2 className="font-bold text-black">{emptyBeds}</h2>
-                <p className="text-xl">Across all departments</p>
-              </section>
-              <section className="grid w-1/4 grid-cols-1 p-5 text-lg rounded-md shadow-md min-w-fit">
-                <p className="text-xl">
-                  Occupied Beds{" "}
-                  <ClipboardDocumentCheckIcon className="inline w-12 h-12" />
-                </p>
-                <h2 className="font-bold text-black">{occupiedBeds}</h2>
-                <p className="text-xl">Total currently occupied</p>
-              </section>
-            </div>
-            <div>
-              <h4 className="mt-10 mb-5 text-2xl font-bold text-slate-900">
-                Admissions Trend
-              </h4>
-              <p className="mb-5 text-lg">
-                Monthly patient admissions and discharges
-              </p>
+        const overview = data?.overview || {};
+        const {
+          totalPatients = 0,
+          admissions = 0,
+          totalEmptyBeds = 0,
+          totalOccupiedBeds = 0,
+          recentActivities = [],
+        } = overview;
 
+        return (
+          <>
+            {/* STATS */}
+            <div className="flex flex-wrap gap-5">
+              <StatCard
+                title="Total Patients"
+                value={totalPatients}
+                Icon={UserGroupIcon}
+              />
+              <StatCard
+                title="Today's Admissions"
+                value={admissions}
+                Icon={FunnelIcon}
+              />
+              <StatCard
+                title="Available Beds"
+                value={totalEmptyBeds}
+                Icon={BuildingStorefrontIcon}
+              />
+              <StatCard
+                title="Occupied Beds"
+                value={totalOccupiedBeds}
+                Icon={ClipboardDocumentCheckIcon}
+              />
+            </div>
+
+            {/* GRAPH */}
+            <div className="mt-10">
+              <h2 className="text-xl font-bold">Admissions Trend</h2>
               <Linegraph />
             </div>
-            <div className="flex flex-row gap-[20%] ">
-              <section className="grid grid-cols-1">
-                <h4 className="font-semibold">Quick Actions</h4>
-                <button className="flex flex-row gap-2 p-2 m-2 font-semibold text-white bg-blue-600 rounded-md w-fit">
-                  <UserPlusIcon className="inline w-5 h-4" />
-                  <h5>Add New Patient</h5>
-                </button>
-                <button className="flex flex-row gap-2 p-2 m-2 font-semibold text-white bg-blue-600 rounded-md w-fit">
-                  <ClipboardIcon className="inline w-5 h-4" />
-                  <h5>Schedule Appointment</h5>
-                </button>
-                <button className="flex flex-row gap-2 p-2 m-2 font-semibold text-white bg-blue-600 rounded-md w-fit">
-                  <ChartBarIcon className="inline w-5 h-4" />
-                  <h5>View All Report</h5>
-                </button>
-              </section>
-              <section>
-                <h4 className="font-semibold">Recent Activities</h4>
-                {activities.map((item) => (
-                  <div className="flex flex-row gap-3">
-                    <p>{item.time}</p>
-                    <p>{item.activity}</p>
-                  </div>
-                ))}
-              </section>
+
+            {/* QUICK ACTIONS */}
+            <div className="flex flex-wrap gap-4 mt-10">
+              <ActionButton Icon={UserPlusIcon} label="Add Patient" />
+              <ActionButton Icon={ClipboardIcon} label="Schedule Appointment" />
+              <ActionButton Icon={ChartBarIcon} label="View Reports" />
             </div>
-          </div>
+
+            {/* RECENT ACTIVITIES */}
+            <div className="mt-10">
+              <h3 className="mb-3 font-semibold">Recent Activities</h3>
+              {recentActivities.length === 0 && (
+                <p className="text-gray-500">No recent activities</p>
+              )}
+              {recentActivities.map((item, index) => (
+                <div key={index} className="flex gap-3 py-2 border-b">
+                  <p className="text-sm text-gray-500">{item.time}</p>
+                  <p>{item.activity}</p>
+                </div>
+              ))}
+            </div>
+          </>
         );
       }
 
       case "doctor": {
-        return (
-          <div>
-            <p>{date.now()}</p>
-            <h1>{`Hello ,Dr.${doctor.fullName}`}</h1>
+        const {
+          fullName = "",
+          appointmentNumber = 0,
+          LabResults = 0,
+          referrals = 0,
+          appointments = [],
+          notifications = [],
+        } = data;
 
-            <div>
-              <section>
-                <p>
-                  Today's appointments <ClipboardDocumentCheckIcon />
-                </p>
-                <h1>{doctor.appointmentNumber}</h1>
-              </section>
-              <section>
-                <p>
-                  Critical Lab Results <FunnelIcon />
-                </p>
-                <h1>{doctor.LabResults}</h1>
-              </section>
-              <section>
-                <p>pending referrals</p>
-                <h1>{doctor.referrals}</h1>
-                <p>patients awaiting for review</p>
-              </section>
-              <section></section>
+        return (
+          <>
+            <p className="text-gray-500">
+              {new Date().toISOString().split("T")[0]}
+            </p>
+
+            <h1 className="mb-6 text-2xl font-bold">Hello, Dr. {fullName}</h1>
+
+            {/* SUMMARY CARDS */}
+            <div className="flex flex-wrap gap-5">
+              <StatCard
+                title="Today's Appointments"
+                value={appointmentNumber}
+                Icon={CalendarDateRangeIcon}
+              />
+              <StatCard
+                title="Critical Lab Results"
+                value={LabResults}
+                Icon={BeakerIcon}
+              />
+              <StatCard
+                title="Pending Referrals"
+                value={referrals}
+                Icon={ReceiptPercentIcon}
+              />
             </div>
-            <div>
+
+            {/* TABLE */}
+            <div className="mt-10">
+              <h3 className="mb-3 font-semibold">Today's Schedule</h3>
+
               <table className="w-full border-collapse">
-                <thead className="rounded-lg">
-                  <tr className="rounded-lg bg-gray-50">
+                <thead>
+                  <tr className="bg-gray-100">
                     <th className="px-4 py-2 text-left">Time</th>
-                    <th className="px-4 py-2 text-left">Patient Name</th>
+                    <th className="px-4 py-2 text-left">Patient</th>
                     <th className="px-4 py-2 text-left">Reason</th>
                     <th className="px-4 py-2 text-left">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.isArray(doctor.appointments) &&
-                    doctor.appointments.map((invoice) => (
-                      <tr
-                        key={invoice.invoiceId}
-                        className="transition hover:bg-gray-50"
+                  {appointments.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="py-3 text-center text-gray-500"
                       >
-                        <td className="px-4 py-2">{invoice.time}</td>
-                        <td className="px-4 py-2">{invoice.patientName}</td>
-                        <td className="px-4 py-2">{invoice.reason}</td>
-                        <td className="px-4 py-2">{invoice.status}</td>
-                      </tr>
-                    ))}
+                        No appointments today
+                      </td>
+                    </tr>
+                  )}
+
+                  {appointments.map((appt, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-4 py-2">{appt.time}</td>
+                      <td className="px-4 py-2">{appt.patientName}</td>
+                      <td className="px-4 py-2">{appt.reason}</td>
+                      <td className="px-4 py-2">{appt.status}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
+            </div>
 
-              <section>
-               <h1> Recent Alerts</h1>
-               <p>Important notifications requiring attention</p>
-               {
-               Array.isArray(doctor.notifications)&&
-               doctor.notifications.map((not,index)=>{
-                <div key={index}>
-<h4><ReceiptPercentIcon /> {not.message}</h4>
-<p>{not.time}</p>
+            {/* ALERTS */}
+            <div className="mt-10">
+              <h3 className="mb-3 font-semibold">Recent Alerts</h3>
+
+              {notifications.length === 0 && (
+                <p className="text-gray-500">No alerts</p>
+              )}
+
+              {notifications.map((note, index) => (
+                <div key={index} className="py-3 border-b">
+                  <div className="flex items-center gap-2">
+                    <ReceiptPercentIcon className="w-4 h-4 text-red-500" />
+                    <p>{note.message}</p>
+                  </div>
+                  <p className="text-sm text-gray-500">{note.time}</p>
                 </div>
-               }
+              ))}
+            </div>
 
-               )
-               }
-              </section>
+            {/* QUICK ACTIONS */}
+            <div className="flex flex-wrap gap-4 mt-10">
+              <ActionButton
+                Icon={ClipboardDocumentCheckIcon}
+                label="Add Prescription"
+              />
+              <ActionButton Icon={UserGroupIcon} label="Manage Patients" />
+              <ActionButton
+                Icon={MicrophoneIcon}
+                label="View Pending Results"
+              />
+              <ActionButton Icon={UserIcon} label="Update Availability" />
             </div>
-            <div>
-              <h3>Quick Action</h3>
-              <button>
-                <ClipboardDocumentCheckIcon />
-                Add New Prescription
-              </button>
-              <button>
-                <UserGroupIcon />
-                Manage Patient List
-              </button>
-              <button>
-                <MicrophoneIcon />
-                View Pending Results
-              </button>
-              <button>
-                <UserIcon />
-                Update Availability
-              </button>
-            </div>
-          </div>
+          </>
         );
       }
+
+      default:
+        return <p>Invalid role</p>;
     }
   };
 
-  return <div>{roleBasedDashboard()}</div>;
+  return <div className="p-5">{renderDashboard()}</div>;
 };
 
 export default Dashboard;
 
-export const dashboardLoader = async () => {
-  try {
-    const response = await fetch("http://localhost:3000/webpages/dashboard", {
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    });
-    return await response.json();
-  } catch (error) {
-    console.error(error.message);
-  }
-};
+// REUSABLE COMPONENTS
+
+const StatCard = ({ title, value, Icon }) => (
+  <div className="p-5 shadow-md rounded-lg min-w-[200px]">
+    <div className="flex items-center justify-between">
+      <p className="font-semibold">{title}</p>
+      {Icon && <Icon className="w-6 h-6 text-blue-600" />}
+    </div>
+    <h2 className="mt-3 text-2xl font-bold">{value}</h2>
+  </div>
+);
+
+const ActionButton = ({ Icon, label }) => (
+  <button className="flex items-center gap-2 px-4 py-2 text-white transition bg-blue-600 rounded-md hover:bg-blue-700">
+    {Icon && <Icon className="w-5 h-5" />}
+    {label}
+  </button>
+);

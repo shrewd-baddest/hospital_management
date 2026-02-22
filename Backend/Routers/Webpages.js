@@ -61,6 +61,6 @@ webpages.get("/notifications/:id", updateNotificationById);
 webpages.get("/notifications", getNotifications);
 webpages.get("/user_preferences", getPreference);
 webpages.post("/user_preferences", updatePreference);
-// webpages.get("/doctors/appointments");
+//  webpages.get("/doctors/appointments");
 
 export default webpages;

@@ -41,7 +41,7 @@ const App = () => {
         </Route>
 
         <Route path="dashboard" element={<PagesLayout />}>
-          <Route index element={<Dashboard />} loader={dashboardLoader} />
+          <Route index element={<Dashboard />} />
           <Route
             path="patients"
             element={<Patients />}

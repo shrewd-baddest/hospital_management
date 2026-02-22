@@ -7,16 +7,6 @@ CREATE TABLE system_info(
     email VARCHAR(50) NOT NULL UNIQUE,
     logo VARCHAR(200) NOT NULL
 );
-CREATE TABLE preference (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id uuid references users(id),
-    volume INT DEFAULT 50,
-    isSoundOn BOOLEAN DEFAULT TRUE,
-    fontSize INT DEFAULT 16,
-    isSwitchOn BOOLEAN DEFAULT FALSE,
-    isAutoUpdatesOn BOOLEAN DEFAULT TRUE,
-    theme VARCHAR(100) DEFAULT 'Light' CHECK (theme IN ('Light', 'System', 'Dark'))
-);
 CREATE TABLE users(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     full_name VARCHAR(50),
@@ -36,11 +26,20 @@ CREATE TABLE users(
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT NOW()
 );
+CREATE TABLE preference (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id uuid references users(id),
+    volume INT DEFAULT 50,
+    isSoundOn BOOLEAN DEFAULT TRUE,
+    fontSize INT DEFAULT 16,
+    isSwitchOn BOOLEAN DEFAULT FALSE,
+    isAutoUpdatesOn BOOLEAN DEFAULT TRUE,
+    theme VARCHAR(100) DEFAULT 'Light' CHECK (theme IN ('Light', 'System', 'Dark'))
+);
 CREATE TABLE departments(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name VARCHAR(100),
     head VARCHAR(50),
-    beds INT,
     user_id UUID REFERENCES users(id),
     created_at TIMESTAMP DEFAULT NOW()
 );
@@ -56,8 +55,8 @@ CREATE TABLE patients(
     gender VARCHAR(20) DEFAULT 'male' CHECK (gender IN('male', 'female')),
     date_of_birth DATE NOT NULL,
     address TEXT NOT NULL,
-    insurance_num(200),
-    insurance_provider(100),
+    insurance_num VARCHAR(200),
+    insurance_provider VARCHAR(100),
     created_at TIMESTAMP DEFAULT NOW()
 );
 CREATE TABLE nurses(
@@ -92,7 +91,7 @@ CREATE TABLE wards(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     patient_id UUID REFERENCES patients(id) NOT NULL,
     ward_name VARCHAR(50) UNIQUE NOT NULL,
-    bed_number BIGSERIAL UNIQUE,
+    beds_number INT,
     status VARCHAR(20) DEFAULT 'available' CHECK (status IN('available', 'occupied', 'reserved')),
     created_at TIMESTAMP DEFAULT NOW()
 );
@@ -152,6 +151,9 @@ CREATE TABLE appointments(
     patient_id UUID REFERENCES patients(id) NOT NULL,
     doctor_id UUID REFERENCES doctors(id) NOT NULL,
     nurse_id UUID REFERENCES nurses(id) NOT NULL,
+    department_id UUID REFERENCES departments(id),
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
     schedule_id UUID REFERENCES doctor_schedules(id) department_id UUID REFERENCES departments(id) NOT NULL,
     appointment_date TIMESTAMP NOT NULL,
     status VARCHAR(20) DEFAULT 'scheduled' CHECK (

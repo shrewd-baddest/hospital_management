@@ -5,6 +5,8 @@ import {
   MapPinIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  CalendarDateRangeIcon,
+  BeakerIcon,
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import Calendar from "../assets/Calendar/Calendar";
@@ -12,7 +14,10 @@ import { useLoaderData } from "react-router-dom";
 const Appointments = () => {
   // const role = localStorage.getItem(role);
   const role = "doctor";
-  const Schedules = useLoaderData();
+  const appointments = useLoaderData();
+  const lab = appointments.lab;
+  const Schedules = appointments.details;
+  const overview = appointments.appointments;
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const changeDate = (days) => {
@@ -27,6 +32,11 @@ const Appointments = () => {
     day: "numeric",
     year: "numeric",
   });
+
+  const durationCalc = (schedule) => {
+    var duration = schedule.end_time - schedule.start_time;
+    return duration;
+  };
 
   const displayAppointments = () => {
     switch (role) {
@@ -79,6 +89,7 @@ const Appointments = () => {
 
               <button>+ Add Appointment</button>
             </div>
+
             <div className="flex flex-wrap flex-row gap-[5%]">
               {Array.isArray(Schedules) &&
                 Schedules.map((schedule) => (
@@ -86,9 +97,9 @@ const Appointments = () => {
                     <div className="flex flex-row gap-[3%] p-4 w-[18%]">
                       <section>
                         <h3>{schedule.patients}</h3>
-                        <h5>{schedule.range}</h5>
+                        <h5>{`${schedule.start_time}-${schedule.end_time}`}</h5>
                         <p>
-                          {`<ClockIcon w-4 h-4 />${schedule.duration} 
+                          {`<ClockIcon w-4 h-4 />${durationCalc(schedule)} 
                         <MapPinIcon w-4 h-4 /> ${schedule.department}`}
                         </p>
                       </section>
