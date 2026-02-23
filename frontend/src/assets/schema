@@ -49,11 +49,19 @@ CREATE TABLE doctors(
     department_id UUID REFERENCES departments(id),
     created_at TIMESTAMP DEFAULT NOW()
 );
+CREATE TABLE wards(
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    ward_name VARCHAR(50) UNIQUE NOT NULL,
+    beds_number INT,
+    status VARCHAR(20) DEFAULT 'available' CHECK (status IN('available', 'occupied', 'reserved')),
+    created_at TIMESTAMP DEFAULT NOW()
+);
 CREATE TABLE patients(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id),
     gender VARCHAR(20) DEFAULT 'male' CHECK (gender IN('male', 'female')),
     date_of_birth DATE NOT NULL,
+    ward_id UUID REFERENCES wards(id),
     address TEXT NOT NULL,
     insurance_num VARCHAR(200),
     insurance_provider VARCHAR(100),
@@ -85,14 +93,6 @@ CREATE TABLE lab_results(
     test_name VARCHAR(100) NOT NULL,
     result TEXT,
     status VARCHAR DEFAULT 'pending' CHECK(status IN('pending', 'completed', 'reviewed')),
-    created_at TIMESTAMP DEFAULT NOW()
-);
-CREATE TABLE wards(
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    patient_id UUID REFERENCES patients(id) NOT NULL,
-    ward_name VARCHAR(50) UNIQUE NOT NULL,
-    beds_number INT,
-    status VARCHAR(20) DEFAULT 'available' CHECK (status IN('available', 'occupied', 'reserved')),
     created_at TIMESTAMP DEFAULT NOW()
 );
 CREATE TABLE billing(
@@ -154,7 +154,7 @@ CREATE TABLE appointments(
     department_id UUID REFERENCES departments(id),
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
-    schedule_id UUID REFERENCES doctor_schedules(id) department_id UUID REFERENCES departments(id) NOT NULL,
+    schedule_id UUID REFERENCES doctor_schedules(id),
     appointment_date TIMESTAMP NOT NULL,
     status VARCHAR(20) DEFAULT 'scheduled' CHECK (
         status IN (
@@ -164,8 +164,14 @@ CREATE TABLE appointments(
             'cancelled'
         )
     ),
+    reason TEXT,
     created_by UUID REFERENCES users(id),
-    created_at TIMESTAMP DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE (
+        doctor_id,
+        appointment_date,
+        start_time
+    )
 );
 CREATE TABLE notifications (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -180,7 +186,7 @@ CREATE OR REPLACE FUNCTION update_appointment_func() RETURNS TRIGGER AS $$ BEGIN
 INSERT INTO activity (table_name, action, record_id)
 VALUES (
         'appointments',
-        NEW.created_by || ' has updated appointment from ' || OLD.status || ' to ' || NEW.status,
+        COALESCE(NEW.created_by::text, 'Unknown user') || ' has updated appointment from ' || COALESCE(OLD.status, 'Unknown') || ' to ' || COALESCE(NEW.status, 'Unknown'),
         NEW.id
     );
 RETURN NEW;

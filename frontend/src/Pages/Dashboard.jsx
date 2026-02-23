@@ -17,7 +17,8 @@ import {
 import Linegraph from "../assets/Linegraph";
 
 const Dashboard = () => {
-  const role = localStorage.getItem("role");
+  const role = "doctor";
+  // const role = localStorage.getItem("role");
   const token = localStorage.getItem("token");
 
   const [data, setData] = useState(null);
@@ -188,8 +189,8 @@ const Dashboard = () => {
 
                   {appointments.map((appt, index) => (
                     <tr key={index} className="hover:bg-gray-50">
-                      <td className="px-4 py-2">{appt.time}</td>
-                      <td className="px-4 py-2">{appt.patientName}</td>
+                      <td className="px-4 py-2">{appt.start_time}</td>
+                      <td className="px-4 py-2">{appt.patient_name}</td>
                       <td className="px-4 py-2">{appt.reason}</td>
                       <td className="px-4 py-2">{appt.status}</td>
                     </tr>

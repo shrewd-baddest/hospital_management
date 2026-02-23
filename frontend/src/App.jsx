@@ -6,7 +6,7 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { dashboardLoader } from "./Pages/Dashboard.jsx";
+// import { dashboardLoader } from "./Pages/Dashboard.jsx";
 import { userLoader } from "./Pages/Users.jsx";
 import { departments } from "./Pages/Departments.jsx";
 import { appointments } from "./Pages/Appointments.jsx";
@@ -45,7 +45,7 @@ const App = () => {
           <Route
             path="patients"
             element={<Patients />}
-            loader={dashboardLoader}
+            // loader={dashboardLoader}
           />
           <Route path="medicalrecords" element={<MedicalRecords />} />
           <Route
