@@ -127,7 +127,7 @@ const Dashboard = () => {
 
       case "doctor": {
         const {
-          fullName = "",
+          fullName = "Doctor",
           appointmentNumber = 0,
           LabResults = 0,
           referrals = 0,
@@ -207,15 +207,34 @@ const Dashboard = () => {
                 <p className="text-gray-500">No alerts</p>
               )}
 
-              {notifications.map((note, index) => (
-                <div key={index} className="py-3 border-b">
-                  <div className="flex items-center gap-2">
-                    <ReceiptPercentIcon className="w-4 h-4 text-red-500" />
-                    <p>{note.message}</p>
+              {notifications.map((note, index) => {
+                const isToday =
+                  new Date(note.created_at).toDateString() ===
+                  new Date().toDateString();
+                return (
+                  <div
+                    key={index}
+                    className={`py-3 border-b ${note.is_read ? "bg-gray-50" : "bg-red-50"}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <ReceiptPercentIcon className="w-4 h-4 text-red-500" />
+                      <p>{note.message}</p>
+                    </div>
+                    {isToday ? (
+                      <p className="text-sm text-red-500">
+                        {new Date(note.created_at).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    ) : (
+                      <p className="text-sm text-gray-500">
+                        {new Date(note.created_at).toLocaleString()}
+                      </p>
+                    )}
                   </div>
-                  <p className="text-sm text-gray-500">{note.time}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* QUICK ACTIONS */}

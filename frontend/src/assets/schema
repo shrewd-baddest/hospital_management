@@ -164,6 +164,7 @@ CREATE TABLE appointments(
             'cancelled'
         )
     ),
+    reminder_sent BOOLEAN DEFAULT FALSE,
     reason TEXT,
     created_by UUID REFERENCES users(id),
     created_at TIMESTAMP DEFAULT NOW(),
@@ -181,6 +182,15 @@ CREATE TABLE notifications (
     status VARCHAR(100) DEFAULT 'normal' CHECK (status IN ('normal', 'critical')),
     created_at TIMESTAMP DEFAULT NOW()
 );
+CREATE TABLE user_notifications (
+    user_id UUID REFERENCES users(id),
+    notification_id UUID REFERENCES notifications(id),
+    is_read BOOLEAN DEFAULT FALSE,
+    read_at TIMESTAMP,
+    PRIMARY KEY (user_id, notification_id)
+);
+-- INDEXES
+CREATE INDEX idx_appointment_reminder ON appointments (appointment_date, start_time, status);
 -- TRIGGERS
 CREATE OR REPLACE FUNCTION update_appointment_func() RETURNS TRIGGER AS $$ BEGIN
 INSERT INTO activity (table_name, action, record_id)
