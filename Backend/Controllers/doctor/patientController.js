@@ -41,3 +41,14 @@ WHERE a.doctor_id = $1`;
     res.status(400).json({ message: error.message });
   }
 };
+
+export const getMedicalRecords = async (req, res) => {
+  const { patientId } = req.params;
+  try {
+    const sql = `SELECT * FROM medical_records WHERE patient_id = $1`;
+    const result = await pool.query(sql, [patientId]);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

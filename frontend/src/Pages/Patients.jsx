@@ -1,6 +1,7 @@
 import {
   BuildingStorefrontIcon,
   ChatBubbleLeftIcon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useEffect } from "react";
 
@@ -9,6 +10,9 @@ const Patients = () => {
   // const role = localStorage.getItem("role");
   const [patients, setPatients] = React.useState([]);
   const [search, setSearchTerm] = React.useState(null);
+  const [medicals, setmedicals] = React.useState([]);
+  const [displayMedicalRecords, setDisplayMedicalRecords] =
+    React.useState(false);
   const urls = {
     doctor: "http://localhost:3000/webpages/doctor/patients",
     admin: "/admin/dashboard",
@@ -44,6 +48,23 @@ const Patients = () => {
         : fetchPatients("GET", urls.doctor);
   };
 
+  const getMedicalRecords = async (patientId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/webpages/doctor/patient/${patientId}/medical-records`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        },
+      );
+      const data = await response.json();
+      console.log("Medical records data:", data);
+      setmedicals(data.records || []);
+      setDisplayMedicalRecords(true);
+    } catch (error) {
+      console.error("Error fetching medical records:", error);
+    }
+  };
   const roleBasedRender = () => {
     switch (role) {
       case "admin": {
@@ -63,10 +84,13 @@ const Patients = () => {
           </div>
         );
       }
+
       case "doctor": {
         return (
           <>
-            <div className="flex flex-row gap-[10%]">
+            <div
+              className={`flex flex-row gap-[10%] ${displayMedicalRecords ? "blur-sm overflow-hidden pointer-events-none " : ""}`}
+            >
               <h1 className="text-2xl font-extrabold shadow-md">Patients</h1>
               <div className="flex items-center gap-4 px-4 py-2 bg-gray-100 rounded-lg w-fit">
                 <button>
@@ -143,11 +167,45 @@ const Patients = () => {
                       })}
                     </p>
                     <div className="flex flex-row gap-2 mt-3">
-                      <button>Medical Records</button>
-                      <button className="flex items-center gap-2">
+                      <button
+                        onClick={() => getMedicalRecords(patient.id)}
+                        className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                      >
+                        Medical Records
+                      </button>
+                      <button className="flex items-center gap-2 px-4 py-2 text-gray-800 bg-gray-200 rounded-md hover:bg-gray-300">
                         <ChatBubbleLeftIcon className="w-5 h-5" /> Messages
                       </button>
                     </div>
+
+                    {medicals.length > 0 && (
+                      <div
+                        className={`p-4 text-gray-800 rounded-lg fixed 
+                          ${displayMedicalRecords ? "block" : "hidden"}
+                        inset-0 bg-gray-50/50 z-50 flex items-center justify-center `}
+                      >
+                        <button>
+                          <XMarkIcon
+                            className="absolute w-5 h-5 text-gray-600 cursor-pointer top-2 right-2"
+                            onClick={() => setDisplayMedicalRecords(false)}
+                          />
+                        </button>
+                        <h3 className="mb-2 font-semibold text-md">
+                          Medical Records
+                        </h3>
+                        <h4>
+                          Patient_id: {patient.id} - {patient.patient_name}
+                        </h4>
+                        <ul className="list-disc list-inside">
+                          {medicals.map((record, idx) => (
+                            <li key={idx} className="text-sm text-gray-700">
+                              {record.diagnosis} -{" "}
+                              {new Date(record.created_at).toLocaleDateString()}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 );
               })}
