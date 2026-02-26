@@ -37,6 +37,8 @@ import {
   getPreference,
   updatePreference,
 } from "../Controllers/admin/preference.js";
+
+import { getPatients } from "../Controllers/doctor/patientController.js";
 import { getdashboardDetails } from "../Controllers/doctor/dashboardController.js";
 const webpages = Router();
 webpages.get("/dashboard", systemOverview);
@@ -63,5 +65,7 @@ webpages.get("/notifications", getNotifications);
 webpages.get("/user_preferences", getPreference);
 webpages.post("/user_preferences", updatePreference);
 webpages.get("/doctor/dashboard", getdashboardDetails);
+webpages.get("/doctor/patients", getAllDoctors);
+webpages.get("/doctor/patients/search", getDoctorSchedule);
 
 export default webpages;

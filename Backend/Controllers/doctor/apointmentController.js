@@ -25,7 +25,8 @@ export const getAppointment = async (req, res) => {
       WHERE A.doctor_id=$1
     `;
 
-    const sql4 = `SELECT message,is_read,created_at,status FROM notifications WHERE user_id=$1 ORDER BY created_at DESC LIMIT 5`;
+    const sql4 = `SELECT message,is_read,created_at,status 
+    FROM notifications WHERE user_id=$1 ORDER BY created_at DESC LIMIT 5`;
     const [appointments, lab, details] = await Promise.all([
       pool.query(sql1, [id]),
       pool.query(sql2, ["complete", id]),
