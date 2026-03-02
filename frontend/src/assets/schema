@@ -99,7 +99,7 @@ CREATE TABLE billing(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     patient_id UUID REFERENCES patients(id) NOT NULL,
     -- appointment_id UUID REFERENCES appointments(id) NOT NULL,
-    sevrvices VARCHAR(255) NOT NULL,
+    services VARCHAR(255) NOT NULL,
     amount NUMERIC(10, 2) NOT NULL,
     status VARCHAR(20) DEFAULT 'pending' CHECK(status IN('paid', 'pending', 'partially_paid')),
     payment_date TIMESTAMP,
