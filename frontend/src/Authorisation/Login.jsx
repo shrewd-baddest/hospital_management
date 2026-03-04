@@ -35,7 +35,7 @@ const Login = () => {
             )
             .then((response) => {
               if (response.data.status === "success") {
-                Navigate("/dashboard");
+                Navigate("/dashboard", { replace: true });
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("role", response.data.role);
               } else {
