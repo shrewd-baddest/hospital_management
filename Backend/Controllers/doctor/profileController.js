@@ -1,6 +1,6 @@
-import pool from "../../Servers/database";
+import pool from "../../Servers/database.js";
 
-const getProfile = async (req, res) => {
+export const getDocProfile = async (req, res) => {
   const { id } = req.user;
   try {
     const sql = `SELECT role FROM users WHERE id=$1`;

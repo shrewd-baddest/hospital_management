@@ -45,7 +45,7 @@ import {
 } from "../Controllers/doctor/patientController.js";
 import { getdashboardDetails } from "../Controllers/doctor/dashboardController.js";
 import { getAppointment } from "../Controllers/doctor/apointmentController.js";
-import { getProfile } from "../Controllers/doctor/profileController.js";
+import { getDocProfile } from "../Controllers/doctor/profileController.js";
 const webpages = Router();
 webpages.get("/dashboard", systemOverview);
 webpages.get("/users", getAllUsers);
@@ -75,5 +75,5 @@ webpages.get("/doctor/appointment", getAppointment);
 webpages.get("/doctor/patients", getAllDoctors);
 webpages.get("/doctor/patients/search", getDoctorSchedule);
 webpages.get("/doctor/patient/:patientId/medical-records", getMedicalRecords);
-webpages.get("/doctor/profile", getProfile);
+webpages.get("/doctor/profile", getDocProfile);
 export default webpages;

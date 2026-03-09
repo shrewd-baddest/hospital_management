@@ -82,12 +82,15 @@ const Login = () => {
 
   return (
     <div className="h-full m-0 overflow-hidden">
-      <div className="grid grid-cols-2 gap-0 mt-0 rounded-lg h-fit bg-slate-50">
+      <div className="grid grid-cols-1 gap-0 mt-0 rounded-lg h-fit bg-slate-50">
         <div>
           <h3 className="mt-0 mb-10 ml-2 text-sm font-bold text-black ">
             HOSPITAL MANAGEMENT
           </h3>
-          <div className="flex flex-col items-center justify-start pb-5 pl-20">
+          <div
+            className="flex flex-col items-center justify-center pb-5 pl-20 pr-20 
+          border-2 border-gray-300 rounded-lg h-fit w-[70%] lg:w-[35%] mx-auto my-20"
+          >
             <h1 className="mt-2 mb-4 text-4xl font-bold">
               Holla,
               <br /> Welcome Back
@@ -135,9 +138,6 @@ const Login = () => {
               />
             </div>
           </div>
-        </div>
-        <div className="h-full p-4 mt-0 mr-1 w-fit ">
-          <img src={onsoo} alt="zippylito" className="h-screen cover" />
         </div>
       </div>
     </div>
