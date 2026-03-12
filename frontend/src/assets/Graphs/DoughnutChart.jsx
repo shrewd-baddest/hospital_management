@@ -4,7 +4,7 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const Doughnut = () => {
+const DoughnutChart = () => {
   const [graphData, setGraphData] = React.useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -59,4 +59,4 @@ const Doughnut = () => {
   );
 };
 
-export default Doughnut;
+export default DoughnutChart;
