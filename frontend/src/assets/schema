@@ -63,7 +63,12 @@ CREATE TABLE patients(
     date_of_birth DATE NOT NULL,
     ward_id UUID REFERENCES wards(id),
     status VARCHAR(20) DEFAULT 'stable' CHECK (
-        status IN ('stable', 'observation', 'critical', 'discharged')
+        status IN (
+            'stable',
+            'observation',
+            'critical',
+            'discharged'
+        )
     ),
     address TEXT NOT NULL,
     insurance_num VARCHAR(200),

@@ -65,6 +65,7 @@ const App = () => {
             element={<Departments />}
             loader={departments}
           />
+          <Route path="lab-results" element={<LabResults />} />
           <Route path="docdetails/:id" element={<DocDetails />} />
           <Route path="doctors" element={<Doctors />} />
           <Route path="roles_permissions" element={<Permissions />} />

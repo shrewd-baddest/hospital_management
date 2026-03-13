@@ -1,10 +1,15 @@
-import { ClipboardDocumentIcon, ClockIcon } from "@heroicons/react/24/outline";
+import {
+  BellAlertIcon,
+  ClipboardDocumentIcon,
+  ClockIcon,
+} from "@heroicons/react/24/outline";
 import React, { useState, useEffect } from "react";
 
 const LabResults = () => {
   const [labResults, setlabResults] = useState([]);
   const [search, setSearch] = useState(null);
   const role = "doctor";
+  const [activeTab, setActiveTab] = useState("all");
 
   const urls = {
     doctor: "http://localhost:3000/webpages/doctor/patients",
@@ -48,55 +53,65 @@ const LabResults = () => {
 
   return (
     <div>
-      <section>
-        <h1>Lab Results Overview</h1>
-        <button>+ Request New Test</button>
+      <section className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold ">Lab Results Overview</h1>
+        <button className="flex items-center gap-2 px-4 py-2 text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600">
+          + Request New Test
+        </button>
       </section>
 
-      <div>
+      <div className="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
         <section>
-          <h3>
-            Critical Results <BellAlertIcon className="inline w-5 h-5" />
+          <h3 className="flex items-center gap-1">
+            Critical Results
+            <BellAlertIcon className="inline w-5 h-5" />
           </h3>
-          <h2>{LabResults.critical}</h2>
-          <p>Requires immediate attention</p>
+          <h2 className="text-2xl font-bold">{LabResults.critical}</h2>
+          <p className="text-gray-600">Requires immediate attention</p>
         </section>
         <section>
-          <h3>
+          <h3 className="flex items-center gap-1">
             Pending Results <ClockIcon className="inline w-5 h-5" />
           </h3>
-          <h2>{LabResults.pending}</h2>
-          <p>Awaiting pathologist review</p>
+          <h2 className="text-2xl font-bold">{LabResults.pending}</h2>
+          <p className="text-gray-600">Awaiting pathologist review</p>
         </section>
         <section>
-          <h3>
+          <h3 className="flex items-center gap-1">
             Reviewed Today <ClipboardDocumentIcon className="inline w-5 h-5" />
           </h3>
-          <h2>{LabResults.reviewed}</h2>
-          <p>Results with notes or follow-ups</p>
+          <h2 className="text-2xl font-bold">{LabResults.reviewed}</h2>
+          <p className="text-gray-600">Results with notes or follow-ups</p>
         </section>
       </div>
 
-      <div>
+      <div className="flex flex-col items-center justify-between gap-4 mt-6 lg:flex-row">
+        {/* <section className="w-full lg:w-auto"> */}
         <input
           type="text"
           placeholder="Search patient or test Name..."
           onChange={(e) => setSearch({ name: e.target.value })}
+          className="w-full max-w-md p-2 mb-4 border border-gray-300 rounded-lg"
         />
-        <section>
+        {/* </section> */}
+        <section className="grid grid-cols-4 gap-2">
           <button
             onClick={() => {
               setSearch({ status: "all" });
+              setActiveTab("all");
               filteredPatients();
             }}
+            className={`${activeTab === "all" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"} cursor-pointer px-4 py-2 rounded-lg mr-2`}
           >
             All
           </button>
           <button
             onClick={() => {
               setSearch({ status: "critical" });
+              setActiveTab("critical");
               filteredPatients();
             }}
+            className={`${activeTab === "critical" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"} cursor-pointer px-4 py-2 rounded-lg mr-2`}
           >
             Critical
           </button>
@@ -104,20 +119,34 @@ const LabResults = () => {
             onClick={() => {
               setSearch({ status: "normal" });
               filteredPatients();
+              setActiveTab("normal");
             }}
+            className={`${activeTab === "normal" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"} cursor-pointer px-4 py-2 rounded-lg mr-2`}
           >
             Normal
           </button>
-          <button>
-            onClick=
-            {() => {
+          <button
+            onClick={() => {
               setSearch({ status: "pending" });
+              setActiveTab("pending");
               filteredPatients();
             }}
+            className={`${activeTab === "pending" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"} cursor-pointer px-4 py-2 rounded-lg mr-2`}
+          >
             Pending
           </button>
         </section>
-        <input type="Date" />
+
+        {/* <section> */}
+        <input
+          type="Date"
+          onChange={(e) => {
+            setSearch({ date: e.target.value });
+            filteredPatients();
+          }}
+          className="w-full max-w-md p-2 mt-3 border border-gray-300 rounded-lg "
+        />
+        {/* </section> */}
       </div>
 
       <div>

@@ -63,13 +63,14 @@ const Appointments = () => {
       case "doctor": {
         return (
           <>
-            <div className="flex flex-row gap-[10%]">
-              <h1 className="text-2xl font-extrabold shadow-md">
-                Appointments
-              </h1>
+            <div className="flex flex-row items-center justify-between lg:px-[5%] w-fit lg:w-[90%]">
+              <h1 className="text-xl font-bold">Appointments</h1>
 
               <div className="flex items-center gap-4 px-4 py-2 bg-gray-100 rounded-lg w-fit">
-                <button onClick={() => changeDate(-1)}>
+                <button
+                  onClick={() => changeDate(-1)}
+                  className="flex items-center gap-2 px-2 py-1 border-2 border-gray-300 rounded-lg"
+                >
                   <ChevronLeftIcon className="w-5 h-5 text-gray-600" />
                 </button>
 
@@ -77,17 +78,24 @@ const Appointments = () => {
                   {formattedDate}
                 </span>
 
-                <button onClick={() => changeDate(1)}>
+                <button
+                  onClick={() => changeDate(1)}
+                  className="flex items-center gap-2 px-2 py-1 border-2 border-gray-300 rounded-lg"
+                >
                   <ChevronRightIcon className="w-5 h-5 text-gray-600" />
                 </button>
               </div>
 
-              <h3>
-                <FunnelIcon w-5 h-5 />
-                Filters
-              </h3>
+              <div className="flex items-center gap-4 px-4 py-2 bg-gray-100 rounded-lg w-fit">
+                <section className="flex items-center gap-2 px-2 py-1 border-2 border-gray-300 rounded-lg">
+                  <FunnelIcon className="w-4 h-4 text-gray-600" />
+                  <h3>Filters</h3>
+                </section>
 
-              <button>+ Add Appointment</button>
+                <button className="px-2 py-1 text-white bg-blue-600 border-2 border-gray-300 rounded-lg shadow-lg hover:bg-blue-700">
+                  <h3>+ Add Appointment</h3>
+                </button>
+              </div>
             </div>
 
             <div className="flex flex-wrap flex-row gap-[5%]">
@@ -121,7 +129,11 @@ const Appointments = () => {
       }
     }
   };
-  return { displayAppointments };
+  return (
+    <div className="w-screen h-screen overflow-hidden">
+      {displayAppointments()}
+    </div>
+  );
 };
 
 export default Appointments;

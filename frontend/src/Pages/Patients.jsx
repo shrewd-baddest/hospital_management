@@ -1,6 +1,11 @@
 import {
   BuildingStorefrontIcon,
   ChatBubbleLeftIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ClockIcon,
+  FunnelIcon,
+  ClipboardDocumentIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import React, { useEffect } from "react";
@@ -10,8 +15,8 @@ const Patients = () => {
   // const role = localStorage.getItem("role");
 
   const [patients, setPatients] = React.useState([]);
-  const [search, setSearchTerm] = React.useState({});
-  const [medicals, setmedicals] = React.useState([]);
+  // const [search, setSearchTerm] = React.useState({});
+  // const [medicals, setmedicals] = React.useState([]);
   const [displayMedicalRecords, setDisplayMedicalRecords] =
     React.useState(false);
 
@@ -141,34 +146,29 @@ const PatientsComponent = ({
   };
 
   return (
-    <div>
+    <div className="w-full space-y-6 ">
       <div
-        className={`flex flex-row gap-[10%] ${
+        className={`flex flex-row items-center justify-between ${
           displayMedicalRecords
             ? "blur-sm overflow-hidden pointer-events-none "
             : ""
         }`}
       >
-        <h1 className="text-2xl font-extrabold shadow-md">Patients</h1>
+        <h1 className="text-xl font-bold">Patients</h1>
 
         <div className="flex items-center gap-4 px-4 py-2 bg-gray-100 rounded-lg w-fit">
-          <button>
+          <button className="flex items-center gap-2 px-2 py-1 text-gray-800 bg-gray-200 rounded-md hover:bg-gray-300">
             <ChevronLeftIcon className="w-5 h-5 text-gray-600" />
           </button>
           <span className="font-medium text-gray-800">
             {new Date().toISOString().split("T")[0]}
           </span>
-          <button>
+          <button className="flex items-center gap-2 px-2 py-1 text-gray-800 bg-gray-200 rounded-md hover:bg-gray-300">
             <ChevronRightIcon className="w-5 h-5 text-gray-600" />
           </button>
         </div>
 
-        <div>
-          <h3>
-            <FunnelIcon className="w-5 h-5" />
-            Filters By Status
-          </h3>
-
+        <div className="flex flex-row items-center gap-[3%]">
           <select
             name="status"
             id="status-filter"
@@ -179,22 +179,25 @@ const PatientsComponent = ({
               filteredPatients(value, "status");
             }}
           >
-            <option value="all">All</option>
+            <option value="all">
+              <h3>Filters By Status</h3>
+            </option>
             <option value="active">Active</option>
             <option value="discharged">Discharged</option>
             <option value="critical">Critical</option>
           </select>
+          <button className="flex mr-[20%] py-1 text-white px-2 bg-blue-700 rounded-lg shadow-lg min-w-fit hover:bg-blue-800 font-semibold">
+            + Add Patient
+          </button>
         </div>
-
-        <button>+ Add Patient</button>
       </div>
 
       <input
         type="search"
         name="search"
         id="search-input"
-        placeholder="Search patients..."
-        className="w-full max-w-md p-2 border border-gray-300 rounded-lg"
+        placeholder="Search patients by name..."
+        className="min-w-[80%]  p-2 border border-gray-300 rounded-lg mt-3"
         onChange={(e) => {
           const value = e.target.value;
           setSearchTerm({ name: value });
