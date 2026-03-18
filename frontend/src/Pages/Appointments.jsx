@@ -7,6 +7,9 @@ import {
   ChevronRightIcon,
   CalendarDateRangeIcon,
   BeakerIcon,
+  ClipboardIcon,
+  PaperClipIcon,
+  StopCircleIcon,
 } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import Calendar from "../assets/Calendar/Calendar";
@@ -54,7 +57,7 @@ const Appointments = () => {
             </div>
 
             <div>
-              <Calendar />
+              <Calendar role="events" />
             </div>
           </div>
         );
@@ -125,6 +128,70 @@ const Appointments = () => {
                 ))}
             </div>
           </>
+        );
+      }
+
+      case "nurse": {
+        return (
+          <div>
+            <h2 className="text-xl font-semibold text-black">
+              Appointments Overview
+            </h2>
+            <div>
+              <button className="text-lg text-white bg-blue-600 hover:bg-blue-700">
+                + Schedule New Appointment
+              </button>
+              <h3 className="text-xl font-semibold text-black">
+                <ClipboardIcon className="w-5 h-5" /> Calender View
+              </h3>
+            </div>
+            <div>
+              <Calendar role="nurse" />
+              <section>
+                <h3 className="text-xl font-semibold text-slate-800">
+                  Upcoming Appointments
+                </h3>
+                <ul className="flex items-center p-2 border-2 border-black">
+                  {appointments.upcoming ? (
+                    appointments.upcoming.map((upcoming, index) => (
+                      <li key={index}>{upcoming}</li>
+                    ))
+                  ) : (
+                    <p className="text-sm text-slate-700">
+                      No upcoming appointments
+                    </p>
+                  )}
+                </ul>
+                <h3 className="text-xl font-semibold text-slate-800">
+                  Today's Appointments
+                </h3>
+                <ul className="flex items-center p-2 border-2 border-black">
+                  {appointments.today ? (
+                    appointments.today.map((today, index) => (
+                      <li key={index}>{today}</li>
+                    ))
+                  ) : (
+                    <p className="text-sm text-slate-700">
+                      No Appointment scheduled for today
+                    </p>
+                  )}
+                </ul>
+                <h3 className="text-xl font-semibold text-black">
+                  Quick Actions
+                </h3>
+                <div className="p-2 rounded-sm shadow-lg">
+                  <button className="px-3 py-1 text-sm font-semibold rounded-lg cursor-pointer">
+                    <PaperClipIcon className="w-5 h-5" /> Reschedule
+                    Appointments
+                  </button>
+                  <button className="px-3 py-1 text-sm font-semibold text-white bg-red-600 rounded-lg cursor-pointer hover:bg-red-700">
+                    <StopCircleIcon className="w-5 h-5" />
+                    Cancel Appointments
+                  </button>
+                </div>
+              </section>
+            </div>
+          </div>
         );
       }
     }
