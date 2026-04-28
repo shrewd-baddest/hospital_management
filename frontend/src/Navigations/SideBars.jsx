@@ -23,7 +23,7 @@ const SideBars = () => {
   const location = useLocation();
   const site = location.pathname.split("/").filter(Boolean);
   const [roleBasedSidebars, setRoleBasedSidebars] = React.useState([]);
-
+  const [open, setOpen] = React.useState(false);
   useEffect(() => {
     switch (roles) {
       case "admin": {
@@ -51,7 +51,8 @@ const SideBars = () => {
           { name: "Settings", path: "settings", icon: Cog6ToothIcon },
         ];
 
-        return setRoleBasedSidebars(catalog);
+        setRoleBasedSidebars(catalog);
+        break;
       }
       case "doctor": {
         const catalog = [
@@ -70,7 +71,8 @@ const SideBars = () => {
           { name: "Lab Results", path: "lab-results", icon: BeakerIcon },
           { name: "Profile", path: "profile", icon: UserCircleIcon },
         ];
-        return setRoleBasedSidebars(catalog);
+        setRoleBasedSidebars(catalog);
+        break;
       }
 
       case "nurse": {
@@ -90,7 +92,8 @@ const SideBars = () => {
           },
           { name: "Profile", path: "profile", icon: UserCircleIcon },
         ];
-        return setRoleBasedSidebars(catalog);
+        setRoleBasedSidebars(catalog);
+        break;
       }
 
       case "receptionist": {
@@ -109,7 +112,8 @@ const SideBars = () => {
           { name: "Billing", path: "billing", icon: DocumentTextIcon },
           { name: "Profile", path: "profile", icon: UserCircleIcon },
         ];
-        return setRoleBasedSidebars(catalog);
+        setRoleBasedSidebars(catalog);
+        break;
       }
       case "patient": {
         const catalog = [
@@ -128,14 +132,15 @@ const SideBars = () => {
           { name: "Billing", path: "billing", icon: DocumentTextIcon },
           { name: "Profile", path: "profile", icon: UserCircleIcon },
         ];
-        return setRoleBasedSidebars(catalog);
+        setRoleBasedSidebars(catalog);
+        break;
       }
       default: {
         const catalog = [];
-        return catalog;
+        setRoleBasedSidebars(catalog);
       }
     }
-  }, [roles, roleBasedSidebars, location]);
+  }, [roles]);
 
   return (
     <div className="flex-shrink-0 p-3 mr-4 rounded-md shadow-md bg-slate-300 w-fit">

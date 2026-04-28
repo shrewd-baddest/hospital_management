@@ -6,7 +6,6 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-// import { dashboardLoader } from "./Pages/Dashboard.jsx";
 import { userLoader } from "./Pages/Users.jsx";
 import { departments } from "./Pages/Departments.jsx";
 import { appointments } from "./Pages/Appointments.jsx";
@@ -31,6 +30,7 @@ const App = () => {
   const DocDetails = lazy(() => import("./Pages/DocDetails.jsx"));
   const Doctors = lazy(() => import("./Pages/Doctor.jsx"));
   const Permissions = lazy(() => import("./Pages/Permissions.jsx"));
+  const Reports = lazy(() => import("./Pages/Reports.jsx"));
   const SuspendedElement = () => <div>🍷Loading...</div>;
 
   const routes = createBrowserRouter(
@@ -47,7 +47,7 @@ const App = () => {
             element={<Patients />}
             // loader={dashboardLoader}
           />
-          <Route path="medicalrecords" element={<MedicalRecords />} />
+          <Route path="medical-records" element={<MedicalRecords />} />
           <Route
             path="appointments"
             element={<Appointments />}
@@ -65,6 +65,7 @@ const App = () => {
             element={<Departments />}
             loader={departments}
           />
+          <Route path="reports" element={<Reports />} />
           <Route path="lab-results" element={<LabResults />} />
           <Route path="docdetails/:id" element={<DocDetails />} />
           <Route path="doctors" element={<Doctors />} />

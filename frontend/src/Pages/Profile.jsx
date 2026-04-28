@@ -7,7 +7,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:3000/doctor/webpages/profile", {
+    fetch("http://localhost:3000/webpages/doctor/profile", {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
       .then((res) => res.json())

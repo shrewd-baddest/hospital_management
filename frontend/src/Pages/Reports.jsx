@@ -207,133 +207,135 @@ const Reports = () => {
         Generate and analyze key hospital data across various departments and
         time periods.
       </p>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 bg-white rounded shadow outline-5">
         <div>
-          <div className="p-4 bg-white rounded shadow outline-2">
+          <div className="p-4">
             <h2>Report Type</h2>
+          </div>
+          <div className="flex flex-col">
             <button
               onClick={() => setSelectedReport("admissions")}
-              className="shadow-lg hover:rounded-md hover:bg-gray-500"
+              className="hover:rounded-md hover:bg-gray-200"
             >
               <PresentationChartLineIcon className="w-6 h-6 text-blue-500" />
               <p>Admissions</p>
             </button>
             <button
               onClick={() => setSelectedReport("billing")}
-              className="shadow-lg hover:rounded-md hover:bg-gray-500"
+              className=" hover:rounded-md hover:bg-gray-200"
             >
               <ClipboardDocumentCheckIcon className="w-6 h-6 text-green-500" />
               <p>Billing</p>
             </button>
             <button
               onClick={() => setSelectedReport("occupancy")}
-              className="shadow-lg hover:rounded-md hover:bg-gray-500"
+              className=" hover:rounded-md hover:bg-gray-200"
             >
               <BuildingStorefrontIcon className="w-6 h-6 text-purple-500" />
               <p>Occupancy</p>
             </button>
             <button
               onClick={() => setSelectedReport("staff")}
-              className="shadow-lg hover:rounded-md hover:bg-gray-500"
+              className=" hover:rounded-md hover:bg-gray-200"
             >
               <UserGroupIcon className="w-6 h-6 text-yellow-500" />
               <p>Staff Activity</p>
             </button>
           </div>
+        </div>
 
-          <div className="p-4 mt-4 bg-white rounded shadow outline-2">
-            <h2>Date Range</h2>
-            <div>
-              <section className="grid grid-cols-2 gap-2 mb-4">
-                <button
-                  onClick={() => {
-                    setDays(7);
-                    setDateRange({});
-                    setBgColor("7");
-                  }}
-                  className={`rounded-md   p-2 text-center ${bgColor === "7" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
-                >
-                  Last 7 Days
-                </button>
-                <button
-                  onClick={() => {
-                    setDays(30);
-                    setDateRange({});
-                    setBgColor("30");
-                  }}
-                  className={`rounded-md   p-2 text-center ${bgColor === "30" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
-                >
-                  Last 30 Days
-                </button>
-                <button
-                  onClick={() => {
-                    setDays(90);
-                    setDateRange({});
-                    setBgColor("90");
-                  }}
-                  className={`rounded-md p-2 text-center ${bgColor === "90" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
-                >
-                  This Quater
-                </button>
-                <button
-                  onClick={() => {
-                    setDays(365);
-                    setDateRange({});
-                    setBgColor("365");
-                  }}
-                  className={`rounded-md  p-2 text-center ${bgColor === "365" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
-                >
-                  Last Year
-                </button>
-              </section>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.target.value);
-                  const range = Object.fromEntries(formData.entries());
-                  setDateRange(range);
+        <div className="p-4 mt-4 bg-white rounded shadow outline-2">
+          <h2>Date Range</h2>
+          <div>
+            <section className="grid grid-cols-2 gap-2 mb-4">
+              <button
+                onClick={() => {
+                  setDays(7);
+                  setDateRange({});
+                  setBgColor("7");
                 }}
+                className={`rounded-md   p-2 text-center ${bgColor === "7" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
               >
-                <label htmlFor="startDate">Start Date:</label>
-                <input type="date" id="startDate" name="startDate" />
-                <label htmlFor="endDate">End Date:</label>
-                <input type="date" id="endDate" name="endDate" />
-                <input type="submit" value="Apply Custom Range" />
-              </form>
-            </div>
-          </div>
-          <div className="p-4 mt-4 bg-white rounded shadow outline-2">
-            <h2>Export Report</h2>
-            <button
-              className="rounded-md shadow-lg hover:bg-gray-500 outline-1"
-              onClick={generatePDF}
+                Last 7 Days
+              </button>
+              <button
+                onClick={() => {
+                  setDays(30);
+                  setDateRange({});
+                  setBgColor("30");
+                }}
+                className={`rounded-md   p-2 text-center ${bgColor === "30" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
+              >
+                Last 30 Days
+              </button>
+              <button
+                onClick={() => {
+                  setDays(90);
+                  setDateRange({});
+                  setBgColor("90");
+                }}
+                className={`rounded-md p-2 text-center ${bgColor === "90" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
+              >
+                This Quater
+              </button>
+              <button
+                onClick={() => {
+                  setDays(365);
+                  setDateRange({});
+                  setBgColor("365");
+                }}
+                className={`rounded-md  p-2 text-center ${bgColor === "365" ? "bg-blue-500 text-white" : "bg-gray-200 text-black"}`}
+              >
+                Last Year
+              </button>
+            </section>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target.value);
+                const range = Object.fromEntries(formData.entries());
+                setDateRange(range);
+              }}
             >
-              <p>Export as PDF</p>
-            </button>
-            <button className="rounded-md shadow-lg hover:bg-gray-500 outline-1">
-              <p>Export as CSV</p>
-            </button>
+              <label htmlFor="startDate">Start Date:</label>
+              <input type="date" id="startDate" name="startDate" />
+              <label htmlFor="endDate">End Date:</label>
+              <input type="date" id="endDate" name="endDate" />
+              <input type="submit" value="Apply Custom Range" />
+            </form>
           </div>
         </div>
+        <div className="p-4 mt-4 bg-white rounded shadow outline-2">
+          <h2>Export Report</h2>
+          <button
+            className="rounded-md hover:bg-gray-200 outline-offset-2"
+            onClick={generatePDF}
+          >
+            <p>Export as PDF</p>
+          </button>
+          <button className="rounded-md shadow-lg hover:bg-gray-200 outline-offset-2">
+            <p>Export as CSV</p>
+          </button>
+        </div>
+      </div>
+      <div>
         <div>
-          <div>
-            <h2>Monthly Admissions Trend</h2>
-            <p>
-              Overview of patient admissions and discharges over the selected
-              period
-            </p>
+          <h2>Monthly Admissions Trend</h2>
+          <p>
+            Overview of patient admissions and discharges over the selected
+            period
+          </p>
 
-            <Linegraph
-              reportType={selectedReport}
-              dateRange={dateRange}
-              days={days}
-            />
-          </div>
-          <div className="p-4 mt-4 bg-white rounded shadow outline-2">
-            <h2>Detailed Report Data</h2>
-            <p>Raw data for the selected report within the chosen date range</p>
-            {detailedData(selectedReport)}
-          </div>
+          <Linegraph
+            reportType={selectedReport}
+            dateRange={dateRange}
+            days={days}
+          />
+        </div>
+        <div className="p-4 mt-4 bg-white rounded shadow outline-2">
+          <h2>Detailed Report Data</h2>
+          <p>Raw data for the selected report within the chosen date range</p>
+          {detailedData(selectedReport)}
         </div>
       </div>
     </>
