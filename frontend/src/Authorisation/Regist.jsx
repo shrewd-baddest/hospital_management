@@ -3,31 +3,32 @@ import {
   HeartIcon,
   ShieldCheckIcon,
   UserCircleIcon,
-  UserIcon
-} from '@heroicons/react/24/outline';
-import axios from 'axios';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+  UserIcon,
+} from "@heroicons/react/24/outline";
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Regist = () => {
   const navigate = useNavigate();
 
-  const [role, setRole] = useState('');
-  const [name, setName] = useState('');
-  const [gender, setGender] = useState('');
-  const [birth, setBirth] = useState('');
-  const [id, setId] = useState('');
-  const [contact, setContact] = useState('');
-  const [email, setEmail] = useState('');
-  const [provider, setProvider] = useState('');
-  const [num, setNum] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirm, setConfirm] = useState('');
-  const [license, setLicense] = useState('');
-  const [years, setYears] = useState('');
-  const [department, setDepartment] = useState('');
+  const [role, setRole] = useState("");
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState("");
+  const [birth, setBirth] = useState("");
+  const [id, setId] = useState("");
+  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [provider, setProvider] = useState("");
+  const [num, setNum] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [license, setLicense] = useState("");
+  const [years, setYears] = useState("");
+  const [department, setDepartment] = useState("");
   const [photoFile, setPhotoFile] = useState(null);
   const [credentialsFile, setCredentialsFile] = useState(null);
+  const [address, setAddress] = useState("");
 
   const registDetails = {
     name,
@@ -42,57 +43,55 @@ const Regist = () => {
     id,
     license,
     years,
-    department
+    department,
+    address,
   };
 
   const submitPatient = async () => {
     if (!name || !email || !password) {
-      return alert('Please fill all required fields');
+      return alert("Please fill all required fields");
     }
 
     if (password !== confirm) {
-      return alert('Passwords do not match');
+      return alert("Passwords do not match");
     }
 
     try {
       const formData = new FormData();
       // append simple fields
       Object.entries(registDetails).forEach(([key, value]) => {
-        if (value !== undefined && value !== null && value !== '') {
+        if (value !== undefined && value !== null && value !== "") {
           formData.append(key, value);
         }
       });
 
       // append files if present
       if (photoFile) {
-        formData.append('photo', photoFile);
+        formData.append("photo", photoFile);
       }
       if (credentialsFile) {
-        formData.append('credentials', credentialsFile);
+        formData.append("credentials", credentialsFile);
       }
-
+      for (let pair of formData.entries()) {
+        console.log(pair[0], pair[1]);
+      }
       const res = await axios.post(
-        'http://localhost:3000/authorisation/register',
+        "http://localhost:3000/authorisation/register",
         formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
       );
 
-      if (res.data === 'successful') {
-        alert('Patient registered successfully');
-        navigate('/dashboard');
+      if (res.data.message === "successful") {
+        alert("Patient registered successfully");
+        navigate("/dashboard");
       }
     } catch (err) {
-      alert(err.response?.data?.message || 'Registration failed');
+      alert(err.response?.data?.message || "Registration failed");
     }
   };
 
   // switch
   switch (role) {
-    case 'patient':
+    case "patient":
       return (
         <div className="max-w-3xl p-6 mx-auto bg-white rounded shadow">
           <div className="text-center">
@@ -103,7 +102,10 @@ const Regist = () => {
             Personal Details
           </h2>
           <div>
-            <Input label="Full Name" onChange={(e) => setName(e.target.value)} />
+            <Input
+              label="Full Name"
+              onChange={(e) => setName(e.target.value)}
+            />
             <Input
               label="Date of Birth"
               type="date"
@@ -129,9 +131,20 @@ const Regist = () => {
           </div>
           <h2 className="text-lg font-bold text-black">Contact Information</h2>
           <div>
-            <Input label="Contact Number" onChange={(e) => setContact(e.target.value)} />
+            <Input
+              label="Contact Number"
+              onChange={(e) => setContact(e.target.value)}
+            />
+            <Input
+              label="Address"
+              onChange={(e) => setAddress(e.target.value)}
+            />
 
-            <Input label="Email" type="email" onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              label="Email"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <h2 className="text-lg font-bold text-black">Medical & Insurance</h2>
           <div>
@@ -141,7 +154,10 @@ const Regist = () => {
               onChange={(e) => setProvider(e.target.value)}
             />
 
-            <Input label="Insurance Number" onChange={(e) => setNum(e.target.value)} />
+            <Input
+              label="Insurance Number"
+              onChange={(e) => setNum(e.target.value)}
+            />
           </div>
           <h2 className="text-lg font-bold text-black">Account Security</h2>
           <div>
@@ -166,13 +182,18 @@ const Regist = () => {
         </div>
       );
 
-    case 'nurse':
+    case "nurse":
       return (
         <div className="max-w-3xl p-6 mx-auto bg-white rounded shadow">
           <h1 className="text-xl font-extrabold">Nurse Registration</h1>
-          <p>please fill out the form below to register as a nurse in our system</p>
+          <p>
+            please fill out the form below to register as a nurse in our system
+          </p>
           <div>
-            <Input label="Full Name" onChange={(e) => setName(e.target.value)} />
+            <Input
+              label="Full Name"
+              onChange={(e) => setName(e.target.value)}
+            />
             <Input
               label="Date of Birth"
               type="date"
@@ -188,12 +209,22 @@ const Regist = () => {
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
-            <Input label="National ID" onChange={(e) => setId(e.target.value)} />
+            <Input
+              label="National ID"
+              onChange={(e) => setId(e.target.value)}
+            />
           </div>
           <h2 className="mt-4 font-semibold">Contact Details</h2>
           <div>
-            <Input label="Contact Number" onChange={(e) => setContact(e.target.value)} />
-            <Input label="Email" type="email" onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              label="Contact Number"
+              onChange={(e) => setContact(e.target.value)}
+            />
+            <Input
+              label="Email"
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <h2 className="mt-4 font-semibold">Professional Qualifications</h2>
           <div>
@@ -216,7 +247,10 @@ const Regist = () => {
                 setLicense(e.target.value);
               }}
             />
-            <Input label="Years of Experience" onChange={(e) => setYears(e.target.value)} />
+            <Input
+              label="Years of Experience"
+              onChange={(e) => setYears(e.target.value)}
+            />
             <label>Shift Preference</label>
             <select className="w-full p-2 mb-3 border">
               <option value="">select Shift preference</option>
@@ -264,13 +298,16 @@ const Regist = () => {
         </div>
       );
 
-    case 'doctor':
-    case 'receptionist':
-    case 'admin':
+    case "doctor":
+    case "receptionist":
+    case "admin":
       return (
         <div className="mt-10 text-center">
           <h2 className="text-xl font-bold">{role} registration coming soon</h2>
-          <button onClick={() => setRole('')} className="mt-4 text-blue-600 underline">
+          <button
+            onClick={() => setRole("")}
+            className="mt-4 text-blue-600 underline"
+          >
             Back
           </button>
         </div>
@@ -283,22 +320,30 @@ const Regist = () => {
           <p>Select your role to continue</p>
 
           <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
-            <RoleCard icon={UserIcon} title="Patient" onClick={() => setRole('patient')} />
-            <RoleCard icon={HeartIcon} title="Nurse" onClick={() => setRole('nurse')} />
+            <RoleCard
+              icon={UserIcon}
+              title="Patient"
+              onClick={() => setRole("patient")}
+            />
+            <RoleCard
+              icon={HeartIcon}
+              title="Nurse"
+              onClick={() => setRole("nurse")}
+            />
             <RoleCard
               icon={UserCircleIcon}
               title="Doctor"
-              onClick={() => setRole('doctor')}
+              onClick={() => setRole("doctor")}
             />
             <RoleCard
               icon={BriefcaseIcon}
               title="Receptionist"
-              onClick={() => setRole('receptionist')}
+              onClick={() => setRole("receptionist")}
             />
             <RoleCard
               icon={ShieldCheckIcon}
               title="Admin"
-              onClick={() => setRole('admin')}
+              onClick={() => setRole("admin")}
             />
           </div>
         </div>
@@ -310,7 +355,10 @@ const Regist = () => {
 const Input = ({ label, ...props }) => (
   <div className="mb-3">
     <label className="block font-semibold">{label}</label>
-    <input {...props} className={"w-full p-2 border rounded " + (props.className || "")} />
+    <input
+      {...props}
+      className={"w-full p-2 border rounded " + (props.className || "")}
+    />
   </div>
 );
 

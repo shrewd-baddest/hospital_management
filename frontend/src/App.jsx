@@ -9,6 +9,7 @@ import {
 import { userLoader } from "./Pages/Users.jsx";
 import { departments } from "./Pages/Departments.jsx";
 import { appointments } from "./Pages/Appointments.jsx";
+import Regist from "./Authorisation/Regist.jsx";
 
 const App = () => {
   const role = localStorage.getItem("role");
@@ -42,6 +43,7 @@ const App = () => {
 
         <Route path="dashboard" element={<PagesLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="register" element={<Regist />} />
           <Route
             path="patients"
             element={<Patients />}
@@ -70,6 +72,7 @@ const App = () => {
           <Route path="docdetails/:id" element={<DocDetails />} />
           <Route path="doctors" element={<Doctors />} />
           <Route path="roles_permissions" element={<Permissions />} />
+          <Route path="*" element={<p>Page not found</p>} />
         </Route>
       </>,
     ),

@@ -20,7 +20,7 @@ import {
 import { useStyles } from "../StylingProvider";
 const Doctor = () => {
   const { fetchDashboard, data, loading } = useStyles();
-  const role = localStorage("role") || "doctor";
+  const role = localStorage.getItem("role") || "doctor";
 
   useEffect(() => {
     fetchDashboard(role);

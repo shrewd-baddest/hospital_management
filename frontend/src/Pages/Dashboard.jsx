@@ -3,7 +3,7 @@ import Nurse from "./Dashboards/Nurse";
 import Doctor from "./Dashboards/Doctor";
 
 const Dashboard = () => {
-  const role = "doctor"; // For testing, replace with localStorage.getItem("role") in production
+  const role = "admin"; // For testing, replace with localStorage.getItem("role") in production
 
   const renderDashboard = () => {
     switch (role) {
@@ -12,8 +12,7 @@ const Dashboard = () => {
       }
 
       case "nurse": {
-        <Nurse />;
-        break;
+        return <Nurse />;
       }
 
       case "doctor": {

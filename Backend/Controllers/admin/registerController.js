@@ -15,6 +15,7 @@ export const registerUser = async (req, res) => {
           provider,
           num,
           password,
+          address,
         } = req.body;
         const client = await pool.connect();
         try {
@@ -26,17 +27,15 @@ export const registerUser = async (req, res) => {
           );
 
           const newPatient = await client.query(
-            "INSERT INTO patients(user_id,gender,date_of_birth,insurance_provider,insurance_number) VALUES($1, $2, $3, $4, $5) RETURNING *",
-            [newUser.rows[0].id, gender, birth, provider, num],
+            "INSERT INTO patients(user_id,gender,date_of_birth,insurance_provider,insurance_num,address) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+            [newUser.rows[0].id, gender, birth, provider, num, address],
           );
           await client.query("COMMIT");
 
-          res
-            .status(201)
-            .json({
-              message: "User registered successfully",
-              user: newUser.rows[0],
-            });
+          res.status(201).json({
+            message: " successful",
+            user: newUser.rows[0],
+          });
         } catch (error) {
           await client.query("ROLLBACK");
           console.error("Error registering user:", error);
@@ -61,12 +60,10 @@ export const registerUser = async (req, res) => {
           [newUser.rows[0].id, department],
         );
         await client.query("COMMIT");
-        res
-          .status(201)
-          .json({
-            message: "Nurse registered successfully",
-            user: newUser.rows[0],
-          });
+        res.status(201).json({
+          message: "successful",
+          user: newUser.rows[0],
+        });
       } catch (error) {
         await client.query("ROLLBACK");
         console.error("Error registering nurse:", error);

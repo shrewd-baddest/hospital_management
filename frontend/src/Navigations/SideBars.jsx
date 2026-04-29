@@ -19,7 +19,7 @@ import {
 
 const SideBars = () => {
   // const roles=localStorage.getItem('role');
-  const roles = "doctor";
+  const roles = "admin";
   const location = useLocation();
   const site = location.pathname.split("/").filter(Boolean);
   const [roleBasedSidebars, setRoleBasedSidebars] = React.useState([]);
