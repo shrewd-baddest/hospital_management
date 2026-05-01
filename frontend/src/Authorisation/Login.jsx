@@ -72,6 +72,7 @@ const Login = () => {
       const response = await postData.data;
       if (response.status == "success") {
         localStorage.setItem("token", response.token);
+        localStorage.setItem("roles", response.role);
         Navigate("/dashboard");
       } else {
         alert(response.message);

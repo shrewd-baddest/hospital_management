@@ -33,7 +33,7 @@ export const registerUser = async (req, res) => {
           await client.query("COMMIT");
 
           res.status(201).json({
-            message: " successful",
+            message: "successful",
             user: newUser.rows[0],
           });
         } catch (error) {
@@ -46,18 +46,34 @@ export const registerUser = async (req, res) => {
       }
       break;
     case "nurse": {
-      const { name, email, password, role, contact, department } = req.body;
-      const client = await pool.connect();
+      const {
+        name,
+        gender,
+        birth,
+        id,
+        years,
+        email,
+        password,
+        role,
+        contact,
+        department,
+      } = req.body;
+
+console.log(req.files);
+      const photo = req.files?.photo?.[0];
+      const credentials = req.files?.credentials?.[0];
+      const credentialsPath = credentials ? credentials.path : null;
+       const client = await pool.connect();
       try {
         await client.query("BEGIN");
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await client.query(
-          "INSERT INTO users(full_name,email,password,role,phone) VALUES($1, $2, $3, $4, $5) RETURNING *",
-          [name, email, hashedPassword, role, contact],
+          "INSERT INTO users(full_name,email,password,role,phone,profile_Image) VALUES($1, $2, $3, $4, $5,$6) RETURNING *",
+          [name, email, hashedPassword, role, contact, photo ? photo.path : null],
         );
         const newNurse = await client.query(
-          "INSERT INTO nurses(user_id,assigned_wards) VALUES($1, $2) RETURNING *",
-          [newUser.rows[0].id, department],
+          "INSERT INTO nurses(user_id,departments,certificates) VALUES($1, $2 ,$3) RETURNING *",
+          [newUser.rows[0].id, department, credentialsPath],
         );
         await client.query("COMMIT");
         res.status(201).json({

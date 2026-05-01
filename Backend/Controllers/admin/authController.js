@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const Login = async (req, res) => {
   const { passWord, email, googleEmail } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   try {
     // Check if user exists
     let user;
@@ -35,6 +35,7 @@ const Login = async (req, res) => {
       }
 
       user = response.rows[0];
+      console.log(user);
     }
 
     // Generate JWT token

@@ -79,10 +79,12 @@ const Regist = () => {
         "http://localhost:3000/authorisation/register",
         formData,
       );
-
-      if (res.data.message === "successful") {
+      console.log(res.data);
+      if (res.data.message == "successful") {
         alert("Patient registered successfully");
         navigate("/dashboard");
+      } else {
+        alert(res.data.message);
       }
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
@@ -93,7 +95,14 @@ const Regist = () => {
   switch (role) {
     case "patient":
       return (
-        <div className="max-w-3xl p-6 mx-auto bg-white rounded shadow">
+        <div className="relative max-w-3xl p-6 mx-auto bg-white rounded shadow">
+          <button
+            onClick={() => setRole("")}
+            className="absolute mt-4 text-sm font-semibold hover:underline hover:cursor-pointer top-4 left-4"
+          >
+            Back
+          </button>
+
           <div className="text-center">
             <h1 className="text-xl font-extrabold">Patient Registration</h1>
             <p>please fill in your details to create a patient account</p>
@@ -247,10 +256,10 @@ const Regist = () => {
                 setLicense(e.target.value);
               }}
             />
-            <Input
+            {/* <Input
               label="Years of Experience"
               onChange={(e) => setYears(e.target.value)}
-            />
+            /> */}
             <label>Shift Preference</label>
             <select className="w-full p-2 mb-3 border">
               <option value="">select Shift preference</option>
@@ -267,7 +276,7 @@ const Regist = () => {
               onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
               className="block mb-2"
             />
-            <label>Upload Credentials</label>
+            <label>Upload Certificate</label>
             <input
               type="file"
               onChange={(e) => setCredentialsFile(e.target.files?.[0] ?? null)}
