@@ -53,6 +53,7 @@ CREATE TABLE wards(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     ward_name VARCHAR(50) UNIQUE NOT NULL,
     beds_number INT,
+    department_id UUID REFERENCES departments(id),
     status VARCHAR(20) DEFAULT 'available' CHECK (status IN('available', 'occupied', 'reserved')),
     created_at TIMESTAMP DEFAULT NOW()
 );
@@ -78,7 +79,8 @@ CREATE TABLE patients(
 CREATE TABLE nurses(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id),
-    assigned_wards JSONB NOT NULL,
+    department_id UUID REFERENCES departments(id),
+    certification VARCHAR(100),
     created_at TIMESTAMP DEFAULT NOW()
 );
 CREATE TABLE receptionists(
@@ -268,3 +270,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER discharge_trig
 AFTER
 UPDATE ON admissions FOR EACH ROW EXECUTE FUNCTION admissionStatus_func();
+CREATE INDEX ON patients(ward_id);
+CREATE INDEX ON admissions(patient_id, discharge_date);
+CREATE INDEX ON appointments(nurse_id, appointment_date);
+CREATE INDEX ON user_notifications(user_id, is_read);

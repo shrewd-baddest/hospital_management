@@ -47,6 +47,7 @@ import { getdashboardDetails } from "../Controllers/doctor/dashboardController.j
 import { getAppointment } from "../Controllers/doctor/apointmentController.js";
 import { getDocProfile } from "../Controllers/doctor/profileController.js";
 import { getReportData } from "../Controllers/Nurse/chart.js";
+import { nurseDash } from "../Controllers/Nurse/dashboardController.js";
 const webpages = Router();
 webpages.get("/dashboard", systemOverview);
 webpages.get("/users", getAllUsers);
@@ -77,5 +78,6 @@ webpages.get("/doctor/patients", getAllDoctors);
 webpages.get("/doctor/patients/search", getDoctorSchedule);
 webpages.get("/doctor/patient/:patientId/medical-records", getMedicalRecords);
 webpages.get("/doctor/profile", getDocProfile);
+webpages.get("/nurse/dashboard", nurseDash);
 webpages.get("/Nurse/getreportdata", getReportData);
 export default webpages;

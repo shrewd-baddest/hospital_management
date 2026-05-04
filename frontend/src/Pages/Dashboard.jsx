@@ -3,8 +3,7 @@ import Nurse from "./Dashboards/Nurse";
 import Doctor from "./Dashboards/Doctor";
 
 const Dashboard = () => {
-  const role = "admin"; // For testing, replace with localStorage.getItem("role") in production
-
+  const role = localStorage.getItem("roles");
   const renderDashboard = () => {
     switch (role) {
       case "admin": {
@@ -24,7 +23,7 @@ const Dashboard = () => {
     }
   };
 
-  return <div className="p-5">{renderDashboard()}</div>;
+  return <div className="w-screen p-5">{renderDashboard()}</div>;
 };
 
 export default Dashboard;

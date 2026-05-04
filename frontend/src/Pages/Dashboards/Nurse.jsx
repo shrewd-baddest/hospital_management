@@ -18,13 +18,18 @@ import {
 } from "@heroicons/react/24/outline";
 import { useStyles } from "../StylingProvider";
 import DoughnutChart from "../../assets/Graphs/DoughnutChart";
+import { StatCard } from "./Components";
 const Nurse = () => {
   const { fetchDashboard, data, loading } = useStyles();
-  const role = localStorage("role") || "nurse";
+  const role = localStorage.getItem("roles") || "nurse";
 
   useEffect(() => {
     fetchDashboard(role);
   }, [role]);
+
+  console.log(data);
+  if (loading) return <p className="p-5">Loading...</p>;
+  if (!data) return <p className="p-5">No dashboard data</p>;
   const {
     fullName = "Nurse",
     totalPatients = 0,
@@ -35,8 +40,6 @@ const Nurse = () => {
     alerts = 0,
   } = data;
 
-  if (loading) return <p className="p-5">Loading...</p>;
-  if (!data) return <p className="p-5">No dashboard data</p>;
   return (
     <>
       <h1>Hello Nurse {fullName}</h1>
@@ -67,8 +70,9 @@ const Nurse = () => {
         />
       </section>
 
-      <section className="flex flex-row flex-wrap gap-1 mt-10">
+      <section className="flex flex-row flex-wrap gap-4 mt-10">
         <StatCard
+          className="font-bold"
           title="UpComing Appointments"
           value={appointments}
           Icon={ClipboardIcon}
@@ -77,23 +81,25 @@ const Nurse = () => {
 
         <div>
           <h2>Quick Actions</h2>
-          <button>
-            <UserPlusIcon />
-            <h4>Admin New Patient</h4>
-          </button>
+          <div className="grid grid-cols-2 gap-4">
+            <button className="flex flex-col items-center p-4 font-semibold text-blue-500 bg-blue-100 rounded-md shadow-md">
+              <UserPlusIcon className="w-5 h-5" />
+              <h4>Admin New Patient</h4>
+            </button>
 
-          <button>
-            <ClipboardDocumentIcon />
-            <h4>Schedule Appointments</h4>
-          </button>
-          <button>
-            <BellIcon />
-            <h4>View All Alerts</h4>
-          </button>
-          <button>
-            <ClipboardDocumentCheckIcon />
-            <h4>Manage Ward Beds</h4>
-          </button>
+            <button className="flex flex-col items-center p-4 font-semibold text-blue-500 bg-blue-100 rounded-md shadow-md">
+              <ClipboardDocumentIcon className="w-5 h-5" />
+              <h4>Schedule Appointments</h4>
+            </button>
+            <button className="flex flex-col items-center p-4 font-semibold text-blue-500 bg-blue-100 rounded-md shadow-md">
+              <BellIcon className="w-5 h-5" />
+              <h4>View All Alerts</h4>
+            </button>
+            <button className="flex flex-col items-center p-4 font-semibold text-blue-500 bg-blue-100 rounded-md shadow-md">
+              <ClipboardDocumentCheckIcon className="w-5 h-5" />
+              <h4>Manage Ward Beds</h4>
+            </button>
+          </div>
         </div>
       </section>
 

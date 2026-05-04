@@ -18,8 +18,9 @@ import {
 } from "@heroicons/react/24/outline";
 
 const SideBars = () => {
-  // const roles=localStorage.getItem('role');
-  const roles = "admin";
+  const roles = localStorage.getItem("roles");
+  console.log(roles);
+  // const roles = "admin";
   const location = useLocation();
   const site = location.pathname.split("/").filter(Boolean);
   const [roleBasedSidebars, setRoleBasedSidebars] = React.useState([]);
