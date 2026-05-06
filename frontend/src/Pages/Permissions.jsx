@@ -1,139 +1,181 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const Permissions = () => {
-  const [roleData, setroledata] = useState(null);
-  const [selectRole, setselectrole] = useState("Adminstrator");
+  const [roleData, setRoleData] = useState([]);
+  const [selectRole, setSelectRole] = useState("Administrator");
   const [active, setActive] = useState("permissions");
-  const [userrole, setuserrole] = useState(null);
-  const [activitylog, setactivitylog] = useState(null);
-  const permits =
-    roleData && roleData.find((role) => role.role_name === selectRole);
+  const [userRole, setUserRole] = useState([]);
+  const [activityLog, setActivityLog] = useState([]);
+  const [cursor, setCursor] = useState(null);
+  const [hasMore, setHasMore] = useState true;
 
+  const loaderRef = useRef(null);
+
+  const permits = roleData.find(
+    (role) => role.role_name === selectRole
+  );
+
+  // ✅ FETCH FUNCTION (FIXED)
+  const fetchLogs = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/webpages/permissions?cursor=${cursor ?? ""}&limit=10`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      const response = await res.json();
+
+      setCursor(response.nextCursor);
+      setHasMore(!!response.nextCursor);
+
+      setRoleData(response.roles || []);
+      setUserRole(response.users || []);
+
+      // ✅ Append only when cursor exists
+      if (!cursor) {
+        setActivityLog(response.activity || []);
+      } else {
+        setActivityLog((prev) => [...prev, ...(response.activity || [])]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // ✅ INITIAL LOAD
   useEffect(() => {
-    fetch("http://localhost:3000/webpages/permissions", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((data) => data.json())
-      .then((response) => {
-        setroledata(response.roles);
-        setuserrole(response.users);
-        setactivitylog(response.activity);
-      });
+    fetchLogs();
   }, []);
 
-  const returnRoles = (activeTab) => {
-    switch (activeTab) {
-      case "permissions":
-        return (
-          <div>
-            {(permits && permits.permissions.split(",")) ||
-              [].map((p) => (
-                <h2 className="text-slate-900 min-w-[70%] font-semibold mb-5 hover:bg-slate-400 hover:rounded-lg">
-                  {p}
-                </h2>
-              ))}
-          </div>
-        );
-      case "audit-log":
-        return (
-          <table className={`min-w-full border-collapse border`}>
+  // ✅ INTERSECTION OBSERVER (FIXED)
+  useEffect(() => {
+    if (!hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchLogs();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasMore, cursor]);
+
+  // ✅ RENDER FUNCTION (FIXED)
+  const returnRoles = () => {
+    if (active === "permissions") {
+      return (
+        <div>
+          {permits?.permissions
+            ?.split(",")
+            .map((p, i) => (
+              <h2
+                key={i}
+                className="text-slate-900 font-semibold mb-3 hover:bg-slate-200 rounded-lg"
+              >
+                {p}
+              </h2>
+            ))}
+        </div>
+      );
+    }
+
+    if (active === "audit-log") {
+      return (
+        <>
+          <table className="min-w-full border-collapse border">
             <thead>
               <tr>
-                <th className="px-4 py-2 border">Area</th>
-                <th className="px-4 py-2 border">Action</th>
-                <th className="px-4 py-2 border">Record id</th>
-                <th className="px-4 py-2 border">Date</th>
+                <th className="border px-4 py-2">Area</th>
+                <th className="border px-4 py-2">Action</th>
+                <th className="border px-4 py-2">Record ID</th>
+                <th className="border px-4 py-2">Date</th>
               </tr>
             </thead>
             <tbody>
-              {activitylog &&
-                activitylog.map((log) => (
-                  <tr key={log.id}>
-                    <td className="px-4 py-2 border">{log.table_name}</td>
-                    <td className="px-4 py-2 border">{log.action}</td>
-                    <td className="px-4 py-2 border">{log.record_id}</td>
-                    <td className="px-4 py-2 border">
-                      {new Date(log.created_at).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
+              {activityLog.map((log) => (
+                <tr key={log.id}>
+                  <td className="border px-4 py-2">{log.table_name}</td>
+                  <td className="border px-4 py-2">{log.action}</td>
+                  <td className="border px-4 py-2">{log.record_id}</td>
+                  <td className="border px-4 py-2">
+                    {new Date(log.created_at).toLocaleString()}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
-        );
-      default:
-        return <h1>SELECT A TAB</h1>;
+
+          {/* ✅ SCROLL TRIGGER */}
+          <div ref={loaderRef} className="h-10"></div>
+        </>
+      );
     }
+
+    return null;
   };
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-black">Roles & Permissions</h1>
-      <h4 className="mb-8 text-lg font-semibold text-slate-600">
-        Manage user roles,assign specific permissions and review audit logs for
-        access control changes.
-      </h4>
-      <div className="grid grid-cols-[1fr_2.5fr] gap-2">
-        <div className="flex flex-col mr-1 w-fit">
-          <h1 className="text-xl font-semibold text-black">
-            Roles Overview - Total Users:
-            {userrole &&
-              userrole.reduce(
-                (total, user) => total + Number(user.total_users),
-                0,
-              )}
-          </h1>
-          <hr />
-          <button className="px-10 py-1 mt-4 font-semibold text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 w-fit">
-            + Create New Role
-          </button>
-          {roleData &&
-            roleData.map((role) => (
-              <h2
-                className="text-slate-900 min-w-[70%] font-semibold mb-5 hover:bg-slate-400 hover:rounded-lg"
-                onClick={() => setselectrole(role.role_name)}
-                key={role.id}
-              >
-                {role.role_name}
+      <h1 className="text-2xl font-bold">Roles & Permissions</h1>
 
-                <h3>
-                  {userrole &&
-                    userrole.find((user) => user.role === role.role_name)
-                      ?.total_users}
-                </h3>
-              </h2>
-            ))}
-        </div>
+      <div className="grid grid-cols-[1fr_2.5fr] gap-4 mt-4">
+        {/* LEFT SIDE */}
         <div>
-          <h1 className="text-xl font-semibold text-black">Roles</h1>
-          <hr />
-          <div className="flex flex-row gap-[5%]">
-            <section>
-              <h4
-                className={`${active == "permissions" ? "text-blue-600 underline" : "text-slate-700"} hover:cursor-pointer text-lg font-semibold`}
-                onClick={() => {
-                  setActive("permissions");
-                  returnRoles("permissions");
-                }}
-              >
-                Permissions
-              </h4>
-            </section>
-            <section>
-              <h4
-                className={`${active === "audit-log" ? "text-blue-600  underline" : "text-slate-700"} hover:cursor-pointer text-lg font-semibold`}
-                onClick={() => {
-                  setActive("audit-log");
-                }}
-              >
-                Audit Log
-              </h4>
-            </section>
+          <h2 className="font-semibold mb-2">
+            Total Users:{" "}
+            {userRole.reduce(
+              (total, u) => total + Number(u.total_users || 0),
+              0
+            )}
+          </h2>
+
+          {roleData.map((role) => (
+            <div
+              key={role.id}
+              onClick={() => setSelectRole(role.role_name)}
+              className="cursor-pointer mb-3 p-2 hover:bg-slate-200 rounded"
+            >
+              <h3>{role.role_name}</h3>
+              <small>
+                {
+                  userRole.find((u) => u.role === role.role_name)
+                    ?.total_users
+                }
+              </small>
+            </div>
+          ))}
+        </div>
+
+        {/* RIGHT SIDE */}
+        <div>
+          <div className="flex gap-6 mb-4">
+            <button
+              className={active === "permissions" ? "underline" : ""}
+              onClick={() => setActive("permissions")}
+            >
+              Permissions
+            </button>
+
+            <button
+              className={active === "audit-log" ? "underline" : ""}
+              onClick={() => setActive("audit-log")}
+            >
+              Audit Log
+            </button>
           </div>
-          {active == "audit-log"
-            ? returnRoles("audit-log")
-            : returnRoles("permissions")}
+
+          {returnRoles()}
         </div>
       </div>
     </div>

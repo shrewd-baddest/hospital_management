@@ -441,7 +441,7 @@ const Settings = () => {
               </div>
 
               <div className="flex flex-row mt-5 gap-[5%]">
-                <img src={settingsData.image} alt="profile picture" />
+                <img src={settingsData?.image} alt="profile picture" />
                 <button className="px-4 py-1 transition border border-gray-200 rounded-lg shadow-sm hover:border-blue-500">
                   <input type="file" name="" id="" className="hidden" />
                   Change Photo
@@ -456,7 +456,7 @@ const Settings = () => {
                   <input
                     type="text"
                     name="full_name"
-                    value={settingsData?.fullName}
+                    value={settingsData?.full_name}
                     className="lg:max-w-[60%] text-black font-semibold"
                   />
                 </section>
@@ -533,7 +533,7 @@ const Settings = () => {
                   <input
                     type="tel"
                     name="telephone"
-                    value={settingsData?.telephone}
+                    value={settingsData?.phone}
                     className="lg:max-w-[60%] text-black font-semibold"
                   />
                 </div>

@@ -93,68 +93,21 @@ const Regist = () => {
 
   // switch
   switch (role) {
-    case "patient":
+    case "Patient":
       return (
         <div className="relative max-w-3xl p-6 mx-auto bg-white rounded shadow">
-          <button
-            onClick={() => setRole("")}
-            className="absolute mt-4 text-sm font-semibold hover:underline hover:cursor-pointer top-4 left-4"
-          >
-            Back
-          </button>
-
-          <div className="text-center">
-            <h1 className="text-xl font-extrabold">Patient Registration</h1>
-            <p>please fill in your details to create a patient account</p>
-          </div>
-          <h2 className="grid grid-cols-2 gap-[3%] font-bold text-lg text-black">
-            Personal Details
-          </h2>
-          <div>
-            <Input
-              label="Full Name"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Input
-              label="Date of Birth"
-              type="date"
-              onChange={(e) => setBirth(e.target.value)}
-            />
-
-            <label className="font-semibold">Gender</label>
-            <select
-              onChange={(e) => setGender(e.target.value)}
-              className="w-full p-2 mb-3 border"
-              value={gender}
-            >
-              <option value="">Select gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-
-            <Input
-              label="National ID"
-              placeholder="e.g;123-456-789"
-              onChange={(e) => setId(e.target.value)}
-            />
-          </div>
-          <h2 className="text-lg font-bold text-black">Contact Information</h2>
-          <div>
-            <Input
-              label="Contact Number"
-              onChange={(e) => setContact(e.target.value)}
-            />
-            <Input
-              label="Address"
-              onChange={(e) => setAddress(e.target.value)}
-            />
-
-            <Input
-              label="Email"
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+          <UserForm
+            role={role}
+            setRole={setRole}
+            setName={setName}
+            setBirth={setBirth}
+            setGender={setGender}
+            setId={setId}
+            setContact={setContact}
+            setAddress={setAddress}
+            setEmail={setEmail}
+            gender={gender}
+          />
           <h2 className="text-lg font-bold text-black">Medical & Insurance</h2>
           <div>
             <Input
@@ -191,53 +144,26 @@ const Regist = () => {
         </div>
       );
 
-    case "nurse":
+    case "Nurse":
       return (
-        <div className="max-w-3xl p-6 mx-auto bg-white rounded shadow">
-          <h1 className="text-xl font-extrabold">Nurse Registration</h1>
-          <p>
-            please fill out the form below to register as a nurse in our system
-          </p>
+        <div className="relative max-w-3xl p-6 mx-auto bg-white rounded shadow">
+          <UserForm
+            role={role}
+            setRole={setRole}
+            setName={setName}
+            setBirth={setBirth}
+            setGender={setGender}
+            setId={setId}
+            setContact={setContact}
+            setAddress={setAddress}
+            setEmail={setEmail}
+            gender={gender}
+          />
+          <h2 className="mt-4 mb-3 text-xl font-bold">
+            Professional Qualifications
+          </h2>
           <div>
-            <Input
-              label="Full Name"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <Input
-              label="Date of Birth"
-              type="date"
-              onChange={(e) => setBirth(e.target.value)}
-            />
-            <label className="font-semibold">Gender</label>
-            <select
-              onChange={(e) => setGender(e.target.value)}
-              className="w-full p-2 mb-3 border"
-              value={gender}
-            >
-              <option value="">Select gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-            <Input
-              label="National ID"
-              onChange={(e) => setId(e.target.value)}
-            />
-          </div>
-          <h2 className="mt-4 font-semibold">Contact Details</h2>
-          <div>
-            <Input
-              label="Contact Number"
-              onChange={(e) => setContact(e.target.value)}
-            />
-            <Input
-              label="Email"
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <h2 className="mt-4 font-semibold">Professional Qualifications</h2>
-          <div>
-            <label>Department</label>
+            <label className="mt-4 font-semibold">Department</label>
             <select
               onChange={(e) => setDepartment(e.target.value)}
               className="w-full p-2 mb-3 border"
@@ -260,31 +186,31 @@ const Regist = () => {
               label="Years of Experience"
               onChange={(e) => setYears(e.target.value)}
             /> */}
-            <label>Shift Preference</label>
+            <label className="mt-4 font-semibold">Shift Preference</label>
             <select className="w-full p-2 mb-3 border">
               <option value="">select Shift preference</option>
               <option value="day">Day</option>
               <option value="night">Night</option>
             </select>
           </div>
-          <h2 className="mt-4 font-semibold">Document Uploads</h2>
+          <h2 className="mt-4 mb-3 text-xl font-bold">Document Uploads</h2>
           <div>
-            <label>Upload photo</label>
+            <label className="mt-4 mb-4 font-semibold">Upload photo</label>
             <input
               type="file"
               accept="image/*"
               onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)}
-              className="block mb-2"
+              className="block mb-4"
             />
-            <label>Upload Certificate</label>
+            <label className="mt-4 font-semibold">Upload Certificate</label>
             <input
               type="file"
               onChange={(e) => setCredentialsFile(e.target.files?.[0] ?? null)}
-              className="block"
+              className="block mt-4"
             />
           </div>
 
-          <h2 className="mt-4 font-semibold">Account Security</h2>
+          <h2 className="mt-4 mb-3 text-xl font-bold">Account Security</h2>
           <div>
             <Input
               label="Password"
@@ -301,24 +227,61 @@ const Regist = () => {
           <input
             type="button"
             value="Register Nurse"
-            className="p-2 mt-3 text-white bg-blue-600 rounded cursor-pointer hover:bg-blue-800"
+            className="p-2 mt-3 text-white bg-blue-600 rounded-lg shadow-md cursor-pointer hover:bg-blue-800 hover:cursor-pointer"
             onClick={submitPatient}
           />
         </div>
       );
 
     case "doctor":
+      return (
+        <div className="relative max-w-3xl p-6 mx-auto bg-white rounded shadow">
+          <UserForm
+            role={role}
+            setRole={setRole}
+            setName={setName}
+            setBirth={setBirth}
+            setGender={setGender}
+            setId={setId}
+            setContact={setContact}
+            setAddress={setAddress}
+            setEmail={setEmail}
+            gender={gender}
+          />
+        </div>
+      );
     case "receptionist":
+      return (
+        <div className="relative max-w-3xl p-6 mx-auto bg-white rounded shadow">
+          <UserForm
+            role={role}
+            setRole={setRole}
+            setName={setName}
+            setBirth={setBirth}
+            setGender={setGender}
+            setId={setId}
+            setContact={setContact}
+            setAddress={setAddress}
+            setEmail={setEmail}
+            gender={gender}
+          />
+        </div>
+      );
     case "admin":
       return (
-        <div className="mt-10 text-center">
-          <h2 className="text-xl font-bold">{role} registration coming soon</h2>
-          <button
-            onClick={() => setRole("")}
-            className="mt-4 text-blue-600 underline"
-          >
-            Back
-          </button>
+        <div className="relative max-w-3xl p-6 mx-auto bg-white rounded shadow">
+          <UserForm
+            role={role}
+            setRole={setRole}
+            setName={setName}
+            setBirth={setBirth}
+            setGender={setGender}
+            setId={setId}
+            setContact={setContact}
+            setAddress={setAddress}
+            setEmail={setEmail}
+            gender={gender}
+          />
         </div>
       );
 
@@ -332,12 +295,12 @@ const Regist = () => {
             <RoleCard
               icon={UserIcon}
               title="Patient"
-              onClick={() => setRole("patient")}
+              onClick={() => setRole("Patient")}
             />
             <RoleCard
               icon={HeartIcon}
               title="Nurse"
-              onClick={() => setRole("nurse")}
+              onClick={() => setRole("Nurse")}
             />
             <RoleCard
               icon={UserCircleIcon}
@@ -366,7 +329,7 @@ const Input = ({ label, ...props }) => (
     <label className="block font-semibold">{label}</label>
     <input
       {...props}
-      className={"w-full p-2 border rounded " + (props.className || "")}
+      className={"w-full p-2 border rounded-md " + (props.className || "")}
     />
   </div>
 );
@@ -378,6 +341,75 @@ const RoleCard = ({ icon: Icon, title, onClick }) => (
   >
     <Icon className="w-6 h-6 mb-2" />
     <h2 className="font-semibold">{title}</h2>
+  </div>
+);
+
+const UserForm = ({
+  role,
+  setRole,
+  setName,
+  setBirth,
+  setGender,
+  setId,
+  setContact,
+  setAddress,
+  setEmail,
+  gender,
+}) => (
+  <div>
+    <button
+      onClick={() => setRole("")}
+      className="absolute mt-4 text-sm font-semibold hover:underline hover:cursor-pointer top-4 left-4"
+    >
+      Back
+    </button>
+
+    <div className="text-center">
+      <h1 className="text-xl font-extrabold">{role} Registration</h1>
+      <p>please fill in your details to create a patient account</p>
+    </div>
+    <h2 className="grid grid-cols-2 gap-[3%] font-bold text-lg text-black">
+      Personal Details
+    </h2>
+    <div>
+      <Input label="Full Name" onChange={(e) => setName(e.target.value)} />
+      <Input
+        label="Date of Birth"
+        type="date"
+        onChange={(e) => setBirth(e.target.value)}
+      />
+
+      <label className="font-semibold">Gender</label>
+      <select
+        onChange={(e) => setGender(e.target.value)}
+        className="w-full p-2 mb-3 border"
+        value={gender}
+      >
+        <option value="">Select gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+
+      <Input
+        label="National ID"
+        placeholder="e.g;123-456-789"
+        onChange={(e) => setId(e.target.value)}
+      />
+    </div>
+    <h2 className="text-lg font-bold text-black">Contact Information</h2>
+    <div>
+      <Input
+        label="Contact Number"
+        onChange={(e) => setContact(e.target.value)}
+      />
+      <Input label="Address" onChange={(e) => setAddress(e.target.value)} />
+
+      <Input
+        label="Email"
+        type="email"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+    </div>
   </div>
 );
 

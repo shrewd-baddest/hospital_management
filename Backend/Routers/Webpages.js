@@ -30,6 +30,7 @@ import upload from "../Middlewares/multer.js";
 import {
   getNotifications,
   getSettings,
+  getUserInfo,
   updateNotificationById,
   updateSettings,
 } from "../Controllers/admin/systemController.js";
@@ -48,12 +49,14 @@ import { getAppointment } from "../Controllers/doctor/apointmentController.js";
 import { getDocProfile } from "../Controllers/doctor/profileController.js";
 import { getReportData } from "../Controllers/Nurse/chart.js";
 import { nurseDash } from "../Controllers/Nurse/dashboardController.js";
+import verifyToken from "../Middlewares/tokenVerify.js";
 const webpages = Router();
 webpages.get("/dashboard", systemOverview);
 webpages.get("/users", getAllUsers);
 webpages.post("/userSearch", getUserSearch);
 webpages.get("/admissionrange", admissionsOverTime);
 webpages.get("/departments", getDepartments);
+webpages.get("/account", verifyToken, getUserInfo);
 webpages.post("/departmentSearch", searchDepartments);
 webpages.post("/addDepartment", addDepartment);
 webpages.get("/getDepartmentById/:id", getDepartmentById);

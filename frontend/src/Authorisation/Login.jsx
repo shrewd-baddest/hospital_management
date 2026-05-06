@@ -73,7 +73,7 @@ const Login = () => {
       if (response.status == "success") {
         localStorage.setItem("token", response.token);
         localStorage.setItem("roles", response.role);
-        Navigate("/dashboard");
+        Navigate("/dashboard", { replace: true });
       } else {
         alert(response.message);
       }
