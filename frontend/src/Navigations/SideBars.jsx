@@ -146,7 +146,11 @@ const SideBars = () => {
   return (
     <div className="flex-shrink-0 p-3 mr-4 rounded-md shadow-md bg-slate-300 w-fit">
       <section className="catalog">
-        <ul className="hidden categories md:grid ">
+        <ul
+          className={`hidden ${
+            site.includes("reports") ? "lg:grid" : "md:grid"
+          }`}
+        >
           {roleBasedSidebars &&
             roleBasedSidebars.map((item, index) => (
               <li className="card" key={index}>
@@ -173,7 +177,11 @@ const SideBars = () => {
             ))}
         </ul>
         <div>
-          <ul className="grid md:hidden ">
+          <ul
+            className={`grid ${
+              site.includes("reports") ? "lg:hidden" : "md:hidden"
+            }`}
+          >
             {roleBasedSidebars.map((item, index) => (
               <li className="card" key={index}>
                 {item.name == "Dashboard" ? (
@@ -184,7 +192,9 @@ const SideBars = () => {
                     className="flex flex-row items-center gap-2 font-bold"
                   >
                     <item.icon
-                      className="inline mb-5 w-7 h-7 md:hidden"
+                      className={`inline mb-5 w-7 h-7 ${
+                        site.includes("reports") ? "lg:hidden" : "md:hidden"
+                      }`}
                       title={item.name}
                     />
                     <div
@@ -199,7 +209,9 @@ const SideBars = () => {
                     className="flex flex-row items-center gap-2 font-bold"
                   >
                     <item.icon
-                      className="inline mb-5 w-7 h-7 md:hidden"
+                      className={`inline mb-5 w-7 h-7 ${
+                        site.includes("reports") ? "lg:hidden" : "md:hidden"
+                      }`}
                       title={item.name}
                     />
                     <div

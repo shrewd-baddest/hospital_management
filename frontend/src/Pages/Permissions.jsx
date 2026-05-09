@@ -7,15 +7,13 @@ const Permissions = () => {
   const [userRole, setUserRole] = useState([]);
   const [activityLog, setActivityLog] = useState([]);
   const [cursor, setCursor] = useState(null);
-  const [hasMore, setHasMore] = useState true;
+  const [hasMore, setHasMore] = useState(true);
 
   const loaderRef = useRef(null);
 
-  const permits = roleData.find(
-    (role) => role.role_name === selectRole
-  );
+  const permits = roleData.find((role) => role.role_name === selectRole);
 
-  // ✅ FETCH FUNCTION (FIXED)
+  //  FETCH FUNCTION (FIXED)
   const fetchLogs = async () => {
     try {
       const res = await fetch(
@@ -24,19 +22,20 @@ const Permissions = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       const response = await res.json();
+      console.log(response);
 
       setCursor(response.nextCursor);
-      setHasMore(!!response.nextCursor);
+      setHasMore(response.nextCursor);
 
       setRoleData(response.roles || []);
       setUserRole(response.users || []);
 
-      // ✅ Append only when cursor exists
-      if (!cursor) {
+      //  Append only when cursor exists
+      if (activityLog.length == 0) {
         setActivityLog(response.activity || []);
       } else {
         setActivityLog((prev) => [...prev, ...(response.activity || [])]);
@@ -46,12 +45,12 @@ const Permissions = () => {
     }
   };
 
-  // ✅ INITIAL LOAD
+  // INITIAL LOAD
   useEffect(() => {
     fetchLogs();
   }, []);
 
-  // ✅ INTERSECTION OBSERVER (FIXED)
+  //  INTERSECTION OBSERVER (FIXED)
   useEffect(() => {
     if (!hasMore) return;
 
@@ -61,7 +60,7 @@ const Permissions = () => {
           fetchLogs();
         }
       },
-      { threshold: 1 }
+      { threshold: 1 },
     );
 
     if (loaderRef.current) {
@@ -71,21 +70,19 @@ const Permissions = () => {
     return () => observer.disconnect();
   }, [hasMore, cursor]);
 
-  // ✅ RENDER FUNCTION (FIXED)
+  //  RENDER FUNCTION (FIXED)
   const returnRoles = () => {
     if (active === "permissions") {
       return (
         <div>
-          {permits?.permissions
-            ?.split(",")
-            .map((p, i) => (
-              <h2
-                key={i}
-                className="text-slate-900 font-semibold mb-3 hover:bg-slate-200 rounded-lg"
-              >
-                {p}
-              </h2>
-            ))}
+          {permits?.permissions?.split(",").map((p, i) => (
+            <h2
+              key={i}
+              className="text-slate-900 font-semibold mb-3 hover:bg-slate-200 rounded-lg"
+            >
+              {p}
+            </h2>
+          ))}
         </div>
       );
     }
@@ -116,7 +113,7 @@ const Permissions = () => {
             </tbody>
           </table>
 
-          {/* ✅ SCROLL TRIGGER */}
+          {/* SCROLL TRIGGER */}
           <div ref={loaderRef} className="h-10"></div>
         </>
       );
@@ -132,11 +129,11 @@ const Permissions = () => {
       <div className="grid grid-cols-[1fr_2.5fr] gap-4 mt-4">
         {/* LEFT SIDE */}
         <div>
-          <h2 className="font-semibold mb-2">
+          <h2 className="font-semibold mb-2 ">
             Total Users:{" "}
             {userRole.reduce(
               (total, u) => total + Number(u.total_users || 0),
-              0
+              0,
             )}
           </h2>
 
@@ -148,10 +145,7 @@ const Permissions = () => {
             >
               <h3>{role.role_name}</h3>
               <small>
-                {
-                  userRole.find((u) => u.role === role.role_name)
-                    ?.total_users
-                }
+                {userRole.find((u) => u.role === role.role_name)?.total_users}
               </small>
             </div>
           ))}
@@ -161,14 +155,22 @@ const Permissions = () => {
         <div>
           <div className="flex gap-6 mb-4">
             <button
-              className={active === "permissions" ? "underline" : ""}
+              className={
+                active === "permissions"
+                  ? "underline font-semibold text-blue-400 text-xl"
+                  : ""
+              }
               onClick={() => setActive("permissions")}
             >
               Permissions
             </button>
 
             <button
-              className={active === "audit-log" ? "underline" : ""}
+              className={
+                active === "audit-log"
+                  ? "underline font-semibold text-blue-400 text-xl"
+                  : ""
+              }
               onClick={() => setActive("audit-log")}
             >
               Audit Log
