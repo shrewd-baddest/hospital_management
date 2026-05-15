@@ -23,7 +23,7 @@ const WardBed = () => {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
 
         const res = await response.json();
@@ -102,14 +102,11 @@ export default WardBed;
 
 export const bedLoarder = async () => {
   try {
-    const response = await fetch(
-      "http://localhost:3000/webpages/ward_beds",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    const response = await fetch("http://localhost:3000/webpages/ward_beds", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
 
     const res = await response.json();
 
