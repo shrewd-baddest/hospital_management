@@ -19,7 +19,7 @@ import {
 
 const SideBars = () => {
   const roles = localStorage.getItem("roles");
-  console.log(roles);
+  // console.log(roles);
   // const roles = "admin";
   const location = useLocation();
   const site = location.pathname.split("/").filter(Boolean);
@@ -121,7 +121,7 @@ const SideBars = () => {
           { name: "Dashboard", path: "dashboard", icon: HomeIcon },
           {
             name: "My Appointments",
-            path: "my-appointments",
+            path: "appointments",
             icon: CalendarDaysIcon,
           },
           {

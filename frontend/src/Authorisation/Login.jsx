@@ -127,7 +127,7 @@ const Login = () => {
                 type="Button"
                 value="Sign in"
                 onClick={submit}
-                className="text-lg bg-blue-700 cursor-pointer text-cyan-100 hover:bg-blue-600 active:translate-y-1 duration-100"
+                className="text-lg duration-100 bg-blue-700 cursor-pointer text-cyan-100 hover:bg-blue-600 active:translate-y-1"
               />
               <p className="my-8 text-sm text-center text-teal-950">
                 Or Sign in With

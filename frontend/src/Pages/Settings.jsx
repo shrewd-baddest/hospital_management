@@ -704,13 +704,27 @@ const Settings = () => {
                     setFontSize(e.target.value);
                   }}
                 >
-                  <option value="16">200%</option>
-                  <option value="24">300%</option>
-                  <option value="20">250%</option>
-                  <option value="12">150%</option>
-                  <option value="8">100%</option>
-                  <option value="4">50%</option>
-                  <option value="2">20%</option>
+                  <option value="16" selected={fontSize == "16"}>
+                    200%
+                  </option>
+                  <option value="24" selected={fontSize == "24"}>
+                    300%
+                  </option>
+                  <option value="20" selected={fontSize == "20"}>
+                    250%
+                  </option>
+                  <option value="12" selected={fontSize == "12"}>
+                    150%
+                  </option>
+                  <option value="8" selected={fontSize == "8"}>
+                    100%
+                  </option>
+                  <option value="4" selected={fontSize == "4"}>
+                    50%
+                  </option>
+                  <option value="2" selected={fontSize == "2"}>
+                    20%
+                  </option>
                 </select>
               </div>
               <div className="inline-flex mt-5 ml-5">

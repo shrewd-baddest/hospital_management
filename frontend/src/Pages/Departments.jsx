@@ -48,7 +48,7 @@ const Departments = () => {
             type="button"
             value="+ Add New Department"
             className="px-4 text-lg font-semibold text-white bg-blue-600 cursor-pointer w-fit"
-            onClick={navigate("dashboard/addDepartment")}
+            onClick={navigate("dashboard/addDepartments")}
           />
         </div>
       </section>

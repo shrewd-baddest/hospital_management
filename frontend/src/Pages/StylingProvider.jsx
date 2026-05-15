@@ -13,6 +13,7 @@ export const StylingProvider = ({ children }) => {
     admin: "http://localhost:3000/webpages/dashboard",
     doctor: "http://localhost:3000/webpages/doctor/dashboard",
     nurse: "http://localhost:3000/webpages/nurse/dashboard",
+    patient: "http://localhost:3000/webpages/patient/dashboard",
   };
   useEffect(() => {
     document.documentElement.style.setProperty(

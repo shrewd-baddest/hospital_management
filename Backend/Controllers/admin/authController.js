@@ -23,6 +23,7 @@ const Login = async (req, res) => {
       // Compare password
       const isMatch = await bcrypt.compare(passWord, user.password);
       if (!isMatch) {
+        console.log("ended");
         return res.status(401).json({ message: "Invalid  password" });
       }
     } else if (googleEmail) {

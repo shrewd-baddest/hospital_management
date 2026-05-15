@@ -57,6 +57,12 @@ CREATE TABLE wards(
     status VARCHAR(20) DEFAULT 'available' CHECK (status IN('available', 'occupied', 'reserved')),
     created_at TIMESTAMP DEFAULT NOW()
 );
+CREATE TABLE beds(
+    bed_no UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    status VARCHAR(100) DEFAULT 'vacant' CHECK(status IN('vacant', 'occupied')),
+    patient_id UUID REFERENCES patients(id),
+    ward_id UUID REFERENCES wards(id)
+);
 CREATE TABLE patients(
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id),

@@ -15,7 +15,7 @@ import React, { useState } from "react";
 import Calendar from "../assets/Calendar/Calendar";
 import { useLoaderData } from "react-router-dom";
 const Appointments = () => {
-  // const role = localStorage.getItem(role);
+  // const role = localStorage.getItem("roles");
   const role = "doctor";
   const appointments = useLoaderData();
   const lab = appointments.lab;
@@ -46,8 +46,8 @@ const Appointments = () => {
       case "admin": {
         return (
           <div className="grid w-screen space-y-6 overflow-hidden p-[5%] ">
-            <div className="flex flex-row justify-between">
-              <h1 className="text-2xl font-extrabold text-black">
+            <div className="flex flex-row flex-wrap justify-between">
+              <h1 className="mb-3 text-2xl font-extrabold text-black">
                 Appointments
               </h1>
               <button className="flex mr-[20%] py-1 text-white bg-blue-700 rounded-lg shadow-lg min-w-fit h-fit">
@@ -145,7 +145,7 @@ const Appointments = () => {
                 <ClipboardIcon className="w-5 h-5" /> Calender View
               </h3>
             </div>
-            <div>
+            <div className="flex flex-col md:flex-row gap-[5%]">
               <Calendar role="nurse" />
               <section>
                 <h3 className="text-xl font-semibold text-slate-800">

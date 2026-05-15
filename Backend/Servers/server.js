@@ -10,12 +10,13 @@ const app = express();
 const port = process.env.PORT;
 app.use(cors());
 app.use(express.json());
-app.use("/authorisation", authRoutes);
-app.use("/webpages", webpages);
 startCron();
 pool.on("connect", () => {
   console.log("postgre connected successful");
 });
+
+app.use("/authorisation", authRoutes);
+app.use("/webpages", webpages);
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

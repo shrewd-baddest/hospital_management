@@ -1,6 +1,7 @@
 import Admin from "./Dashboards/Admin";
 import Nurse from "./Dashboards/Nurse";
 import Doctor from "./Dashboards/Doctor";
+import Patient from "./Dashboards/Patient";
 
 const Dashboard = () => {
   const role = localStorage.getItem("roles");
@@ -15,8 +16,11 @@ const Dashboard = () => {
       }
 
       case "doctor": {
-        <Doctor />;
-        break;
+        return <Doctor />;
+      }
+
+      case "patient": {
+        return <Patient />;
       }
       default:
         return <p>Invalid role</p>;
